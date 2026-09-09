@@ -1,0 +1,1492 @@
+/* ==========================================================================
+   BELNOVA HRMS SETTINGS HUB - MOBILE-FIRST ENTERPRISE STYLES
+   Isolated Namespace: bel-settings-* / bel-*
+   ========================================================================== */
+
+.bel-settings-app-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding-bottom: 95px; /* Above BottomNavigation */
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+}
+
+.bel-settings-page-content {
+  padding: 12px 16px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   SEARCH BAR
+   ========================================================================== */
+.bel-settings-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.bel-settings-search-bar:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.bel-settings-search-bar svg {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.bel-settings-search-bar input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.875rem;
+  color: #1e293b;
+  font-family: inherit;
+}
+
+.bel-settings-search-bar input::placeholder {
+  color: #94a3b8;
+}
+
+.bel-settings-search-bar button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   CONFIGURATION HEALTH HERO BANNER
+   ========================================================================== */
+.bel-settings-health-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 16px;
+  padding: 16px;
+  color: #ffffff;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+}
+
+.bel-health-hero-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bel-health-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+
+.bel-health-hero-main h3 {
+  margin: 0 0 2px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.bel-health-hero-main p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.bel-health-metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bel-health-metric-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.bel-health-metric-chip svg.icon-success {
+  color: #10b981;
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   SETTINGS HUB GROUPED CARDS
+   ========================================================================== */
+.bel-settings-groups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bel-settings-group-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-group-title {
+  padding: 0 4px;
+}
+
+.bel-group-title span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.bel-settings-nav-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-settings-nav-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 13px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  width: 100%;
+}
+
+.bel-settings-nav-card:hover {
+  border-color: #cbd5e1;
+  background: #fdfdfd;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.bel-settings-nav-card:active {
+  transform: scale(0.99);
+}
+
+.bel-nav-card-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.bel-nav-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.bel-nav-card-title-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.bel-nav-card-title-line h4 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bel-nav-card-status {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.bel-nav-card-body p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #64748b;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bel-nav-card-arrow {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   DETAIL SCREEN LAYOUT & HEADER
+   ========================================================================== */
+.bel-settings-detail-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bel-settings-detail-top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bel-settings-back-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.bel-settings-section-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.bel-settings-detail-header h2 {
+  margin: 0 0 3px 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bel-settings-detail-header p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.bel-settings-section-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.bel-settings-subhead-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.bel-settings-subhead-row h3 {
+  margin: 0 0 2px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-settings-subhead-row p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.bel-settings-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bel-settings-group-header svg {
+  color: #2563eb;
+  font-size: 1rem;
+}
+
+.bel-settings-group-header h4 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* ==========================================================================
+   COMPANY BANNER & LOGO
+   ========================================================================== */
+.bel-settings-company-banner {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bel-settings-company-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: #1e293b;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.bel-settings-company-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bel-settings-company-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bel-settings-company-info h3 {
+  margin: 0 0 2px 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bel-settings-company-info p {
+  margin: 0 0 6px 0;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.bel-settings-change-logo-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bel-settings-company-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.bel-settings-company-badge small {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+.bel-settings-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .bel-settings-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.bel-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bel-form-field label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.bel-form-field input,
+.bel-form-field select,
+.bel-form-field textarea {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 0.825rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.bel-form-field input:focus,
+.bel-form-field select:focus,
+.bel-form-field textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.bel-conditional-field {
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bel-conditional-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.bel-conditional-field input {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
+
+.bel-field-error {
+  font-size: 0.7rem;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   KPIS & SUMMARIES
+   ========================================================================== */
+.bel-settings-kpi-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bel-kpi-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.bel-kpi-box strong {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bel-kpi-box span {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   ITEM CARDS & LISTS (Branches, Departments, Designations, Shifts)
+   ========================================================================== */
+.bel-settings-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bel-settings-item-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bel-item-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bel-item-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.bel-item-icon-box.branch { background: #eff6ff; color: #2563eb; }
+.bel-item-icon-box.department { background: #fdf2f8; color: #db2777; }
+.bel-item-icon-box.designation { background: #f5f3ff; color: #7c3aed; }
+.bel-item-icon-box.shift { background: #fffbeb; color: #d97706; }
+.bel-item-icon-box.email { background: #ecfdf5; color: #059669; }
+
+.bel-item-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.bel-item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.bel-item-card-main h4 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bel-item-card-main p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.bel-shift-timing {
+  font-weight: 700;
+  color: #2563eb !important;
+}
+
+.bel-code-badge,
+.bel-level-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.bel-tag-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.bel-tag-badge.warning { background: #fef3c7; color: #92400e; }
+
+.bel-shift-mini-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.bel-mini-kpi {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 1px;
+}
+
+.bel-mini-kpi span {
+  font-size: 0.64rem;
+  color: #94a3b8;
+}
+
+.bel-mini-kpi strong {
+  font-size: 0.76rem;
+  color: #1e293b;
+}
+
+.bel-item-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.bel-card-action-btn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bel-card-action-btn.edit {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.bel-card-action-btn.edit:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.bel-card-action-btn.preview {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #2563eb;
+}
+
+.bel-card-action-btn.delete {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #ef4444;
+}
+
+.bel-card-action-btn.delete:hover {
+  background: #fef2f2;
+  border-color: #fee2e2;
+}
+
+/* ==========================================================================
+   LEAVE POLICIES
+   ========================================================================== */
+.bel-settings-leave-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .bel-settings-leave-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.bel-leave-policy-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-leave-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.bel-leave-card-top h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bel-leave-card-top span {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.bel-policy-edit-icon {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+}
+
+.bel-leave-card-numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  background: #f8fafc;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.bel-leave-card-numbers span { font-size: 0.65rem; color: #94a3b8; }
+.bel-leave-card-numbers strong { font-size: 0.85rem; color: #0f172a; }
+
+.bel-progress-bar {
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bel-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 999px;
+}
+
+.bel-leave-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   TOGGLE LIST
+   ========================================================================== */
+.bel-settings-toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.bel-toggle-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.bel-toggle-row strong {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bel-toggle-row span {
+  font-size: 0.7rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.bel-settings-toggle {
+  width: 40px;
+  height: 22px;
+  padding: 2px;
+  background: #cbd5e1;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.bel-settings-toggle span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.bel-settings-toggle.is-on {
+  background: #2563eb;
+}
+
+.bel-settings-toggle.is-on span {
+  transform: translateX(18px);
+}
+
+/* ==========================================================================
+   SECURITY HERO & AUDIT
+   ========================================================================== */
+.bel-settings-security-hero {
+  background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+  border-radius: 14px;
+  padding: 16px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.bel-security-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bel-security-icon-large {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.bel-security-hero-left h3 {
+  margin: 0 0 3px 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.bel-security-hero-left p {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #a7f3d0;
+  line-height: 1.35;
+}
+
+.bel-security-score-badge {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 8px 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.bel-security-score-badge strong {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.bel-security-score-badge span {
+  font-size: 0.65rem;
+  color: #d1fae5;
+}
+
+.bel-settings-danger-box {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bel-settings-danger-box strong {
+  display: block;
+  font-size: 0.82rem;
+  color: #991b1b;
+  margin-bottom: 2px;
+}
+
+.bel-settings-danger-box p {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #b91c1c;
+}
+
+.bel-btn-danger-outline {
+  background: #ffffff;
+  border: 1px solid #f87171;
+  color: #dc2626;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bel-audit-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-audit-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.bel-audit-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.bel-audit-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.bel-audit-badge.success { background: #dcfce7; color: #15803d; }
+.bel-audit-badge.blocked { background: #fee2e2; color: #b91c1c; }
+.bel-audit-badge.warning { background: #fef3c7; color: #b45309; }
+
+.bel-audit-time {
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.bel-audit-card h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bel-audit-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   ALERTS & INFO BOXES
+   ========================================================================== */
+.bel-settings-info-alert {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bel-settings-info-alert svg {
+  color: #d97706;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bel-settings-info-alert.compliance {
+  background: #ecfdf5;
+  border-color: #d1fae5;
+}
+
+.bel-settings-info-alert.compliance svg {
+  color: #059669;
+}
+
+.bel-settings-info-alert strong {
+  display: block;
+  font-size: 0.78rem;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.bel-settings-info-alert p {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   STICKY SAVE BAR
+   ========================================================================== */
+.bel-settings-sticky-save-bar {
+  position: fixed;
+  bottom: 65px; /* Above BottomNavigation */
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.15);
+  animation: slideUpSave 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUpSave {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.bel-sticky-save-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bel-sticky-save-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.bel-sticky-save-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   MODALS & BOTTOM SHEETS
+   ========================================================================== */
+.bel-settings-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: fadeInModal 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .bel-settings-modal-backdrop {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bel-settings-modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 550px;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.15);
+  animation: slideUpModal 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .bel-settings-modal-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.bel-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bel-modal-header-copy h3 {
+  margin: 0 0 2px 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bel-modal-header-copy p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.bel-modal-close-btn {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bel-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-modal-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.bel-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Modal Variants */
+.bel-settings-modal-card.confirm-delete,
+.bel-settings-modal-card.confirm-discard {
+  text-align: center;
+}
+
+.bel-delete-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.bel-delete-icon-box.warning {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.bel-settings-modal-card.confirm-delete h3,
+.bel-settings-modal-card.confirm-discard h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.bel-settings-modal-card.confirm-delete p,
+.bel-settings-modal-card.confirm-discard p {
+  margin: 0 0 16px 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Email Preview */
+.bel-email-preview-body {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 0.8rem;
+}
+
+.bel-preview-header {
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bel-preview-content {
+  line-height: 1.5;
+  color: #334155;
+}
+
+.bel-preview-highlight-box {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+/* Emergency Modal */
+.bel-emergency-status-box {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.bel-emergency-status-box svg {
+  color: #2563eb;
+  font-size: 1.25rem;
+}
+
+.bel-custodian-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.bel-custodian-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.bel-custodian-row strong {
+  display: block;
+  font-size: 0.82rem;
+}
+
+.bel-custodian-row span {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   GENERIC BUTTONS & PILLS
+   ========================================================================== */
+.bel-btn-primary {
+  height: 38px;
+  padding: 0 14px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+  transition: all 0.15s ease;
+}
+
+.bel-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+.bel-btn-secondary {
+  height: 38px;
+  padding: 0 14px;
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.bel-btn-danger {
+  height: 38px;
+  padding: 0 14px;
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.bel-status-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bel-status-pill.success { background: #dcfce7; color: #15803d; }
+.bel-status-pill.muted { background: #f1f5f9; color: #64748b; }
+
+.bel-settings-empty-card {
+  padding: 30px 16px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bel-settings-empty-card svg {
+  font-size: 2rem;
+  color: #94a3b8;
+}
+
+.bel-settings-empty-card h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+.bel-settings-empty-card p {
+  margin: 0 0 8px 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+.bel-settings-toast {
+  position: fixed;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  padding: 10px 16px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: toastPop 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+@keyframes toastPop {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.bel-settings-toast.success { background: #065f46; color: #ffffff; }
+.bel-settings-toast.error { background: #991b1b; color: #ffffff; }
+.bel-settings-toast.warning { background: #92400e; color: #ffffff; }
+.bel-settings-toast.info { background: #1e293b; color: #ffffff; }
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .bel-settings-page-content {
+    padding: 10px 12px 20px;
+  }
+  .bel-settings-health-hero {
+    padding: 14px 12px;
+  }
+}

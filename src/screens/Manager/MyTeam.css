@@ -1,0 +1,752 @@
+/* =========================================================
+   MY TEAM PAGE
+   MOBILE APP & RESPONSIVE DESIGN SYSTEM
+========================================================= */
+
+.myteam-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px 14px calc(90px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+
+.myteam-page *,
+.myteam-page *::before,
+.myteam-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.myteam-page-header {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.myteam-page-header > div:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.myteam-page-header h1 {
+  margin: 0;
+  color: #10233f;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.myteam-page-header p {
+  margin: 4px 0 0;
+  color: #6b7a90;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.myteam-header-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.myteam-export-btn,
+.myteam-add-btn {
+  height: 44px;
+  min-width: 0;
+  border-radius: 10px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+
+.myteam-export-btn {
+  border: 1px solid #dce3ec;
+  background: #ffffff;
+  color: #334155;
+}
+
+.myteam-export-btn:active {
+  background: #f8fafc;
+  transform: scale(0.97);
+}
+
+.myteam-add-btn {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #1597f4 0%, #6357e8 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.myteam-add-btn:active {
+  transform: scale(0.97);
+}
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.myteam-main-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.035);
+}
+
+/* =========================================================
+   SEARCH WRAPPER
+========================================================= */
+
+.myteam-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+}
+
+.myteam-search-wrapper input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dce4ee;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #172b4d;
+  padding: 0 42px;
+  outline: none;
+  font-size: 13px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.myteam-search-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.myteam-search-wrapper input:focus {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.myteam-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8da0b8;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.myteam-clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.myteam-clear-search:active {
+  background: #e8edf3;
+}
+
+/* =========================================================
+   TABLE HEADING
+========================================================= */
+
+.myteam-table-heading {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.myteam-table-heading h3 {
+  margin: 0;
+  color: #213b5c;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.myteam-table-heading span {
+  display: block;
+  margin-top: 2px;
+  color: #8a99ad;
+  font-size: 11px;
+}
+
+/* =========================================================
+   MOBILE EMPLOYEE CARDS VIEW (< 768px)
+========================================================= */
+
+.myteam-mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.myteam-desktop-table {
+  display: none;
+}
+
+.myteam-mobile-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 13px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.myteam-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.myteam-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.myteam-card-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.myteam-row-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.myteam-row-val {
+  color: #334155;
+  font-weight: 600;
+}
+
+.myteam-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px dashed #edf2f7;
+  margin-top: 2px;
+}
+
+.myteam-footer-label {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.myteam-perf-val {
+  color: #16a34a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.myteam-empty-state-mobile {
+  padding: 24px 14px;
+  text-align: center;
+}
+
+/* =========================================================
+   MEMBER DETAILS & AVATAR
+========================================================= */
+
+.myteam-member-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.myteam-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.myteam-member-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.myteam-member-details strong {
+  color: #172b4d;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myteam-member-details span {
+  color: #94a3b8;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   EMAIL / PHONE LINKS
+========================================================= */
+
+.myteam-email-link,
+.myteam-phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.myteam-email-link {
+  color: #2563eb;
+}
+
+.myteam-phone-link {
+  color: #475569;
+}
+
+.myteam-email-link span,
+.myteam-phone-link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+.myteam-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.myteam-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.myteam-status-badge.present {
+  background: #dcfce7;
+  color: #15803d;
+}
+.myteam-status-badge.present .myteam-status-dot {
+  background: #22c55e;
+}
+
+.myteam-status-badge.wfh {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.myteam-status-badge.wfh .myteam-status-dot {
+  background: #0ea5e9;
+}
+
+.myteam-status-badge.absent {
+  background: #fee2e2;
+  color: #dc2626;
+}
+.myteam-status-badge.absent .myteam-status-dot {
+  background: #ef4444;
+}
+
+.myteam-status-badge.on-leave {
+  background: #fef3c7;
+  color: #b45309;
+}
+.myteam-status-badge.on-leave .myteam-status-dot {
+  background: #f59e0b;
+}
+
+.myteam-status-badge.unknown {
+  background: #f1f5f9;
+  color: #64748b;
+}
+.myteam-status-badge.unknown .myteam-status-dot {
+  background: #94a3b8;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.myteam-empty-state {
+  padding: 32px 16px !important;
+  text-align: center;
+}
+
+.myteam-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.myteam-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.myteam-empty-content h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.myteam-empty-content p {
+  margin: 4px 0 14px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.myteam-empty-content button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   ADD EMPLOYEE MODAL / BOTTOM SHEET
+========================================================= */
+
+.myteam-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.myteam-modal {
+  width: 100%;
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUpSheet 0.22s ease-out;
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.myteam-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.myteam-modal-header h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.myteam-modal-header p {
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.myteam-modal-close {
+  background: #f1f5f9;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.myteam-employee-form {
+  padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.myteam-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.myteam-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.myteam-form-field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.myteam-form-field label span {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.myteam-form-field input,
+.myteam-form-field select {
+  height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+}
+
+.myteam-form-field input:focus,
+.myteam-form-field select:focus {
+  border-color: #1597f4;
+  box-shadow: 0 0 0 3px rgba(21, 151, 244, 0.15);
+}
+
+.myteam-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.myteam-cancel-btn,
+.myteam-save-btn {
+  flex: 1;
+  height: 46px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.myteam-cancel-btn {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+}
+
+.myteam-save-btn {
+  border: none;
+  background: linear-gradient(135deg, #1597f4 0%, #6357e8 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* =========================================================
+   DESKTOP / TABLET RESPONSIVE OVERRIDES (>= 768px)
+========================================================= */
+
+@media (min-width: 768px) {
+  .myteam-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 18px 20px 40px;
+  }
+
+  .myteam-page-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .myteam-header-actions {
+    width: auto;
+    display: flex;
+  }
+
+  .myteam-export-btn,
+  .myteam-add-btn {
+    min-width: 140px;
+  }
+
+  .myteam-mobile-cards {
+    display: none;
+  }
+
+  .myteam-desktop-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e1e7ef;
+    border-radius: 13px;
+    background: #ffffff;
+  }
+
+  .myteam-table {
+    width: 100%;
+    min-width: 850px;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  .myteam-table thead {
+    background: #f8fafc;
+  }
+
+  .myteam-table th {
+    height: 48px;
+    padding: 0 14px;
+    border-bottom: 1px solid #e4e9f0;
+    color: #536b88;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .myteam-table td {
+    padding: 14px;
+    border-bottom: 1px solid #edf1f5;
+    color: #273b55;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .myteam-member-column { width: 22%; }
+  .myteam-designation-column { width: 16%; }
+  .myteam-email-column { width: 21%; }
+  .myteam-phone-column { width: 16%; }
+  .myteam-status-column { width: 14%; }
+  .myteam-performance-column { width: 11%; }
+
+  .myteam-modal-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+
+  .myteam-modal {
+    max-width: 500px;
+    border-radius: 16px;
+  }
+
+  .myteam-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

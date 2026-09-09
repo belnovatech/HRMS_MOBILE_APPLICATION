@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Belnova HRMS</string>
+    <string name="title_activity_main">Belnova HRMS</string>
+    <string name="package_name">com.belnova.hrmsmobile</string>
+    <string name="custom_url_scheme">com.belnova.hrmsmobile</string>
+</resources>

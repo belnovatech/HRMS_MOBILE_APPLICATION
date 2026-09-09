@@ -1,0 +1,48 @@
+/* Theme Utilities */
+
+.role-theme-hr {
+  --active-role-color: var(--primary-color);
+  --active-role-light: var(--primary-light);
+}
+
+.role-theme-manager {
+  --active-role-color: var(--manager-color);
+  --active-role-light: var(--manager-light);
+}
+
+.role-theme-employee {
+  --active-role-color: var(--employee-color);
+  --active-role-light: var(--employee-light);
+}
+
+/* Common Card Elements */
+.mobile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mobile-card:active {
+  transform: scale(0.99);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge-success { background: var(--status-success-bg); color: var(--status-success); }
+.badge-warning { background: var(--status-warning-bg); color: var(--status-warning); }
+.badge-danger { background: var(--status-danger-bg); color: var(--status-danger); }
+.badge-info { background: var(--status-info-bg); color: var(--status-info); }
+.badge-secondary { background: var(--bg-secondary); color: var(--text-muted); }

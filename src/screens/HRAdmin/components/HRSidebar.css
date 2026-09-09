@@ -1,0 +1,282 @@
+/* =========================================================
+   HR EXECUTIVE SIDEBAR — MATCHING REFERENCE SCREENSHOTS
+   ========================================================= */
+
+.hr-sidebar {
+  width: 250px;
+  min-width: 250px;
+  height: 100vh;
+  background-color: #0b132b;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+  user-select: none;
+}
+
+/* Brand Header */
+.hr-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.hr-brand-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hr-logo-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hr-sidebar-brand-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.hr-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hr-brand-title {
+  font-size: 1.05rem;
+  font-weight: 850;
+  letter-spacing: 0.6px;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.hr-brand-subtitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #7a8ea8;
+  letter-spacing: 0.2px;
+}
+
+.hr-sidebar-close-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Scrollable Nav Area */
+.hr-sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hr-sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hr-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+/* Group Section */
+.hr-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hr-group-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #64748b;
+  padding: 0 10px 6px 10px;
+}
+
+.hr-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hr-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  width: 100%;
+}
+
+.hr-nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+}
+
+.hr-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.hr-nav-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Active State — matches screenshot bright blue rounded pill */
+.hr-nav-item.active {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 650;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38);
+}
+
+.hr-nav-item.active .hr-nav-icon {
+  color: #ffffff;
+}
+
+.hr-active-bar {
+  width: 3.5px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+/* Footer Section */
+.hr-sidebar-footer {
+  padding: 14px 16px 16px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #090e20;
+}
+
+.hr-sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+}
+
+.hr-user-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 750;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.hr-user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hr-user-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-user-role {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.hr-sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: #fca5a5;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.hr-sidebar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #ffffff;
+}
+
+/* Backdrop */
+.hr-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+/* Responsive Mobile Sidebar */
+@media (max-width: 1023px) {
+  .hr-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
+  }
+
+  .hr-sidebar-mobile-open {
+    transform: translateX(0);
+  }
+
+  .hr-sidebar-close-btn {
+    display: flex;
+  }
+}

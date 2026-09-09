@@ -1,0 +1,742 @@
+/* =========================================================
+   MANAGER HELP & SUPPORT — MOBILE APP & RESPONSIVE DESKTOP
+   All classes prefixed with mgrhelp- to prevent conflicts.
+   ========================================================= */
+
+.mgrhelp-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px 14px calc(90px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+
+.mgrhelp-page *,
+.mgrhelp-page *::before,
+.mgrhelp-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.mgrhelp-header {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mgrhelp-header-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #eaf1ff, #f0ebff);
+  color: #4f67e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dbe5ff;
+}
+
+.mgrhelp-header-content {
+  min-width: 0;
+}
+
+.mgrhelp-header-content h1 {
+  margin: 0;
+  color: #172033;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 750;
+  letter-spacing: -0.35px;
+}
+
+.mgrhelp-header-content p {
+  margin: 4px 0 0;
+  max-width: 720px;
+  color: #7b8798;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   MAIN LAYOUT (Mobile Single-Column / Desktop 2-Column)
+   ========================================================= */
+
+.mgrhelp-layout {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .mgrhelp-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+/* =========================================================
+   TICKET CARD
+   ========================================================= */
+
+.mgrhelp-ticket-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  border: 1px solid #dfe5ed;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.mgrhelp-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.mgrhelp-card-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: #edf4ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgrhelp-card-header h2 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.mgrhelp-card-header p {
+  margin: 3px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   SUCCESS MESSAGE
+   ========================================================= */
+
+.mgrhelp-success {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #b7ebcb;
+  border-radius: 12px;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.mgrhelp-success-icon {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgrhelp-success-content {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mgrhelp-success-content strong {
+  color: #166534;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.mgrhelp-success-content span {
+  color: #374151;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mgrhelp-success-content b {
+  color: #15803d;
+}
+
+.mgrhelp-success-close {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mgrhelp-success-close:hover {
+  color: #166534;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.mgrhelp-form {
+  width: 100%;
+  min-width: 0;
+}
+
+.mgrhelp-form-group {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 16px;
+}
+
+.mgrhelp-form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.mgrhelp-form-group label span {
+  margin-left: 3px;
+  color: #ef4444;
+}
+
+.mgrhelp-form-row {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .mgrhelp-form-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================================================
+   INPUT & SELECT & TEXTAREA
+   ========================================================= */
+
+.mgrhelp-input {
+  width: 100% !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
+  padding: 0 12px !important;
+  border: 1px solid #dce3eb !important;
+  border-radius: 10px !important;
+  outline: none !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  transition: border-color 0.17s ease, box-shadow 0.17s ease;
+}
+
+.mgrhelp-input::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+.mgrhelp-input:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.mgrhelp-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.mgrhelp-select {
+  width: 100% !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
+  padding: 0 36px 0 12px !important;
+  border: 1px solid #dce3eb !important;
+  border-radius: 10px !important;
+  outline: none !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer;
+  transition: border-color 0.17s ease, box-shadow 0.17s ease;
+}
+
+.mgrhelp-select:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.mgrhelp-select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #94a3b8;
+}
+
+.mgrhelp-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.mgrhelp-label-row label {
+  margin-bottom: 0;
+}
+
+.mgrhelp-label-row small {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.mgrhelp-textarea {
+  display: block;
+  width: 100% !important;
+  min-height: 140px !important;
+  box-sizing: border-box !important;
+  padding: 12px !important;
+  border: 1px solid #dce3eb !important;
+  border-radius: 10px !important;
+  outline: none !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  resize: vertical !important;
+  transition: border-color 0.17s ease, box-shadow 0.17s ease;
+}
+
+.mgrhelp-textarea::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+.mgrhelp-textarea:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* =========================================================
+   FORM INFO & SUBMIT
+   ========================================================= */
+
+.mgrhelp-form-info {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #e5eaf1;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.mgrhelp-form-info svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #3b82f6;
+}
+
+.mgrhelp-form-info span {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.mgrhelp-submit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mgrhelp-submit-button {
+  height: 46px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transition: all 0.17s ease;
+}
+
+@media (max-width: 600px) {
+  .mgrhelp-submit-button {
+    width: 100%;
+  }
+}
+
+.mgrhelp-submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.26);
+}
+
+.mgrhelp-required-note {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+/* =========================================================
+   SIDEBAR (HR HELP, EMERGENCY, HOURS, GUIDEBOOK)
+   ========================================================= */
+
+.mgrhelp-sidebar {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mgrhelp-info-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid #dfe5ed;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.02);
+}
+
+.mgrhelp-info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mgrhelp-info-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgrhelp-info-blue   { background: #eff6ff; color: #2563eb; }
+.mgrhelp-info-green  { background: #f0fdf4; color: #16a34a; }
+.mgrhelp-info-purple { background: #faf5ff; color: #7c3aed; }
+
+.mgrhelp-info-header h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.mgrhelp-info-header p {
+  margin: 2px 0 0;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.mgrhelp-contact-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: all 0.16s ease;
+}
+
+.mgrhelp-contact-link:hover {
+  background: #dbeafe;
+}
+
+.mgrhelp-phone-link {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.mgrhelp-phone-link:hover {
+  background: #dcfce7;
+}
+
+.mgrhelp-contact-note {
+  display: block;
+  margin-top: 5px;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+/* Support Hours */
+.mgrhelp-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mgrhelp-hours div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mgrhelp-hours span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.mgrhelp-hours strong {
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Manager Guide Card */
+.mgrhelp-guide-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #dcd9ff;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f8f7ff, #fbfbff);
+}
+
+.mgrhelp-guide-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  background: #ece9ff;
+  color: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgrhelp-guide-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.mgrhelp-guide-content h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.mgrhelp-guide-content p {
+  margin: 4px 0 10px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mgrhelp-guide-button {
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #4f46e5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.mgrhelp-guide-button:hover {
+  background: #eeef2ff;
+  border-color: #a5b4fc;
+}
+
+/* =========================================================
+   FAQ SECTION & ACCORDION
+   ========================================================= */
+
+.mgrhelp-faq-card {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid #dfe5ed;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.mgrhelp-faq-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mgrhelp-faq-title-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgrhelp-faq-header h2 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.mgrhelp-faq-header p {
+  margin: 3px 0 0;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.mgrhelp-faq-list {
+  width: 100%;
+  border-top: 1px solid #edf1f5;
+}
+
+.mgrhelp-faq-item {
+  border-bottom: 1px solid #edf1f5;
+}
+
+.mgrhelp-faq-question {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 4px;
+  border: none;
+  background: transparent;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.16s ease;
+}
+
+.mgrhelp-faq-question:hover {
+  color: #2563eb;
+}
+
+.mgrhelp-faq-chevron {
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.mgrhelp-faq-open .mgrhelp-faq-chevron {
+  transform: rotate(180deg);
+  color: #2563eb;
+}
+
+.mgrhelp-faq-answer {
+  padding: 0 12px 14px 4px;
+  animation: mgrhelpFadeIn 0.2s ease-out;
+}
+
+@keyframes mgrhelpFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mgrhelp-faq-answer p {
+  margin: 0;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ACCESSIBILITY & FOCUS
+   ========================================================= */
+
+.mgrhelp-input:focus-visible,
+.mgrhelp-select:focus-visible,
+.mgrhelp-textarea:focus-visible,
+.mgrhelp-submit-button:focus-visible,
+.mgrhelp-guide-button:focus-visible,
+.mgrhelp-faq-question:focus-visible,
+.mgrhelp-success-close:focus-visible,
+.mgrhelp-contact-link:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.25);
+  outline-offset: 2px;
+}

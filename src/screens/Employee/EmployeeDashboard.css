@@ -1,0 +1,518 @@
+/* Employee Dashboard Mobile Styles */
+.hrms-dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hrms-profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hrms-profile-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hrms-profile-copy {
+  flex: 1;
+}
+
+.hrms-profile-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hrms-profile-name-row h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.hrms-profile-link {
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.hrms-profile-role {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.hrms-profile-department, .hrms-profile-reports {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.hrms-attendance-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hrms-attendance-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hrms-attendance-top h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.hrms-status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.hrms-status-present { background: var(--status-success-bg); color: var(--status-success); }
+.hrms-status-neutral { background: var(--bg-secondary); color: var(--text-muted); }
+
+.hrms-attendance-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.hrms-attendance-stat strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.hrms-attendance-stat span {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.hrms-time-green { color: var(--status-success); }
+.hrms-time-red { color: var(--status-danger); }
+.hrms-time-purple { color: var(--manager-color); }
+
+.hrms-attendance-sync {
+  font-size: 0.7rem;
+  color: var(--text-subtle);
+  margin-bottom: 12px;
+}
+
+.hrms-check-toggle {
+  width: 100%;
+  min-height: 42px;
+  background: var(--employee-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.hrms-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hrms-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hrms-section-heading h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.hrms-text-action {
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.hrms-leave-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hrms-leave-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hrms-leave-title-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.hrms-progress-track {
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.hrms-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.hrms-progress-blue { background: #2563eb; }
+.hrms-progress-purple { background: #7c3aed; }
+.hrms-progress-green { background: #10b981; }
+
+.hrms-leave-meta {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.hrms-widget-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.hrms-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hrms-card-heading h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.hrms-salary-list {
+  background: var(--bg-secondary);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hrms-salary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.hrms-money-green { color: var(--status-success); }
+.hrms-money-red { color: var(--status-danger); }
+.hrms-money-blue { color: var(--primary-color); font-weight: 700; }
+
+.hrms-outline-button {
+  width: 100%;
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.hrms-holiday-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hrms-holiday-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.hrms-holiday-date {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hrms-holiday-date strong { font-size: 0.7rem; text-transform: uppercase; }
+.hrms-holiday-date span { font-size: 1rem; font-weight: 800; }
+
+.hrms-holiday-copy strong { font-size: 0.88rem; display: block; color: var(--text-main); }
+.hrms-holiday-copy span { font-size: 0.75rem; color: var(--text-muted); }
+
+.hrms-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hrms-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.hrms-action-item span:nth-child(2) {
+  flex: 1;
+  text-align: left;
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.hrms-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hrms-action-blue { background: #dbeafe; color: #2563eb; }
+.hrms-action-purple { background: #f3e8ff; color: #7c3aed; }
+.hrms-action-green { background: #d1fae5; color: #10b981; }
+.hrms-action-orange { background: #ffedd5; color: #ea580c; }
+.hrms-action-pink { background: #fce7f3; color: #db2777; }
+
+.hrms-table-scroll {
+  overflow-x: auto;
+}
+
+.hrms-attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.hrms-attendance-table th, .hrms-attendance-table td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hrms-attendance-table th {
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+.hrms-table-green { color: var(--status-success); font-weight: 600; }
+.hrms-table-red { color: var(--status-danger); font-weight: 600; }
+
+.hrms-table-status {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.hrms-table-status-present { background: var(--status-success-bg); color: var(--status-success); }
+.hrms-table-status-late { background: var(--status-warning-bg); color: var(--status-warning); }
+.hrms-table-status-leave { background: var(--status-danger-bg); color: var(--status-danger); }
+
+.hrms-announcement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hrms-announcement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hrms-announcement-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.hrms-announcement-content strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.hrms-announcement-content span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Modal Styling */
+.hrms-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 2000;
+}
+
+.hrms-modal {
+  width: 100%;
+  background: var(--bg-card);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-lg);
+}
+
+.hrms-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.hrms-modal-kicker {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+}
+
+.hrms-modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.hrms-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.hrms-modal-employee {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+}
+
+.hrms-modal-employee span { display: block; font-size: 0.7rem; color: var(--text-muted); }
+
+.hrms-modal-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.hrms-modal-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hrms-modal-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--primary-color);
+}
+
+.hrms-download-button {
+  width: 100%;
+  min-height: 44px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}

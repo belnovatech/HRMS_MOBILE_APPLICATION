@@ -1,0 +1,1152 @@
+/* ==========================================================
+   EMPLOYEE HELP & SUPPORT
+   All classes are uniquely prefixed with emp-help-
+   ========================================================== */
+
+.emp-help-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2px 0 42px;
+  color: #1f2937;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.emp-help-page *,
+.emp-help-page *::before,
+.emp-help-page *::after {
+  box-sizing: border-box;
+}
+
+.emp-help-page button,
+.emp-help-page input,
+.emp-help-page select,
+.emp-help-page textarea {
+  font: inherit;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.emp-help-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.emp-help-header-copy {
+  min-width: 0;
+}
+
+.emp-help-eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: #6575e5;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.emp-help-header h1 {
+  margin: 0;
+  color: #202632;
+  font-size: 25px;
+  line-height: 1.15;
+  font-weight: 760;
+  text-align: left;
+}
+
+.emp-help-header p {
+  max-width: 620px;
+  margin: 6px 0 0;
+  color: #7d8796;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.emp-help-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 11px;
+  border: 1px solid #dfe9e4;
+  border-radius: 999px;
+  background: #f7fcf9;
+  color: #34815e;
+  font-size: 8px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.emp-help-online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #27bd78;
+  box-shadow: 0 0 0 3px rgba(39, 189, 120, 0.12);
+}
+
+
+/* ==========================================================
+   QUICK CARDS
+   ========================================================== */
+
+.emp-help-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.emp-help-quick-card {
+  position: relative;
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 13px;
+  overflow: hidden;
+  border: 1px solid #e0e5eb;
+  border-radius: 11px;
+  background: #ffffff;
+  box-shadow: 0 3px 11px rgba(15, 23, 42, 0.025);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.emp-help-quick-card::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  top: -28px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.035);
+}
+
+.emp-help-quick-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.emp-help-quick-icon {
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.emp-help-quick-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.emp-help-blue {
+  color: #3474e7;
+  background: #edf3ff;
+}
+
+.emp-help-purple {
+  color: #705ce5;
+  background: #f1edff;
+}
+
+.emp-help-green {
+  color: #1ba369;
+  background: #eaf9f1;
+}
+
+.emp-help-quick-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.emp-help-quick-content span {
+  margin-bottom: 3px;
+  color: #9099a8;
+  font-size: 6.5px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.emp-help-quick-content strong {
+  color: #303846;
+  font-size: 9px;
+  line-height: 1.25;
+}
+
+.emp-help-quick-content p {
+  margin: 3px 0 0;
+  overflow: hidden;
+  color: #8a94a2;
+  font-size: 7.5px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emp-help-quick-arrow {
+  position: relative;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  margin-left: auto;
+  color: #a2aab5;
+}
+
+
+/* ==========================================================
+   MAIN TWO-COLUMN LAYOUT
+   ========================================================== */
+
+.emp-help-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  align-items: start;
+  gap: 14px;
+}
+
+
+/* ==========================================================
+   FAQ PANEL
+   ========================================================== */
+
+.emp-help-faq-panel,
+.emp-help-ticket-panel,
+.emp-help-ticket-history,
+.emp-help-contact-panel {
+  border: 1px solid #dfe4ea;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 3px 11px rgba(15, 23, 42, 0.025);
+}
+
+.emp-help-faq-panel {
+  overflow: hidden;
+}
+
+.emp-help-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 16px 11px;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.emp-help-section-heading > div:first-child {
+  min-width: 0;
+}
+
+.emp-help-section-heading > div:first-child > span,
+.emp-help-ticket-heading > div:last-child > span,
+.emp-help-history-heading > div:first-child > span,
+.emp-help-contact-copy > span {
+  display: block;
+  margin-bottom: 4px;
+  color: #6978e3;
+  font-size: 6.5px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.emp-help-section-heading h2,
+.emp-help-ticket-heading h2,
+.emp-help-history-heading h2,
+.emp-help-contact-copy h2 {
+  margin: 0;
+  color: #2d3541;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 720;
+}
+
+.emp-help-section-heading p {
+  margin: 4px 0 0;
+  color: #8b94a1;
+  font-size: 7.5px;
+  line-height: 1.4;
+}
+
+.emp-help-faq-count {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f3f5f8;
+  color: #7c8695;
+  font-size: 6.8px;
+  font-weight: 650;
+}
+
+
+/* ==========================================================
+   SEARCH
+   ========================================================== */
+
+.emp-help-search {
+  position: relative;
+  margin: 11px 12px 9px;
+}
+
+.emp-help-search > svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  color: #9ca5b1;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.emp-help-search input {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px 0 29px;
+  border: 1px solid #dfe4ea;
+  border-radius: 8px;
+  outline: none;
+  background: #fafbfc;
+  color: #586474;
+  font-size: 8px;
+}
+
+.emp-help-search input:focus {
+  border-color: #7180e4;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(113, 128, 228, 0.08);
+}
+
+.emp-help-search input::placeholder {
+  color: #a0a8b4;
+}
+
+
+/* ==========================================================
+   FAQ ITEMS
+   ========================================================== */
+
+.emp-help-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 2px 12px 13px;
+}
+
+.emp-help-faq-item {
+  overflow: hidden;
+  border: 1px solid #e5e8ed;
+  border-radius: 9px;
+  background: #ffffff;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.emp-help-faq-item:hover {
+  border-color: #d7dce5;
+  background: #fcfdff;
+}
+
+.emp-help-faq-open {
+  border-color: #cfd6ee;
+  background: #fbfcff;
+}
+
+.emp-help-faq-question {
+  width: 100%;
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: #303846;
+  text-align: left;
+  cursor: pointer;
+}
+
+.emp-help-faq-question-text {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333b48;
+  font-size: 8.5px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+.emp-help-faq-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border-radius: 6px;
+  background: #f1f3ff;
+  color: #6574df;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 6px;
+  font-weight: 700;
+}
+
+.emp-help-faq-toggle {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: #f5f6f8;
+  color: #858e9b;
+}
+
+.emp-help-faq-toggle svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.18s ease;
+}
+
+.emp-help-faq-open .emp-help-faq-toggle svg {
+  transform: rotate(180deg);
+}
+
+.emp-help-faq-category {
+  display: inline-flex;
+  margin: -2px 10px 9px 40px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #8b94a0;
+  font-size: 6.2px;
+  line-height: 1;
+  font-weight: 650;
+}
+
+.emp-help-faq-answer {
+  padding: 0 40px 11px;
+}
+
+.emp-help-faq-answer p {
+  margin: 0 0 7px;
+  color: #717c8c;
+  font-size: 7.8px;
+  line-height: 1.55;
+}
+
+.emp-help-faq-answer span {
+  display: inline-flex;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #edf3ff;
+  color: #5570bb;
+  font-size: 6px;
+  line-height: 1;
+  font-weight: 650;
+}
+
+
+/* ==========================================================
+   EMPTY
+   ========================================================== */
+
+.emp-help-empty {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.emp-help-empty > svg {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 7px;
+  color: #7a86df;
+}
+
+.emp-help-empty strong {
+  color: #4e5969;
+  font-size: 9px;
+}
+
+.emp-help-empty p {
+  margin: 4px 0 9px;
+  color: #9aa2ae;
+  font-size: 7px;
+}
+
+.emp-help-empty button {
+  min-height: 27px;
+  padding: 0 10px;
+  border: 1px solid #dce2e9;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #6876d9;
+  font-size: 7px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+
+/* ==========================================================
+   TICKET PANEL
+   ========================================================== */
+
+.emp-help-ticket-panel {
+  padding: 15px;
+}
+
+.emp-help-ticket-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.emp-help-ticket-icon {
+  width: 33px;
+  height: 33px;
+  flex: 0 0 33px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #edf7ff, #f0edff);
+  color: #6575df;
+}
+
+.emp-help-ticket-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.emp-help-ticket-heading > div:last-child {
+  min-width: 0;
+}
+
+.emp-help-ticket-heading h2 {
+  font-size: 12px;
+}
+
+.emp-help-ticket-heading p {
+  margin: 4px 0 0;
+  color: #8d96a3;
+  font-size: 7px;
+  line-height: 1.4;
+}
+
+
+/* ==========================================================
+   SUCCESS ALERT
+   ========================================================== */
+
+.emp-help-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 11px;
+  padding: 9px;
+  border: 1px solid #bcebd2;
+  border-radius: 8px;
+  background: #f0fcf5;
+}
+
+.emp-help-success-icon {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: #d7f7e6;
+  color: #1a9b61;
+}
+
+.emp-help-success-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.emp-help-success > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+
+.emp-help-success strong {
+  display: block;
+  color: #24734f;
+  font-size: 7.5px;
+}
+
+.emp-help-success p {
+  margin: 3px 0 0;
+  color: #5e8972;
+  font-size: 6.8px;
+}
+
+.emp-help-success button {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #78a18d;
+  cursor: pointer;
+}
+
+.emp-help-success button svg {
+  width: 11px;
+  height: 11px;
+}
+
+
+/* ==========================================================
+   FORM
+   ========================================================== */
+
+.emp-help-ticket-form {
+  padding-top: 13px;
+}
+
+.emp-help-field {
+  margin-bottom: 11px;
+}
+
+.emp-help-field label {
+  display: block;
+  margin-bottom: 5px;
+  color: #596476;
+  font-size: 7.5px;
+  font-weight: 700;
+}
+
+.emp-help-field input,
+.emp-help-select-wrap select,
+.emp-help-field textarea {
+  width: 100%;
+  border: 1px solid #dce2e8;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #586475;
+  font-size: 8px;
+}
+
+.emp-help-field input,
+.emp-help-select-wrap select {
+  height: 35px;
+}
+
+.emp-help-field input {
+  padding: 0 10px;
+}
+
+.emp-help-select-wrap {
+  position: relative;
+}
+
+.emp-help-select-wrap select {
+  appearance: none;
+  padding: 0 30px 0 10px;
+  cursor: pointer;
+}
+
+.emp-help-select-wrap > svg {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  color: #7e8795;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.emp-help-field textarea {
+  min-height: 102px;
+  padding: 9px 10px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.emp-help-field input:focus,
+.emp-help-select-wrap select:focus,
+.emp-help-field textarea:focus {
+  border-color: #7180e4;
+  box-shadow: 0 0 0 3px rgba(113, 128, 228, 0.08);
+}
+
+.emp-help-field input::placeholder,
+.emp-help-field textarea::placeholder {
+  color: #a2aab5;
+}
+
+.emp-help-field-hint {
+  display: block;
+  margin-top: 5px;
+  color: #9ba3af;
+  font-size: 6.5px;
+  line-height: 1.35;
+}
+
+.emp-help-submit-btn {
+  width: 100%;
+  min-height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(100deg, #08b9ef, #7555e9);
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 13px rgba(76, 93, 226, 0.15);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.emp-help-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 17px rgba(76, 93, 226, 0.2);
+}
+
+.emp-help-submit-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+
+/* ==========================================================
+   SUPPORT NOTE
+   ========================================================== */
+
+.emp-help-support-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eef1f4;
+  color: #9099a6;
+  font-size: 6.8px;
+}
+
+.emp-help-support-note svg {
+  width: 11px;
+  height: 11px;
+  color: #7a86dd;
+}
+
+.emp-help-support-note strong {
+  color: #677281;
+}
+
+
+/* ==========================================================
+   REQUEST HISTORY
+   ========================================================== */
+
+.emp-help-ticket-history {
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.emp-help-history-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 15px;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.emp-help-history-heading > span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f3f5f8;
+  color: #7f8997;
+  font-size: 6.5px;
+}
+
+.emp-help-history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.emp-help-history-item {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.emp-help-history-item:last-child {
+  border-bottom: 0;
+}
+
+.emp-help-history-file {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #f0f2ff;
+  color: #6978df;
+}
+
+.emp-help-history-file svg {
+  width: 13px;
+  height: 13px;
+}
+
+.emp-help-history-main {
+  min-width: 0;
+}
+
+.emp-help-history-main strong {
+  display: block;
+  overflow: hidden;
+  color: #3c4552;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emp-help-history-main p {
+  margin: 3px 0 0;
+  color: #939ba8;
+  font-size: 6.8px;
+}
+
+.emp-help-history-status {
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #e2f8ec;
+  color: #258256;
+  font-size: 6px;
+  font-weight: 650;
+}
+
+.emp-help-history-date {
+  color: #9aa2ad;
+  font-size: 6.8px;
+  white-space: nowrap;
+}
+
+
+/* ==========================================================
+   CONTACT PANEL
+   ========================================================== */
+
+.emp-help-contact-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 14px;
+  padding: 15px 16px;
+  background: linear-gradient(115deg, #fbfcff, #f8f9ff);
+}
+
+.emp-help-contact-copy {
+  min-width: 0;
+}
+
+.emp-help-contact-copy h2 {
+  font-size: 11px;
+}
+
+.emp-help-contact-copy p {
+  max-width: 560px;
+  margin: 4px 0 0;
+  color: #87919f;
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+.emp-help-contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.emp-help-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.emp-help-contact-item > div {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #6677dc;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
+}
+
+.emp-help-contact-item svg {
+  width: 12px;
+  height: 12px;
+}
+
+.emp-help-contact-item > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.emp-help-contact-item small {
+  color: #9aa2ae;
+  font-size: 6px;
+}
+
+.emp-help-contact-item strong {
+  color: #566172;
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .emp-help-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .emp-help-ticket-panel {
+    order: -1;
+  }
+
+  .emp-help-ticket-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+  }
+
+  .emp-help-field:nth-child(3),
+  .emp-help-submit-btn,
+  .emp-help-support-note {
+    grid-column: 1 / -1;
+  }
+
+  .emp-help-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .emp-help-contact-panel {
+    align-items: flex-start;
+  }
+
+  .emp-help-contact-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+  }
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 640px) {
+  .emp-help-page {
+    padding: 2px 1px 28px;
+  }
+
+  .emp-help-header {
+    align-items: flex-start;
+  }
+
+  .emp-help-header h1 {
+    font-size: 21px;
+  }
+
+  .emp-help-header p {
+    font-size: 8.5px;
+  }
+
+  .emp-help-header-badge {
+    display: none;
+  }
+
+  .emp-help-quick-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .emp-help-quick-card {
+    min-height: 70px;
+  }
+
+  .emp-help-quick-content p {
+    white-space: normal;
+  }
+
+  .emp-help-section-heading {
+    padding: 13px;
+  }
+
+  .emp-help-search {
+    margin: 9px 10px;
+  }
+
+  .emp-help-faq-list {
+    padding: 2px 10px 11px;
+  }
+
+  .emp-help-ticket-panel {
+    padding: 13px;
+  }
+
+  .emp-help-ticket-form {
+    display: block;
+  }
+
+  .emp-help-field:nth-child(3),
+  .emp-help-submit-btn,
+  .emp-help-support-note {
+    grid-column: auto;
+  }
+
+  .emp-help-history-item {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+  }
+
+  .emp-help-history-date {
+    grid-column: 2 / 3;
+  }
+
+  .emp-help-contact-panel {
+    display: block;
+  }
+
+  .emp-help-contact-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 13px;
+  }
+
+  .emp-help-contact-item > div {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+
+/* ==========================================================
+   SMALL MOBILE
+   ========================================================== */
+
+@media (max-width: 420px) {
+  .emp-help-header h1 {
+    font-size: 19px;
+  }
+
+  .emp-help-header p {
+    font-size: 8px;
+  }
+
+  .emp-help-faq-question-text {
+    font-size: 8px;
+  }
+
+  .emp-help-faq-answer {
+    padding-left: 39px;
+    padding-right: 12px;
+  }
+
+  .emp-help-ticket-heading h2 {
+    font-size: 11px;
+  }
+
+  .emp-help-contact-actions {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .emp-help-history-item {
+    grid-template-columns: 29px minmax(0, 1fr);
+  }
+
+  .emp-help-history-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .emp-help-history-date {
+    grid-column: 2;
+  }
+}
+
+
+/* ==========================================================
+   VERY SMALL DEVICES
+   ========================================================== */
+
+@media (max-width: 340px) {
+  .emp-help-header h1 {
+    font-size: 18px;
+  }
+
+  .emp-help-quick-card {
+    padding: 10px;
+  }
+
+  .emp-help-section-heading h2,
+  .emp-help-ticket-heading h2 {
+    font-size: 11px;
+  }
+
+  .emp-help-ticket-panel {
+    padding: 11px;
+  }
+
+  .emp-help-faq-question {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .emp-help-quick-card,
+  .emp-help-submit-btn,
+  .emp-help-faq-toggle svg {
+    transition: none;
+  }
+}

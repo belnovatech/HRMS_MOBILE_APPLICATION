@@ -1,0 +1,1443 @@
+/* ==========================================================================
+   BELNOVA HRMS HELP & SUPPORT - MOBILE-FIRST ENTERPRISE STYLES
+   Isolated Namespace: bel-help-* / bel-*
+   ========================================================================== */
+
+.bel-help-app-shell {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding-bottom: calc(var(--bottom-nav-height, 64px) + 40px);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+}
+
+.bel-help-main-content {
+  padding: 12px 16px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   HERO SEARCH & WELCOME BANNER
+   ========================================================================== */
+.bel-help-welcome-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 18px;
+  padding: 20px 16px;
+  color: #ffffff;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12);
+}
+
+.bel-welcome-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
+
+.bel-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.bel-status-dot.pulse {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.bel-help-welcome-card h1 {
+  margin: 0 0 6px 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.bel-help-welcome-card p {
+  margin: 0 0 16px 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.bel-help-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 4px 6px 4px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.bel-search-icon {
+  color: #94a3b8;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.bel-help-search-wrapper input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.85rem;
+  color: #1e293b;
+  font-family: inherit;
+  padding: 6px 0;
+}
+
+.bel-help-search-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.bel-search-clear-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bel-search-action-btn {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bel-popular-topics-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.bel-topic-chip {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 3px 10px;
+  color: #e2e8f0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bel-topic-chip:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   QUICK ACTION TILES
+   ========================================================================== */
+.bel-help-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+@media (min-width: 640px) {
+  .bel-help-quick-actions {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bel-quick-tile {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.18s ease;
+}
+
+.bel-quick-tile:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.bel-quick-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.bel-quick-icon-box.ticket { background: #eff6ff; color: #2563eb; }
+.bel-quick-icon-box.email { background: #fdf2f8; color: #db2777; }
+.bel-quick-icon-box.status { background: #ecfdf5; color: #059669; }
+.bel-quick-icon-box.faq { background: #f5f3ff; color: #7c3aed; }
+
+.bel-quick-tile-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bel-quick-tile-copy strong {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bel-quick-tile-copy span {
+  font-size: 0.68rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   SECTION HEADERS
+   ========================================================================== */
+.bel-help-section {
+  margin-bottom: 24px;
+}
+
+.bel-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.bel-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.bel-section-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bel-topic-count,
+.bel-faq-results-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.bel-raise-action-btn {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+/* ==========================================================================
+   KNOWLEDGE BASE CATEGORY CARDS
+   ========================================================================== */
+.bel-category-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .bel-category-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.bel-category-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  width: 100%;
+}
+
+.bel-category-card:hover,
+.bel-category-card.active {
+  border-color: #3b82f6;
+  background: #fdfefe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.bel-category-card.active {
+  background: #f0f7ff;
+}
+
+.bel-cat-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.bel-cat-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bel-cat-card-content h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bel-cat-card-content p {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bel-cat-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.bel-cat-article-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.bel-cat-arrow {
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   SUPPORT TICKETS LIST (HR ADMIN DESK)
+   ========================================================================== */
+.bel-ticket-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.bel-ticket-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.bel-ticket-filter-chip {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bel-ticket-filter-chip span {
+  font-size: 0.65rem;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.bel-ticket-filter-chip.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.bel-ticket-filter-chip.active span {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.bel-tickets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bel-ticket-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.bel-ticket-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bel-ticket-id-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bel-ticket-id-tag strong {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.bel-ticket-cat-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 1px 7px;
+  border-radius: 5px;
+}
+
+.bel-ticket-status-pill {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.bel-ticket-status-pill.open { background: #fee2e2; color: #dc2626; }
+.bel-ticket-status-pill.in-progress { background: #fef3c7; color: #d97706; }
+.bel-ticket-status-pill.resolved { background: #dcfce7; color: #15803d; }
+
+.bel-ticket-subject {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-ticket-description {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.bel-ticket-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.bel-ticket-meta-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bel-ticket-response-preview {
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.74rem;
+  color: #065f46;
+}
+
+.bel-ticket-response-preview svg {
+  color: #059669;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bel-ticket-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.bel-ticket-btn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bel-ticket-btn.outline {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.bel-ticket-btn.progress-btn {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+}
+
+.bel-ticket-btn.resolve-btn {
+  background: #10b981;
+  border: none;
+  color: #ffffff;
+}
+
+.bel-empty-tickets-card {
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bel-empty-tickets-card svg {
+  font-size: 1.8rem;
+  color: #10b981;
+}
+
+.bel-empty-tickets-card h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+.bel-empty-tickets-card p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   FAQS ACCORDION
+   ========================================================================== */
+.bel-faq-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.bel-faq-category-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.bel-faq-category-pills button {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bel-faq-category-pills button.active {
+  background: #1e293b;
+  border-color: #1e293b;
+  color: #ffffff;
+}
+
+.bel-faq-accordion-list {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.bel-faq-item {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bel-faq-item:last-child {
+  border-bottom: none;
+}
+
+.bel-faq-question-btn {
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.bel-faq-chevron {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bel-faq-item.open .bel-faq-chevron {
+  transform: rotate(180deg);
+  color: #2563eb;
+}
+
+.bel-faq-answer-panel {
+  padding: 0 16px 14px;
+  animation: fadeInFaq 0.2s ease;
+}
+
+@keyframes fadeInFaq {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bel-faq-answer-panel p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.bel-faq-empty-state {
+  padding: 24px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bel-faq-empty-state svg {
+  font-size: 1.8rem;
+  color: #94a3b8;
+}
+
+.bel-faq-empty-state h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+.bel-faq-empty-state p {
+  margin: 0 0 8px 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   RECOMMENDED GUIDES
+   ========================================================================== */
+.bel-articles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .bel-articles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.bel-article-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.bel-article-card:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.bel-article-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.bel-article-category {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2563eb;
+}
+
+.bel-article-card-body h4 {
+  margin: 2px 0 4px 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bel-article-card-body p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.bel-article-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.bel-read-guide-link {
+  color: #2563eb;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* ==========================================================================
+   EMERGENCY OUTAGE & SUPPORT DESK FOOTER
+   ========================================================================== */
+.bel-emergency-outage-card {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.bel-emergency-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.bel-emergency-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.bel-emergency-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #dc2626;
+  text-transform: uppercase;
+}
+
+.bel-emergency-copy h3 {
+  margin: 2px 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #991b1b;
+}
+
+.bel-emergency-copy p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #7f1d1d;
+  line-height: 1.4;
+}
+
+.bel-emergency-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.bel-emergency-call-btn {
+  flex: 1;
+  height: 38px;
+  background: #dc2626;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.bel-emergency-ticket-btn {
+  flex: 1;
+  height: 38px;
+  background: #ffffff;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.bel-support-desk-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.bel-desk-info-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .bel-desk-info-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.bel-desk-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bel-desk-info-item svg {
+  color: #2563eb;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.bel-desk-info-item div {
+  display: flex;
+  flex-direction: column;
+}
+
+.bel-desk-info-item strong {
+  font-size: 0.75rem;
+  color: #1e293b;
+}
+
+.bel-desk-info-item a,
+.bel-desk-info-item span {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   MODALS & BOTTOM SHEETS
+   ========================================================================== */
+.bel-help-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .bel-help-modal-backdrop {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+.bel-help-modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 540px;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.15);
+  animation: slideUpHelp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .bel-help-modal-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes slideUpHelp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.bel-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bel-modal-header-copy h3 {
+  margin: 0 0 2px 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bel-modal-header-copy p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.bel-modal-close-btn {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bel-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bel-form-group label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.bel-form-group input,
+.bel-form-group select,
+.bel-form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  color: #1e293b;
+  font-family: inherit;
+  outline: none;
+}
+
+.bel-form-group input:focus,
+.bel-form-group select:focus,
+.bel-form-group textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.bel-form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.bel-modal-info-note {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.68rem;
+  color: #64748b;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.bel-modal-info-note svg {
+  color: #2563eb;
+  font-size: 0.85rem;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.bel-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.bel-btn-primary {
+  height: 36px;
+  padding: 0 14px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.bel-btn-primary.success-btn {
+  background: #10b981;
+}
+
+.bel-btn-secondary {
+  height: 36px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.bel-field-error {
+  font-size: 0.7rem;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* Success Card */
+.bel-ticket-success-view {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.bel-success-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.bel-ticket-success-view h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.bel-ticket-success-view p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Ticket Details Sheet */
+.bel-ticket-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-ticket-detail-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bel-detail-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.bel-detail-info-block {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.bel-detail-info-block h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.bel-detail-info-block p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #475569;
+}
+
+.bel-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  font-size: 0.74rem;
+}
+
+.bel-detail-grid span {
+  display: block;
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.bel-detail-grid strong {
+  color: #1e293b;
+}
+
+.bel-detail-response-box {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.75rem;
+  color: #065f46;
+}
+
+/* Article Reader */
+.bel-article-reader-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bel-article-section-block h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.bel-article-section-block p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.bel-article-help-box {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+}
+
+.bel-article-help-box svg {
+  color: #2563eb;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.bel-article-help-box strong {
+  display: block;
+  color: #1e40af;
+}
+
+.bel-article-help-box p {
+  margin: 0;
+  color: #3b82f6;
+}
+
+/* System Status Modal */
+.bel-system-status-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-status-overall-banner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bel-status-overall-banner strong {
+  display: block;
+  font-size: 0.85rem;
+  color: #166534;
+}
+
+.bel-status-overall-banner span {
+  font-size: 0.72rem;
+  color: #15803d;
+}
+
+.bel-service-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-service-status-row {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bel-service-status-row strong {
+  display: block;
+  font-size: 0.78rem;
+  color: #1e293b;
+}
+
+.bel-service-status-row span {
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.bel-status-badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.bel-desk-contact-pill {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+}
+
+.bel-desk-contact-pill svg {
+  color: #2563eb;
+  font-size: 1.15rem;
+}
+
+.bel-desk-contact-pill strong {
+  display: block;
+  color: #1e40af;
+}
+
+.bel-desk-contact-pill span {
+  font-size: 0.68rem;
+  color: #3b82f6;
+}
+
+.bel-ticket-summary-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.76rem;
+}
+
+.bel-ticket-summary-box strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #1e293b;
+}
+
+.bel-ticket-summary-box p {
+  margin: 0;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+.bel-help-toast {
+  position: fixed;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  padding: 10px 16px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: toastPop 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.bel-help-toast.success { background: #065f46; color: #ffffff; }
+.bel-help-toast.error { background: #991b1b; color: #ffffff; }
+.bel-help-toast.info { background: #1e293b; color: #ffffff; }
+
+@media (max-width: 480px) {
+  .bel-help-main-content {
+    padding: 10px 12px 20px;
+  }
+}

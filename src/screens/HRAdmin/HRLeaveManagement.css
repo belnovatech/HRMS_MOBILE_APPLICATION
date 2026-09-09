@@ -1,0 +1,1371 @@
+/* ==========================================================================
+   BELNOVA HRMS MOBILE — LEAVE MANAGEMENT MODULE
+   Namespace: bel-leave-*
+   Optimized for mobile viewports (360px - 430px+)
+   ========================================================================== */
+
+.bel-leave-page-container {
+  min-height: 100vh;
+  background-color: #f6f8fc;
+  color: #1e293b;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.bel-leave-page-container *,
+.bel-leave-page-container *::before,
+.bel-leave-page-container *::after {
+  box-sizing: border-box;
+}
+
+/* Scroll Content Container */
+.bel-leave-scroll-content {
+  flex: 1 0 auto;
+  padding: 14px 16px calc(var(--bottom-nav-height, 64px) + 36px);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Toast Alert */
+.bel-leave-toast {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: belLeaveToastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 90vw;
+}
+
+@keyframes belLeaveToastSlide {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.bel-leave-toast-icon {
+  color: #10b981;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Hero Header */
+.bel-leave-hero-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bel-leave-hero-text {
+  flex: 1;
+}
+
+.bel-leave-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+.bel-leave-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Export Button */
+.bel-leave-export-btn {
+  height: 38px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bel-leave-export-btn:active {
+  background: #f1f5f9;
+  transform: scale(0.97);
+}
+
+.bel-leave-export-btn svg {
+  font-size: 14px;
+  color: #2f6fed;
+}
+
+/* Stats Horizontal Scroll */
+.bel-leave-stats-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.bel-leave-stats-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.bel-leave-stat-card {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.bel-leave-stat-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.bel-leave-stat-card--pending .bel-leave-stat-icon-wrap {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.bel-leave-stat-card--approved .bel-leave-stat-icon-wrap {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.bel-leave-stat-card--rejected .bel-leave-stat-icon-wrap {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.bel-leave-stat-card--today .bel-leave-stat-icon-wrap {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.bel-leave-stat-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.bel-leave-stat-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.bel-leave-stat-label {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* Mobile Segmented Control Navigation */
+.bel-leave-segmented-tabs {
+  display: flex;
+  background: #e2e8f0;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  gap: 3px;
+}
+
+.bel-leave-tab-btn {
+  flex: 1;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bel-leave-tab-btn.is-active {
+  background: #ffffff;
+  color: #2f6fed;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.bel-leave-badge-count {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   TAB 1: REQUESTS VIEW
+   ========================================================================== */
+.bel-leave-filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.bel-leave-search-box {
+  flex: 1;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.bel-leave-search-icon {
+  color: #94a3b8;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.bel-leave-search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #1e293b;
+  background: transparent;
+}
+
+.bel-leave-search-input::placeholder {
+  color: #94a3b8;
+}
+
+.bel-leave-search-clear {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bel-leave-filter-trigger {
+  height: 44px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.bel-leave-filter-trigger:active {
+  background: #f1f5f9;
+}
+
+.bel-leave-filter-trigger.is-filtering {
+  border-color: #2f6fed;
+  color: #2f6fed;
+  background: #eff6ff;
+}
+
+.bel-leave-filter-indicator {
+  background: #2f6fed;
+  color: #ffffff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Active Pills Row */
+.bel-leave-active-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.bel-leave-active-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.bel-leave-active-pill button {
+  border: none;
+  background: transparent;
+  color: #4f46e5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: 12px;
+}
+
+.bel-leave-reset-link {
+  border: none;
+  background: transparent;
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Cards List */
+.bel-leave-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-leave-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-leave-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bel-leave-card-employee {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bel-leave-card-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.bel-leave-card-emp-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bel-leave-emp-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bel-leave-emp-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.bel-leave-meta-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+/* Status Pills */
+.bel-leave-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.bel-leave-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.bel-leave-status-pill--pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+.bel-leave-status-pill--pending .bel-leave-status-dot {
+  background: #f59e0b;
+}
+
+.bel-leave-status-pill--approved {
+  background: #d1fae5;
+  color: #047857;
+}
+.bel-leave-status-pill--approved .bel-leave-status-dot {
+  background: #10b981;
+}
+
+.bel-leave-status-pill--rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.bel-leave-status-pill--rejected .bel-leave-status-dot {
+  background: #ef4444;
+}
+
+/* Card Body */
+.bel-leave-card-body {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bel-leave-type-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.bel-leave-tag-icon {
+  color: #2f6fed;
+  font-size: 14px;
+}
+
+.bel-leave-days-count {
+  margin-left: auto;
+  background: #ffffff;
+  color: #2f6fed;
+  border: 1px solid #bfdbfe;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bel-leave-date-interval {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-top: 1px dashed #e2e8f0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.bel-leave-date-point {
+  display: flex;
+  flex-direction: column;
+}
+
+.bel-leave-date-point small {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.bel-leave-date-point strong {
+  font-size: 12px;
+  color: #0f172a;
+}
+
+.bel-leave-date-arrow {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.bel-leave-card-reason {
+  margin: 0;
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.bel-leave-reason-label {
+  font-style: normal;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.bel-leave-card-footer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.bel-leave-card-footer-meta code {
+  background: #f1f5f9;
+  padding: 1px 4px;
+  border-radius: 4px;
+  color: #64748b;
+}
+
+/* Card Actions */
+.bel-leave-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bel-leave-btn-view,
+.bel-leave-btn-reject,
+.bel-leave-btn-approve {
+  height: 38px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.bel-leave-btn-view {
+  flex: 1;
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.bel-leave-btn-view:active {
+  background: #e2e8f0;
+}
+
+.bel-leave-btn-reject {
+  flex: 1;
+  background: #fff;
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+
+.bel-leave-btn-reject:active {
+  background: #fee2e2;
+}
+
+.bel-leave-btn-approve {
+  flex: 1.2;
+  background: #10b981;
+  color: #ffffff;
+  border-color: #10b981;
+}
+
+.bel-leave-btn-approve:active {
+  background: #059669;
+}
+
+/* Empty State Box */
+.bel-leave-empty-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.bel-leave-empty-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.bel-leave-empty-box h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-empty-box p {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: #64748b;
+  max-width: 280px;
+}
+
+.bel-leave-empty-action {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: #2f6fed;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   TAB 2: POLICIES VIEW
+   ========================================================================== */
+.bel-leave-section-headline {
+  margin-bottom: 14px;
+}
+
+.bel-leave-section-headline h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-section-headline p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.bel-leave-policy-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bel-leave-policy-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.bel-leave-policy-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bel-leave-policy-title-wrap h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-policy-badge {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.bel-leave-policy-edit-btn {
+  height: 32px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #2f6fed;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bel-leave-policy-edit-btn:active {
+  background: #eff6ff;
+}
+
+.bel-leave-policy-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bel-leave-kpi-box {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.bel-leave-kpi-box strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.bel-leave-kpi-used {
+  color: #f59e0b !important;
+}
+
+.bel-leave-kpi-remaining {
+  color: #10b981 !important;
+}
+
+.bel-leave-kpi-box span {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+/* Utilization Bar */
+.bel-leave-utilization-wrap {
+  margin-bottom: 14px;
+}
+
+.bel-leave-utilization-bar {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.bel-leave-utilization-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2f6fed, #635beb);
+  transition: width 0.4s ease;
+}
+
+.bel-leave-policy-card--purple .bel-leave-utilization-fill {
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+}
+
+.bel-leave-policy-card--green .bel-leave-utilization-fill {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.bel-leave-policy-card--orange .bel-leave-utilization-fill {
+  background: linear-gradient(90deg, #f59e0b, #ea580c);
+}
+
+.bel-leave-utilization-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.bel-leave-utilization-meta strong {
+  color: #0f172a;
+}
+
+/* Policy Rules */
+.bel-leave-policy-rules {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bel-leave-rule-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.bel-leave-rule-label {
+  color: #64748b;
+}
+
+.bel-leave-rule-val {
+  color: #334155;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   TAB 3: BALANCE VIEW
+   ========================================================================== */
+.bel-leave-balance-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bel-leave-balance-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.bel-leave-balance-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bel-leave-emp-id {
+  font-size: 11px;
+  color: #94a3b8;
+  display: block;
+}
+
+.bel-leave-total-available-badge {
+  text-align: right;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.bel-leave-total-available-badge small {
+  display: block;
+  font-size: 9px;
+  color: #3b82f6;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.bel-leave-total-available-badge strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+.bel-leave-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.bel-leave-breakdown-item {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bel-leave-breakdown-type {
+  font-size: 11px;
+  color: #475569;
+}
+
+.bel-leave-breakdown-item strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-breakdown-item small {
+  font-size: 10px;
+  font-weight: 400;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   BOTTOM SHEETS & MODALS (MOBILE-FIRST)
+   ========================================================================== */
+.bel-leave-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: belLeaveFadeIn 0.2s ease;
+}
+
+@keyframes belLeaveFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bel-leave-bottom-sheet {
+  background: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px 20px 0 0;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  animation: belLeaveSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes belLeaveSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.bel-leave-sheet-drag-handle {
+  width: 36px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 999px;
+  margin: 10px auto 4px;
+}
+
+.bel-leave-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px 18px 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bel-leave-sheet-header h2 {
+  margin: 0 0 2px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-sheet-header p {
+  margin: 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.bel-leave-sheet-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.bel-leave-sheet-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.bel-leave-sheet-footer {
+  padding: 14px 18px 20px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 10px;
+  background: #ffffff;
+}
+
+.bel-leave-btn-secondary,
+.bel-leave-btn-primary,
+.bel-leave-btn-approve-solid,
+.bel-leave-btn-reject-solid {
+  height: 44px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.bel-leave-btn-secondary {
+  flex: 1;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.bel-leave-btn-primary {
+  flex: 1.5;
+  background: #2f6fed;
+  color: #ffffff;
+}
+
+.bel-leave-btn-approve-solid {
+  flex: 1.5;
+  background: #10b981;
+  color: #ffffff;
+}
+
+.bel-leave-btn-reject-solid {
+  flex: 1.5;
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Filter Group Inside Sheet */
+.bel-leave-filter-group {
+  margin-bottom: 18px;
+}
+
+.bel-leave-filter-group-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.bel-leave-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bel-leave-filter-chip {
+  padding: 8px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bel-leave-filter-chip.is-selected {
+  background: #eff6ff;
+  border-color: #2f6fed;
+  color: #2f6fed;
+  font-weight: 700;
+}
+
+/* Details Sheet Hero */
+.bel-leave-detail-employee-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.bel-leave-detail-employee-hero h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-detail-employee-hero p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.bel-leave-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.bel-leave-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bel-leave-detail-full {
+  grid-column: 1 / -1;
+}
+
+.bel-leave-detail-label {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.bel-leave-detail-value {
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.bel-leave-detail-reason {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #334155;
+  background: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.bel-leave-detail-applied {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Form Styles for Policy Edit */
+.bel-leave-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.bel-leave-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bel-leave-form-field span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.bel-leave-form-field input,
+.bel-leave-form-field select {
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.bel-leave-form-field input:focus,
+.bel-leave-form-field select:focus {
+  border-color: #2f6fed;
+}
+
+.bel-leave-form-full {
+  grid-column: 1 / -1;
+}
+
+/* Confirmation Sheet Styles */
+.bel-leave-confirm-sheet {
+  text-align: center;
+}
+
+.bel-leave-confirm-header {
+  padding: 16px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bel-leave-confirm-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.bel-leave-confirm-icon-wrap--approve {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.bel-leave-confirm-icon-wrap--reject {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.bel-leave-confirm-header h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bel-leave-confirm-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+  max-width: 320px;
+}
+
+.bel-leave-confirm-summary {
+  margin: 12px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.bel-leave-confirm-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.bel-leave-confirm-row span:first-child {
+  color: #94a3b8;
+}
+
+.bel-leave-confirm-row strong,
+.bel-leave-confirm-row span:last-child {
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   RESPONSIVE OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 375px) {
+  .bel-leave-scroll-content {
+    padding: 12px 12px 100px;
+  }
+
+  .bel-leave-title {
+    font-size: 18px;
+  }
+
+  .bel-leave-stat-card {
+    min-width: 105px;
+    padding: 10px 12px;
+  }
+
+  .bel-leave-stat-number {
+    font-size: 16px;
+  }
+
+  .bel-leave-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bel-leave-card-actions {
+    flex-wrap: wrap;
+  }
+
+  .bel-leave-btn-view {
+    flex: 100%;
+  }
+}

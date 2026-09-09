@@ -1,0 +1,448 @@
+/* =========================================================
+   HR EMPLOYEES DIRECTORY — MOBILE FIRST STYLES
+   BELNOVA HRMS
+   ========================================================= */
+
+.hr-emp-mobile-app {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hr-emp-page-content {
+  padding: 16px 16px calc(var(--bottom-nav-height, 65px) + 24px) 16px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Header Card */
+.hr-emp-header-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(8, 20, 38, 0.035);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hr-emp-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hr-emp-main-title {
+  font-size: 1.25rem;
+  font-weight: 850;
+  color: #081426;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.hr-emp-sub-title {
+  font-size: 0.78rem;
+  color: #60708a;
+  margin: 0;
+  font-weight: 500;
+}
+
+.hr-emp-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #2F6FED;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 0.84rem;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(47, 111, 237, 0.25);
+  transition: all 0.16s ease;
+  flex-shrink: 0;
+}
+
+.hr-emp-add-btn:active {
+  background: #1d4ed8;
+  transform: scale(0.97);
+}
+
+/* Search and Filter Section */
+.hr-emp-search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hr-emp-search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.hr-emp-search-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.hr-emp-search-input {
+  width: 100%;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0 38px 0 42px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #081426;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+.hr-emp-search-input:focus {
+  border-color: #2F6FED;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.12);
+}
+
+.hr-emp-clear-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hr-emp-filter-chips-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.hr-emp-filter-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hr-emp-filter-chip {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: #60708a;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.hr-emp-filter-chip.active {
+  background: #2F6FED;
+  color: #ffffff;
+  border-color: #2F6FED;
+  box-shadow: 0 2px 8px rgba(47, 111, 237, 0.25);
+}
+
+/* List Counter Meta */
+.hr-emp-list-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.hr-emp-count-text {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.hr-emp-count-text strong {
+  color: #081426;
+  font-weight: 750;
+}
+
+.hr-emp-active-filter-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #eff6ff;
+  color: #2F6FED;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* Employee Cards List */
+.hr-emp-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hr-emp-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(8, 20, 38, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.18s ease;
+}
+
+.hr-emp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hr-emp-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.hr-emp-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hr-emp-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hr-emp-name {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #081426;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.hr-emp-status-badge {
+  font-size: 0.68rem;
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.status-active {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.status-on-leave {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.status-inactive {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.hr-emp-id-tag {
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+/* Role & Dept Box */
+.hr-emp-role-dept-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #eef2f6;
+  border-radius: 10px;
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.hr-emp-info-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #081426;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-emp-info-pill svg {
+  color: #2F6FED;
+  flex-shrink: 0;
+}
+
+.hr-emp-dept-text {
+  font-size: 0.74rem;
+  color: #60708a;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Meta Details */
+.hr-emp-meta-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hr-emp-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  color: #60708a;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-emp-meta-item svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Card Actions */
+.hr-emp-card-actions {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.hr-emp-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-view {
+  background: #eff6ff;
+  color: #2F6FED;
+  border: 1px solid #bfdbfe;
+}
+
+.btn-view:active {
+  background: #dbeafe;
+  transform: scale(0.98);
+}
+
+.btn-edit {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-edit:active {
+  background: #f8fafc;
+  transform: scale(0.98);
+}
+
+/* Empty State */
+.hr-emp-empty-state {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 36px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.hr-emp-empty-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.hr-emp-empty-state h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #081426;
+  margin: 0;
+}
+
+.hr-emp-empty-state p {
+  font-size: 0.8rem;
+  color: #60708a;
+  margin: 0;
+  max-width: 280px;
+}
+
+.hr-emp-reset-btn {
+  margin-top: 10px;
+  background: #2F6FED;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  cursor: pointer;
+}

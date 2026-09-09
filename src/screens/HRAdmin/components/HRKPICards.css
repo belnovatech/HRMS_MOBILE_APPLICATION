@@ -1,0 +1,207 @@
+/* =========================================================
+   HR KPI CARDS — 6 CARDS IN A ROW MATCHING SCREENSHOT
+   ========================================================= */
+
+.hr-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.hr-kpi-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 120px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  user-select: none;
+}
+
+.hr-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+  border-color: #cbd5e1;
+}
+
+/* Gradient Card for Monthly Payroll */
+.hr-kpi-card-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.28);
+}
+
+.hr-kpi-card-gradient:hover {
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.38);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Top Row: Icon + Badge */
+.hr-kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.hr-kpi-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hr-icon-blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.hr-icon-green {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.hr-icon-red {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.hr-icon-amber {
+  background: #fffbeb;
+  color: #f59e0b;
+}
+
+.hr-icon-purple {
+  background: #faf5ff;
+  color: #a855f7;
+}
+
+.hr-icon-white-translucent {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+/* Badges */
+.hr-kpi-badge {
+  font-size: 0.7rem;
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  letter-spacing: 0.1px;
+}
+
+.hr-badge-green {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.hr-badge-red {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.hr-badge-gray {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.hr-badge-pink {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+
+.hr-badge-white-translucent {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+/* Body / Values */
+.hr-kpi-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr-kpi-value {
+  font-size: 1.65rem;
+  font-weight: 850;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.hr-kpi-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.1px;
+}
+
+.hr-val-white {
+  color: #ffffff;
+}
+
+.hr-lbl-white {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+@media (max-width: 1400px) {
+  .hr-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .hr-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hr-kpi-card {
+    padding: 14px;
+    min-height: 108px;
+    border-radius: 14px;
+  }
+
+  .hr-kpi-value {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hr-kpi-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .hr-kpi-card {
+    padding: 12px;
+  }
+
+  .hr-kpi-value {
+    font-size: 1.25rem;
+  }
+
+  .hr-kpi-badge {
+    font-size: 0.62rem;
+    padding: 2px 6px;
+  }
+}

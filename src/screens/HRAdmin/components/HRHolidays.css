@@ -1,0 +1,113 @@
+/* =========================================================
+   HR HOLIDAYS STYLES
+   ========================================================= */
+
+.hr-cal-icon {
+  color: #2F6FED;
+}
+
+.hr-holidays-count-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.hr-holidays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hr-holiday-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #eef2f6;
+  transition: all 0.15s ease;
+}
+
+.hr-holiday-item.holiday-soon {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.hr-holiday-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.hr-holiday-item.holiday-soon .hr-holiday-date-badge {
+  background: #2F6FED;
+  border-color: #2F6FED;
+}
+
+.hr-h-month {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.hr-holiday-item.holiday-soon .hr-h-month {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.hr-h-date {
+  font-size: 1.1rem;
+  font-weight: 850;
+  color: #081426;
+  line-height: 1.1;
+}
+
+.hr-holiday-item.holiday-soon .hr-h-date {
+  color: #ffffff;
+}
+
+.hr-holiday-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hr-holiday-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #081426;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-holiday-day {
+  font-size: 0.76rem;
+  color: #60708a;
+  font-weight: 500;
+}
+
+.hr-holiday-soon-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: #dbeafe;
+  color: #1e40af;
+  flex-shrink: 0;
+}

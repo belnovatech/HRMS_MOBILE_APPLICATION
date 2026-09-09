@@ -1,0 +1,996 @@
+/* ============================================================
+   EMPLOYEE PAYSLIPS
+   Unique prefix: emp-payslip-
+   No generic selectors are used to prevent CSS overrides.
+   ============================================================ */
+
+.emp-payslip-page {
+  --emp-payslip-text: #182131;
+  --emp-payslip-muted: #7b8799;
+  --emp-payslip-border: #e0e4ea;
+  --emp-payslip-surface: #ffffff;
+
+  width: 100%;
+  max-width: 100%;
+
+  padding: 5px 10px 40px;
+
+  color: var(--emp-payslip-text);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.emp-payslip-page *,
+.emp-payslip-page *::before,
+.emp-payslip-page *::after {
+  box-sizing: border-box;
+}
+
+.emp-payslip-page button,
+.emp-payslip-page input {
+  font: inherit;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.emp-payslip-page-header {
+  width: 100%;
+
+  margin: 0 0 14px;
+  padding: 0;
+}
+
+.emp-payslip-page-header h1 {
+  margin: 0;
+
+  color: #171c27;
+
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+
+  text-align: left;
+}
+
+.emp-payslip-page-header p {
+  margin: 3px 0 0;
+
+  color: #778397;
+
+  font-size: 10.5px;
+  line-height: 1.4;
+  font-weight: 500;
+
+  text-align: left;
+}
+
+
+/* ============================================================
+   CURRENT PAYSLIP GRADIENT CARD
+   ============================================================ */
+
+.emp-payslip-current-card {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 156px;
+
+  margin: 0 0 16px;
+  padding: 20px 19px;
+
+  overflow: hidden;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      115deg,
+      #2f73f4 0%,
+      #5368f2 46%,
+      #8555ed 100%
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 18px rgba(72, 91, 222, 0.09);
+}
+
+.emp-payslip-current-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 150px;
+  height: 150px;
+
+  right: -60px;
+  bottom: -95px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  pointer-events: none;
+}
+
+.emp-payslip-current-top {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 15px;
+}
+
+.emp-payslip-current-label {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.84);
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.emp-payslip-company-mark {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  flex: 0 0 auto;
+}
+
+.emp-payslip-company-icon {
+  width: 20px;
+  height: 22px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 5px 8px 5px 8px;
+
+  background: #111c3a;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+
+  box-shadow:
+    inset 0 0 0 2px rgba(53, 116, 255, 0.7);
+}
+
+.emp-payslip-company-name {
+  display: flex;
+  flex-direction: column;
+
+  line-height: 1;
+}
+
+.emp-payslip-company-name strong {
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.emp-payslip-company-name span {
+  margin-top: 2px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 5.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+
+/* ============================================================
+   SALARY VALUES
+   ============================================================ */
+
+.emp-payslip-current-salary-grid {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 30px;
+
+  margin-bottom: 14px;
+}
+
+.emp-payslip-current-item {
+  min-width: 0;
+}
+
+.emp-payslip-current-item span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: rgba(255, 255, 255, 0.66);
+
+  font-size: 8.5px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.emp-payslip-current-item strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 17px;
+  line-height: 1.15;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CURRENT DOWNLOAD BUTTON
+   ============================================================ */
+
+.emp-payslip-current-download {
+  position: relative;
+  z-index: 1;
+
+  min-height: 29px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 11px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.16);
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 700;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.emp-payslip-current-download svg {
+  width: 11px;
+  height: 11px;
+}
+
+.emp-payslip-current-download:hover {
+  background: rgba(255, 255, 255, 0.24);
+
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   NO CURRENT PAYSLIP
+   ============================================================ */
+
+.emp-payslip-no-current {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 95px;
+}
+
+.emp-payslip-no-current > svg {
+  width: 28px;
+  height: 28px;
+}
+
+.emp-payslip-no-current > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.emp-payslip-no-current strong {
+  font-size: 12px;
+}
+
+.emp-payslip-no-current span {
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 9px;
+}
+
+
+/* ============================================================
+   HISTORY CARD
+   ============================================================ */
+
+.emp-payslip-history-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid var(--emp-payslip-border);
+  border-radius: 14px;
+
+  background: #ffffff;
+}
+
+.emp-payslip-history-header {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 13px;
+
+  border-bottom: 1px solid #edf0f3;
+}
+
+.emp-payslip-history-header h2 {
+  margin: 0;
+
+  color: #252b35;
+
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+
+  text-align: left;
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.emp-payslip-table-scroll {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.emp-payslip-table {
+  width: 100%;
+
+  min-width: 650px;
+
+  border-collapse: collapse;
+}
+
+.emp-payslip-table th {
+  height: 36px;
+
+  padding: 0 13px;
+
+  background: #fbfcfd;
+
+  color: #8d97a7;
+
+  font-size: 8.5px;
+  line-height: 1;
+  font-weight: 600;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.emp-payslip-table td {
+  height: 47px;
+
+  padding: 0 13px;
+
+  border-top: 1px solid #f0f2f5;
+
+  color: #667184;
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 500;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.emp-payslip-table td strong {
+  color: #344054;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.emp-payslip-gross {
+  color: #12b86a !important;
+
+  font-weight: 600 !important;
+}
+
+.emp-payslip-deduction {
+  color: #ff4e51 !important;
+
+  font-weight: 600 !important;
+}
+
+.emp-payslip-net {
+  color: #252c38 !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.emp-payslip-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 65px;
+  min-height: 19px;
+
+  padding: 3px 9px;
+
+  border-radius: 999px;
+
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.emp-payslip-status-processed {
+  background: #d9f8e8;
+  color: #158b57;
+}
+
+.emp-payslip-status-paid {
+  background: #d9f8e8;
+  color: #158b57;
+}
+
+.emp-payslip-status-pending {
+  background: #fff1c5;
+  color: #9d6b00;
+}
+
+.emp-payslip-status-failed,
+.emp-payslip-status-rejected {
+  background: #ffe0e1;
+  color: #d83f43;
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+
+.emp-payslip-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.emp-payslip-view-button,
+.emp-payslip-pdf-button {
+  min-height: 27px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 0 9px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 8.5px;
+  line-height: 1;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.emp-payslip-view-button {
+  border: 1px solid #e0e4e9;
+
+  background: #ffffff;
+  color: #687385;
+}
+
+.emp-payslip-pdf-button {
+  border: 1px solid #cddfff;
+
+  background: #ffffff;
+  color: #3577ee;
+}
+
+.emp-payslip-view-button svg,
+.emp-payslip-pdf-button svg {
+  width: 10px;
+  height: 10px;
+}
+
+.emp-payslip-view-button:hover,
+.emp-payslip-pdf-button:hover {
+  transform: translateY(-1px);
+}
+
+.emp-payslip-view-button:hover {
+  background: #f8fafc;
+}
+
+.emp-payslip-pdf-button:hover {
+  background: #f2f6ff;
+}
+
+
+/* ============================================================
+   EMPTY TABLE
+   ============================================================ */
+
+.emp-payslip-empty {
+  height: 95px !important;
+
+  color: #98a2b3 !important;
+
+  text-align: center !important;
+
+  white-space: normal !important;
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.emp-payslip-modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  background: rgba(15, 23, 42, 0.48);
+
+  backdrop-filter: blur(2px);
+}
+
+.emp-payslip-modal {
+  width: min(480px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 25px 70px rgba(15, 23, 42, 0.22);
+}
+
+.emp-payslip-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  padding: 19px 20px;
+
+  border-bottom: 1px solid #edf0f3;
+}
+
+.emp-payslip-modal-kicker {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #6874e9;
+
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.emp-payslip-modal-header h2 {
+  margin: 0;
+
+  color: #252b35;
+
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.emp-payslip-modal-close {
+  width: 29px;
+  height: 29px;
+
+  flex: 0 0 29px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: #f3f4f6;
+  color: #667085;
+
+  cursor: pointer;
+}
+
+.emp-payslip-modal-close svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* ============================================================
+   MODAL BODY
+   ============================================================ */
+
+.emp-payslip-modal-body {
+  padding: 20px;
+}
+
+.emp-payslip-employee-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+
+  margin-bottom: 18px;
+
+  padding: 11px 12px;
+
+  border-radius: 99px;
+
+  background: #f7f9fc;
+}
+
+.emp-payslip-employee-info span {
+  color: #8a94a5;
+
+  font-size: 8.5px;
+  font-weight: 600;
+}
+
+.emp-payslip-employee-info strong {
+  color: #344054;
+
+  font-size: 11px;
+}
+
+.emp-payslip-employee-info small {
+  color: #8993a3;
+
+  font-size: 8.5px;
+}
+
+.emp-payslip-breakdown {
+  display: grid;
+
+  gap: 13px;
+}
+
+.emp-payslip-breakdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.emp-payslip-breakdown-row span {
+  color: #667085;
+
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.emp-payslip-breakdown-row strong {
+  color: #344054;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.emp-payslip-modal-green {
+  color: #12ae62 !important;
+}
+
+.emp-payslip-modal-red {
+  color: #ef4444 !important;
+}
+
+.emp-payslip-breakdown-divider {
+  width: 100%;
+  height: 1px;
+
+  margin: 2px 0;
+
+  background: #edf0f3;
+}
+
+.emp-payslip-breakdown-total span {
+  color: #273141;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.emp-payslip-breakdown-total strong {
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   MODAL DOWNLOAD
+   ============================================================ */
+
+.emp-payslip-modal-download {
+  width: 100%;
+
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  margin-top: 20px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: linear-gradient(
+    90deg,
+    #3577ef,
+    #7159ec
+  );
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.emp-payslip-modal-download svg {
+  width: 12px;
+  height: 12px;
+}
+
+
+/* ============================================================
+   MEDIA QUERIES
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .emp-payslip-current-salary-grid {
+    gap: 20px;
+  }
+
+  .emp-payslip-table {
+    min-width: 630px;
+  }
+}
+
+@media (max-width: 700px) {
+  .emp-payslip-page {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .emp-payslip-current-card {
+    padding: 18px 16px;
+  }
+
+  .emp-payslip-current-salary-grid {
+    gap: 15px;
+  }
+
+  .emp-payslip-current-item strong {
+    font-size: 15px;
+  }
+
+  .emp-payslip-table {
+    min-width: 620px;
+  }
+}
+
+@media (max-width: 600px) {
+  .emp-payslip-page {
+    padding: 3px 4px 28px;
+  }
+
+  .emp-payslip-page-header h1 {
+    font-size: 18px;
+  }
+
+  .emp-payslip-page-header p {
+    font-size: 9.5px;
+  }
+
+  .emp-payslip-current-card {
+    min-height: auto;
+    padding: 16px 14px;
+    border-radius: 12px;
+  }
+
+  .emp-payslip-current-top {
+    align-items: flex-start;
+    margin-bottom: 17px;
+  }
+
+  .emp-payslip-current-label {
+    font-size: 9px;
+  }
+
+  .emp-payslip-company-mark {
+    transform: scale(0.9);
+    transform-origin: right top;
+  }
+
+  .emp-payslip-current-salary-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .emp-payslip-current-item span {
+    margin-bottom: 3px;
+    font-size: 8px;
+  }
+
+  .emp-payslip-current-item strong {
+    font-size: 15px;
+  }
+
+  .emp-payslip-current-download {
+    width: 100%;
+    min-height: 31px;
+    font-size: 8.5px;
+  }
+
+  .emp-payslip-history-card {
+    border-radius: 12px;
+  }
+
+  .emp-payslip-history-header {
+    min-height: 44px;
+    padding: 0 11px;
+  }
+
+  .emp-payslip-history-header h2 {
+    font-size: 11px;
+  }
+
+  .emp-payslip-table {
+    min-width: 610px;
+  }
+
+  .emp-payslip-modal-overlay {
+    padding: 10px;
+  }
+
+  .emp-payslip-modal-header {
+    padding: 16px;
+  }
+
+  .emp-payslip-modal-body {
+    padding: 16px;
+  }
+
+  .emp-payslip-modal-header h2 {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .emp-payslip-current-top {
+    display: block;
+  }
+
+  .emp-payslip-company-mark {
+    margin-top: 10px;
+    justify-content: flex-start;
+    transform-origin: left center;
+  }
+
+  .emp-payslip-current-download {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .emp-payslip-table {
+    min-width: 590px;
+  }
+
+  .emp-payslip-actions {
+    gap: 5px;
+  }
+
+  .emp-payslip-view-button,
+  .emp-payslip-pdf-button {
+    padding: 0 7px;
+  }
+}
+
+@media (max-width: 340px) {
+  .emp-payslip-page-header h1 {
+    font-size: 17px;
+  }
+
+  .emp-payslip-current-card {
+    padding: 14px 12px;
+  }
+
+  .emp-payslip-current-item strong {
+    font-size: 14px;
+  }
+
+  .emp-payslip-table {
+    min-width: 570px;
+  }
+}

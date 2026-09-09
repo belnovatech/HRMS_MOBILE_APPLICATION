@@ -1,0 +1,235 @@
+/* =========================================================
+   HR MOBILE ADMIN APPLICATION — BELNOVA DASHBOARD
+   ========================================================= */
+
+.hr-mobile-app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f6f8fc;
+  color: #081426;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* 1. Mobile Top Header Bar */
+.hr-mobile-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5eaf2;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(8, 20, 38, 0.03);
+}
+
+.hr-top-bar-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr-brand-badge {
+  font-size: 0.95rem;
+  font-weight: 850;
+  color: #081426;
+  letter-spacing: -0.2px;
+}
+
+.hr-role-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #2F6FED;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.hr-top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hr-top-icon-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.hr-top-icon-btn:active {
+  transform: scale(0.95);
+  background: #f1f5f9;
+}
+
+.hr-top-notif-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 17px;
+  height: 17px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+.hr-top-avatar-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.hr-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2F6FED 0%, #635BEB 100%);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(47, 111, 237, 0.25);
+}
+
+/* 2. Main Scroll Area */
+.hr-mobile-main-scroll {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px 16px calc(var(--bottom-nav-height, 64px) + 36px) 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Greeting Card */
+.hr-mobile-greeting-card {
+  margin-bottom: 14px;
+}
+
+.hr-greeting-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hr-mobile-greeting-title {
+  font-size: 1.35rem;
+  font-weight: 850;
+  color: #081426;
+  letter-spacing: -0.4px;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.hr-wave-hand {
+  display: inline-block;
+  animation: hrWave 1.8s infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes hrWave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.hr-mobile-greeting-sub {
+  font-size: 0.84rem;
+  color: #60708a;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.hr-mobile-date-chip {
+  align-self: flex-start;
+  margin-top: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #2F6FED;
+  background: #eff6ff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #dbeafe;
+}
+
+/* Search Form */
+.hr-mobile-search-form {
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.hr-mobile-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.hr-mobile-search-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.hr-mobile-search-input {
+  width: 100%;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0 16px 0 42px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #081426;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+.hr-mobile-search-input:focus {
+  border-color: #2F6FED;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.12);
+}
+
+.hr-mobile-search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Dashboard Section wrapper */
+.hr-dashboard-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

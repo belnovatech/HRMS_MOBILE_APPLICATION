@@ -1,0 +1,65 @@
+/* =========================================================
+   HR EDIT EMPLOYEE — MOBILE FIRST STYLES
+   BELNOVA HRMS
+   ========================================================= */
+
+.hr-emp-edit-container {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hr-emp-edit-scroll {
+  padding: 16px 16px calc(var(--bottom-nav-height, 65px) + 75px) 16px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Header Banner */
+.hr-emp-edit-header-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(8, 20, 38, 0.035);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hr-emp-edit-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hr-emp-edit-id-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: #eff6ff;
+  color: #2F6FED;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.hr-emp-edit-title {
+  font-size: 1.25rem;
+  font-weight: 850;
+  color: #081426;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.hr-emp-edit-desc {
+  font-size: 0.8rem;
+  color: #60708a;
+  margin: 0;
+  line-height: 1.35;
+}

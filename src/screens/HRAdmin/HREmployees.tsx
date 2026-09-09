@@ -1,0 +1,258 @@
+import React, { useState, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { AppHeader } from '../../components/AppHeader/AppHeader';
+import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
+import { getEmployees, EmployeeRecord } from '../../data/employeeStore';
+import {
+  FiSearch,
+  FiUserPlus,
+  FiEye,
+  FiEdit2,
+  FiX,
+  FiCalendar,
+  FiBriefcase,
+  FiMail,
+} from 'react-icons/fi';
+import './HREmployees.css';
+
+const DEPARTMENTS = [
+  'All',
+  'Engineering',
+  'Product & Design',
+  'HR & Operations',
+  'Sales & Marketing',
+  'Finance & Legal',
+];
+
+export const HREmployees: React.FC = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+  const initialDept = searchParams.get('dept') || 'All';
+
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const [selectedDept, setSelectedDept] = useState(initialDept);
+
+  const employees: EmployeeRecord[] = getEmployees();
+
+  const filteredEmployees = useMemo(() => {
+    return employees.filter((emp) => {
+      const search = searchTerm.toLowerCase().trim();
+      const matchesSearch =
+        !search ||
+        emp.name.toLowerCase().includes(search) ||
+        emp.email.toLowerCase().includes(search) ||
+        emp.id.toLowerCase().includes(search) ||
+        emp.role.toLowerCase().includes(search);
+
+      const matchesDept =
+        selectedDept === 'All' ||
+        emp.department.toLowerCase().includes(selectedDept.toLowerCase()) ||
+        (selectedDept === 'Product & Design' && emp.department.includes('Product')) ||
+        (selectedDept === 'HR & Operations' && emp.department.includes('HR')) ||
+        (selectedDept === 'Sales & Marketing' && emp.department.includes('Sales')) ||
+        (selectedDept === 'Finance & Legal' && emp.department.includes('Finance'));
+
+      return matchesSearch && matchesDept;
+    });
+  }, [searchTerm, selectedDept, employees]);
+
+  const formatDate = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      return new Intl.DateTimeFormat('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }).format(d);
+    } catch {
+      return dateStr;
+    }
+  };
+
+  return (
+    <div className="app-container hr-emp-mobile-app">
+      <AppHeader title="Employee Directory" showBack />
+
+      <main className="page-content hr-emp-page-content">
+        {/* Top Header Card */}
+        <section className="hr-emp-header-card">
+          <div className="hr-emp-header-left">
+            <h2 className="hr-emp-main-title">Employee Directory</h2>
+            <p className="hr-emp-sub-title">Manage your workforce, records & assignments</p>
+          </div>
+
+          <button
+            type="button"
+            className="hr-emp-add-btn"
+            onClick={() => navigate('/hr/employees/add')}
+            aria-label="Add New Employee"
+          >
+            <FiUserPlus size={18} />
+            <span>Add Employee</span>
+          </button>
+        </section>
+
+        {/* Mobile Search Bar */}
+        <section className="hr-emp-search-section">
+          <div className="hr-emp-search-bar">
+            <FiSearch className="hr-emp-search-icon" size={17} />
+            <input
+              type="text"
+              className="hr-emp-search-input"
+              placeholder="Search by ID, name, or email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                className="hr-emp-clear-btn"
+                onClick={() => setSearchTerm('')}
+                aria-label="Clear Search"
+              >
+                <FiX size={16} />
+              </button>
+            )}
+          </div>
+
+          {/* Department Filter Chips */}
+          <div className="hr-emp-filter-chips-scroll">
+            {DEPARTMENTS.map((dept) => (
+              <button
+                key={dept}
+                type="button"
+                className={`hr-emp-filter-chip ${selectedDept === dept ? 'active' : ''}`}
+                onClick={() => setSelectedDept(dept)}
+              >
+                {dept === 'All' ? 'All Departments' : dept}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Counter Header */}
+        <div className="hr-emp-list-meta-row">
+          <span className="hr-emp-count-text">
+            Showing <strong>{filteredEmployees.length}</strong> of {employees.length} Employees
+          </span>
+          {selectedDept !== 'All' && (
+            <span className="hr-emp-active-filter-badge">
+              Filter: {selectedDept}
+            </span>
+          )}
+        </div>
+
+        {/* Mobile Employee Cards List */}
+        <div className="hr-emp-cards-list">
+          {filteredEmployees.length === 0 ? (
+            <div className="hr-emp-empty-state">
+              <div className="hr-emp-empty-icon-wrap">
+                <FiBriefcase size={28} />
+              </div>
+              <h4>No employees found</h4>
+              <p>Try adjusting your search criteria or resetting the department filter.</p>
+              <button
+                type="button"
+                className="hr-emp-reset-btn"
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedDept('All');
+                }}
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            filteredEmployees.map((emp) => {
+              const initials = emp.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase();
+
+              const statusClass = emp.status.toLowerCase().replace(/\s+/g, '-');
+
+              return (
+                <div key={emp.id} className="hr-emp-card">
+                  {/* Top Profile Row */}
+                  <div className="hr-emp-card-header">
+                    <div
+                      className="hr-emp-avatar"
+                      style={{ backgroundColor: emp.avatarBg || '#2F6FED' }}
+                    >
+                      {initials}
+                    </div>
+
+                    <div className="hr-emp-header-info">
+                      <div className="hr-emp-name-row">
+                        <strong
+                          className="hr-emp-name"
+                          onClick={() => navigate(`/hr/employees/${emp.id}`)}
+                        >
+                          {emp.name}
+                        </strong>
+                        <span className={`hr-emp-status-badge status-${statusClass}`}>
+                          {emp.status}
+                        </span>
+                      </div>
+                      <span className="hr-emp-id-tag">{emp.id}</span>
+                    </div>
+                  </div>
+
+                  {/* Role & Department */}
+                  <div className="hr-emp-role-dept-box">
+                    <div className="hr-emp-info-pill">
+                      <FiBriefcase size={13} />
+                      <span>{emp.role}</span>
+                    </div>
+                    <span className="hr-emp-dept-text">{emp.department}</span>
+                  </div>
+
+                  {/* Email & Joined Date Meta */}
+                  <div className="hr-emp-meta-details">
+                    <div className="hr-emp-meta-item">
+                      <FiMail size={13} />
+                      <span>{emp.email}</span>
+                    </div>
+                    <div className="hr-emp-meta-item">
+                      <FiCalendar size={13} />
+                      <span>Joined {formatDate(emp.joinDate)}</span>
+                    </div>
+                  </div>
+
+                  {/* Touch Action Buttons */}
+                  <div className="hr-emp-card-actions">
+                    <button
+                      type="button"
+                      className="hr-emp-action-btn btn-view"
+                      onClick={() => navigate(`/hr/employees/${emp.id}`)}
+                    >
+                      <FiEye size={15} />
+                      <span>View Profile</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="hr-emp-action-btn btn-edit"
+                      onClick={() => navigate(`/hr/employees/${emp.id}/edit`)}
+                    >
+                      <FiEdit2 size={15} />
+                      <span>Edit</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </main>
+
+      <BottomNavigation />
+    </div>
+  );
+};
+
+export default HREmployees;

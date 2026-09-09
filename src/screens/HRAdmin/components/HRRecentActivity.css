@@ -1,0 +1,125 @@
+/* =========================================================
+   HR RECENT ACTIVITY STYLES
+   ========================================================= */
+
+.hr-activity-card {
+  margin-bottom: 20px;
+}
+
+.hr-live-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.75rem;
+  font-weight: 750;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #a7f3d0;
+}
+
+.hr-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #10b981;
+  animation: hrBlink 1.5s infinite;
+}
+
+@keyframes hrBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+.hr-activity-timeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.hr-timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+  padding-bottom: 18px;
+}
+
+.hr-timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.hr-timeline-line {
+  position: absolute;
+  top: 36px;
+  left: 17px;
+  bottom: 0;
+  width: 2px;
+  background-color: #e2e8f0;
+  z-index: 1;
+}
+
+.hr-timeline-avatar-wrap {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.hr-timeline-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 750;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.hr-timeline-subicon {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hr-timeline-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr-timeline-text {
+  font-size: 0.86rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.hr-timeline-user {
+  color: #081426;
+  font-weight: 700;
+}
+
+.hr-timeline-action {
+  color: #60708a;
+}
+
+.hr-timeline-time {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 500;
+}

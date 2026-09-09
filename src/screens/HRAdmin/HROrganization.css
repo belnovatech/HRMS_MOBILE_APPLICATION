@@ -1,0 +1,903 @@
+/* =========================================================
+   HR ORGANIZATION MODULE — MOBILE FIRST STYLES
+   BELNOVA HRMS VISUAL IDENTITY
+   ========================================================= */
+
+.hr-org-mobile-container {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hr-org-page-content {
+  padding: 16px 16px calc(var(--bottom-nav-height, 65px) + 24px) 16px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 1. Header Card Banner */
+.hr-org-header-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(8, 20, 38, 0.035);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hr-org-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 750;
+  color: #2F6FED;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hr-org-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #2F6FED;
+}
+
+.hr-org-title {
+  font-size: 1.35rem;
+  font-weight: 850;
+  color: #081426;
+  margin: 0;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+}
+
+.hr-org-desc {
+  font-size: 0.82rem;
+  color: #60708a;
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.hr-org-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #2F6FED;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 0.88rem;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(47, 111, 237, 0.25);
+  transition: all 0.16s ease;
+  margin-top: 4px;
+}
+
+.hr-org-add-btn:active {
+  transform: scale(0.98);
+  background: #1d4ed8;
+}
+
+/* 2. Overview Stats (2-Column Grid) */
+.hr-org-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hr-org-stat-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 4px rgba(8, 20, 38, 0.02);
+}
+
+.hr-org-stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hr-org-stat-icon.blue {
+  background: #eff6ff;
+  color: #2F6FED;
+}
+
+.hr-org-stat-icon.purple {
+  background: #f5f3ff;
+  color: #635BEB;
+}
+
+.hr-org-stat-icon.orange {
+  background: #fffbeb;
+  color: #F59E0B;
+}
+
+.hr-org-stat-icon.green {
+  background: #ecfdf5;
+  color: #10B981;
+}
+
+.hr-org-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hr-org-stat-label {
+  font-size: 0.72rem;
+  color: #60708a;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-org-stat-val {
+  font-size: 1.35rem;
+  font-weight: 850;
+  color: #081426;
+  line-height: 1.1;
+}
+
+.hr-org-stat-sub {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.text-green {
+  color: #10B981 !important;
+}
+
+/* 3. Toolbar & Filters */
+.hr-org-toolbar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hr-org-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.hr-org-search-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.hr-org-search-input {
+  width: 100%;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0 38px 0 42px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #081426;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+.hr-org-search-input:focus {
+  border-color: #2F6FED;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.12);
+}
+
+.hr-org-search-clear {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hr-org-filter-pills-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.hr-org-filter-pills-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hr-org-filter-pill {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: #60708a;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.hr-org-filter-pill.active {
+  background: #2F6FED;
+  color: #ffffff;
+  border-color: #2F6FED;
+  box-shadow: 0 2px 8px rgba(47, 111, 237, 0.25);
+}
+
+/* 4. Section Headings */
+.hr-org-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.hr-org-section-heading {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #081426;
+  margin: 0;
+}
+
+.hr-org-section-sub {
+  font-size: 0.76rem;
+  color: #60708a;
+  margin: 3px 0 0 0;
+  font-weight: 500;
+}
+
+.hr-org-result-badge {
+  font-size: 0.72rem;
+  font-weight: 750;
+  background: #eff6ff;
+  color: #2F6FED;
+  padding: 4px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* 5. Department Cards */
+.hr-org-department-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hr-org-dept-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(8, 20, 38, 0.035);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hr-org-dept-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hr-org-dept-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.hr-org-dept-icon.small {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+}
+
+.hr-org-dept-icon.blue {
+  background: #eff6ff;
+  color: #2F6FED;
+}
+
+.hr-org-dept-icon.purple {
+  background: #f5f3ff;
+  color: #635BEB;
+}
+
+.hr-org-dept-icon.orange {
+  background: #fffbeb;
+  color: #F59E0B;
+}
+
+.hr-org-dept-icon.green {
+  background: #ecfdf5;
+  color: #10B981;
+}
+
+.hr-org-dept-icon.cyan {
+  background: #ecfeff;
+  color: #06B6D4;
+}
+
+.hr-org-dept-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hr-org-status-badge {
+  font-size: 0.7rem;
+  font-weight: 750;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.hr-org-status-badge.blue {
+  background: #eff6ff;
+  color: #2F6FED;
+}
+
+.hr-org-status-badge.purple {
+  background: #f5f3ff;
+  color: #635BEB;
+}
+
+.hr-org-status-badge.orange {
+  background: #fffbeb;
+  color: #F59E0B;
+}
+
+.hr-org-status-badge.green {
+  background: #ecfdf5;
+  color: #10B981;
+}
+
+.hr-org-status-badge.cyan {
+  background: #ecfeff;
+  color: #06B6D4;
+}
+
+.hr-org-more-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.hr-org-dept-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #081426;
+  margin: 0;
+}
+
+/* Manager / Lead Row */
+.hr-org-dept-manager-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #eef2f6;
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hr-org-dept-manager-row:active {
+  background: #f1f5f9;
+}
+
+.hr-org-lead-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2F6FED, #635BEB);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hr-org-lead-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hr-org-lead-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.hr-org-lead-name {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: #081426;
+}
+
+.hr-org-lead-role {
+  font-size: 0.74rem;
+  color: #60708a;
+}
+
+.hr-org-lead-chevron {
+  color: #94a3b8;
+}
+
+/* Metrics Row */
+.hr-org-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.hr-org-metric-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr-org-metric-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.hr-org-metric-value {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #081426;
+}
+
+/* Budget Row */
+.hr-org-budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hr-org-budget-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+  display: block;
+}
+
+.hr-org-budget-value {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #081426;
+}
+
+.hr-org-budget-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 6. Organization Hierarchy Tree (Mobile) */
+.hr-org-mobile-tree-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 20px 16px;
+  box-shadow: 0 2px 8px rgba(8, 20, 38, 0.035);
+  display: flex;
+  flex-direction: column;
+}
+
+.hr-org-tree-ceo-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.hr-org-person-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hr-org-person-card.ceo-card {
+  background: linear-gradient(135deg, #081426 0%, #1e293b 100%);
+  border-color: #081426;
+  color: #ffffff;
+  max-width: 320px;
+}
+
+.hr-org-person-card.ceo-card .hr-org-person-info strong {
+  color: #ffffff;
+}
+
+.hr-org-person-card.ceo-card .hr-org-person-info span {
+  color: #94a3b8;
+}
+
+.hr-org-person-card.manager-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.hr-org-person-card.employee-card {
+  background: #ffffff;
+  border-color: #f1f5f9;
+  cursor: pointer;
+}
+
+.hr-org-person-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.hr-org-person-avatar.ceo-avatar {
+  background: #2F6FED;
+  color: #ffffff;
+}
+
+.hr-org-person-avatar.blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.hr-org-person-avatar.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.hr-org-person-avatar.orange {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.hr-org-person-avatar.green {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.hr-org-person-avatar.cyan {
+  background: #cffafe;
+  color: #0e7490;
+}
+
+.hr-org-person-avatar.emp-avatar {
+  width: 32px;
+  height: 32px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 0.74rem;
+}
+
+.hr-org-person-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hr-org-person-info strong {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: #081426;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-org-person-info span {
+  font-size: 0.74rem;
+  color: #60708a;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-org-tree-stem-line {
+  width: 2px;
+  height: 24px;
+  background: #cbd5e1;
+  margin: 4px auto;
+}
+
+.hr-org-tree-branches {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.hr-org-tree-node {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.hr-org-tree-expand-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hr-org-tree-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 20px;
+  border-left: 2px dashed #cbd5e1;
+  margin-left: 19px;
+}
+
+.hr-org-tree-more-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  cursor: pointer;
+}
+
+/* 7. Workforce Insights (Stacked Mobile Cards) */
+.hr-org-insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hr-org-insight-item {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 1px 4px rgba(8, 20, 38, 0.02);
+}
+
+.hr-org-insight-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-orange {
+  background: #fffbeb;
+  color: #F59E0B;
+}
+
+.icon-blue {
+  background: #eff6ff;
+  color: #2F6FED;
+}
+
+.icon-purple {
+  background: #f5f3ff;
+  color: #635BEB;
+}
+
+.icon-green {
+  background: #ecfdf5;
+  color: #10B981;
+}
+
+.hr-org-insight-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hr-org-insight-label {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.hr-org-insight-val {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: #081426;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-org-insight-sub {
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* 8. Bottom Action Sheet Modal */
+.hr-org-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 20, 38, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.hr-org-bottom-sheet {
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px;
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: sheetSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.hr-org-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+}
+
+.hr-org-sheet-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hr-org-sheet-title-row h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #081426;
+  margin: 0;
+}
+
+.hr-org-sheet-title-row p {
+  font-size: 0.76rem;
+  color: #60708a;
+  margin: 2px 0 0 0;
+}
+
+.hr-org-sheet-close {
+  background: #f8fafc;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.hr-org-sheet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hr-org-sheet-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #eef2f6;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #081426;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hr-org-sheet-action-btn:active {
+  background: #f1f5f9;
+  transform: scale(0.98);
+}

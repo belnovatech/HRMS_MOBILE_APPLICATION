@@ -1,0 +1,233 @@
+/* =========================================================
+   HR ATTENDANCE TREND CHART STYLES
+   ========================================================= */
+
+.hr-trend-card {
+  margin-bottom: 20px;
+}
+
+.hr-trend-header {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hr-trend-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 10px;
+  gap: 2px;
+}
+
+.hr-tab-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hr-tab-btn.active {
+  background: #ffffff;
+  color: #2F6FED;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.hr-trend-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.hr-trend-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #60708a;
+}
+
+.hr-leg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.leg-dot-present {
+  background: #2F6FED;
+}
+
+.leg-dot-absent {
+  background: #F59E0B;
+}
+
+.leg-dot-leave {
+  background: #635BEB;
+}
+
+/* Chart Canvas */
+.hr-chart-wrapper {
+  position: relative;
+  height: 190px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.hr-y-axis {
+  position: absolute;
+  inset: 0 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.hr-y-tick-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.hr-y-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #94a3b8;
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.hr-grid-line {
+  flex: 1;
+  height: 1px;
+  background-color: #f1f5f9;
+}
+
+.hr-grid-baseline {
+  background-color: #e2e8f0;
+}
+
+.hr-bars-row {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 38px;
+  right: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.hr-bar-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  cursor: pointer;
+}
+
+.hr-grouped-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  height: calc(100% - 24px);
+}
+
+.hr-single-bar-track {
+  width: 18px;
+  height: calc(100% - 24px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.hr-subbar {
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;
+}
+
+.bar-present {
+  background: #2F6FED;
+  width: 8px;
+}
+
+.bar-absent {
+  background: #F59E0B;
+  width: 8px;
+}
+
+.bar-leave {
+  background: #635BEB;
+  width: 8px;
+}
+
+.bar-growth {
+  background: #2F6FED;
+  width: 14px;
+}
+
+.bar-payroll {
+  background: linear-gradient(180deg, #635BEB 0%, #2F6FED 100%);
+  width: 14px;
+}
+
+.hr-bar-col:hover .hr-subbar {
+  opacity: 0.85;
+}
+
+.hr-x-label {
+  height: 22px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tooltip */
+.hr-bar-tooltip {
+  position: absolute;
+  bottom: calc(100% - 10px);
+  background: #081426;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+  z-index: 20;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.hr-bar-tooltip strong {
+  font-weight: 750;
+}
+
+.tip-present {
+  color: #93c5fd;
+}
+
+.tip-absent {
+  color: #fcd34d;
+}
+
+.tip-leave {
+  color: #c4b5fd;
+}

@@ -1,0 +1,608 @@
+/* =========================================================
+   NOTIFICATIONS PAGE — MOBILE & DESKTOP
+   Isolated CSS prefixed with notifmgr- and mn-
+   ========================================================= */
+
+.notifmgr-page,
+.mn-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px 14px calc(90px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+
+.notifmgr-page *,
+.notifmgr-page *::before,
+.notifmgr-page *::after,
+.mn-page *,
+.mn-page *::before,
+.mn-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.notifmgr-header,
+.mn-header {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.notifmgr-heading,
+.mn-header-text {
+  min-width: 0;
+}
+
+.notifmgr-heading h1,
+.mn-header-text h1 {
+  margin: 0;
+  color: #172033;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.4px;
+}
+
+.notifmgr-heading p,
+.mn-header-text p {
+  margin: 4px 0 0;
+  color: #7b8798;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.notifmgr-header-actions,
+.mn-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.notifmgr-mark-all,
+.notifmgr-filter-button,
+.mn-mark-all-btn,
+.mn-filter-btn {
+  height: 40px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.17s ease;
+}
+
+.notifmgr-mark-all,
+.notifmgr-filter-button,
+.mn-mark-all-btn {
+  border: 1px solid #dce3eb;
+  background: #ffffff;
+  color: #475569;
+}
+
+.notifmgr-mark-all:hover:not(:disabled),
+.notifmgr-filter-button:hover,
+.notifmgr-filter-active,
+.mn-mark-all-btn:hover:not(:disabled),
+.mn-filter-btn-active {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #2563eb;
+}
+
+.notifmgr-mark-all:disabled,
+.mn-mark-all-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   CATEGORY AREA (Horizontally Scrollable Chips)
+   ========================================================= */
+
+.notifmgr-category-wrapper,
+.mn-chips-row {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.notifmgr-category-wrapper::-webkit-scrollbar,
+.mn-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.notifmgr-category-list {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notifmgr-category-chip,
+.mn-chip {
+  height: 36px;
+  padding: 0 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.notifmgr-category-chip:hover,
+.mn-chip:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.notifmgr-category-active,
+.mn-chip-active {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, #2563eb, #6366f1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+.notifmgr-chip-count,
+.mn-chip-count {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.notifmgr-category-chip:not(.notifmgr-category-active) .notifmgr-chip-count {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* =========================================================
+   FILTER BOTTOM SHEET & OVERLAY
+   ========================================================= */
+
+.notifmgr-filter-overlay,
+.mn-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: notifmgrFadeIn 0.2s ease-out;
+}
+
+@keyframes notifmgrFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.notifmgr-filter-panel,
+.mn-filter-panel {
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  border-radius: 22px 22px 0 0;
+  background: #ffffff;
+  box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.2);
+  animation: notifmgrSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes notifmgrSlideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@media (min-width: 768px) {
+  .notifmgr-filter-overlay {
+    align-items: center;
+  }
+  .notifmgr-filter-panel {
+    border-radius: 16px;
+    padding-bottom: 20px;
+  }
+}
+
+.notifmgr-filter-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.notifmgr-filter-title strong {
+  display: block;
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.notifmgr-filter-title span {
+  display: block;
+  margin-top: 3px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.notifmgr-filter-close {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.notifmgr-filter-close:hover {
+  background: #e2e8f0;
+}
+
+.notifmgr-filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notifmgr-checkbox-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notifmgr-checkbox-option input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+.notifmgr-clear-filter {
+  height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid #dce3eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.notifmgr-clear-filter:hover {
+  background: #f8fafc;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+/* =========================================================
+   NOTIFICATION LIST & ITEM CARDS
+   ========================================================= */
+
+.notifmgr-list,
+.mn-list {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notifmgr-item,
+.mn-item {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #dfe5ed;
+  border-radius: 14px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.notifmgr-item:hover,
+.mn-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.notifmgr-item-unread,
+.mn-item-unread {
+  border-color: #bfdbfe !important;
+  background: #f8fafc !important;
+}
+
+/* Category Icons */
+.notifmgr-icon,
+.mn-item-icon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notifmgr-icon-leave      { background: #ede9fe; color: #7c3aed; }
+.notifmgr-icon-payroll    { background: #dcfce7; color: #16a34a; }
+.notifmgr-icon-attendance { background: #dbeafe; color: #2563eb; }
+.notifmgr-icon-hr         { background: #fef3c7; color: #d97706; }
+.notifmgr-icon-system     { background: #f3e8ff; color: #9333ea; }
+
+/* Unread Dot */
+.notifmgr-unread-dot,
+.mn-unread-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #2563eb;
+}
+
+/* Content */
+.notifmgr-content,
+.mn-item-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.notifmgr-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.notifmgr-title-wrapper {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.notifmgr-title-wrapper strong,
+.mn-item-title {
+  color: #1e293b;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 750;
+}
+
+.notifmgr-title-row time,
+.mn-item-time {
+  flex-shrink: 0;
+  color: #94a3b8;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* Category Badges */
+.notifmgr-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.notifmgr-type-leave      { background: #ede9fe; color: #7c3aed; }
+.notifmgr-type-payroll    { background: #dcfce7; color: #16a34a; }
+.notifmgr-type-attendance { background: #dbeafe; color: #2563eb; }
+.notifmgr-type-hr         { background: #fef3c7; color: #d97706; }
+.notifmgr-type-system     { background: #f3e8ff; color: #9333ea; }
+
+.notifmgr-content > p,
+.mn-item-message {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Mark as Read Button */
+.notifmgr-mark-read {
+  margin-top: 8px;
+  padding: 4px 10px;
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.notifmgr-mark-read:hover {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.notifmgr-empty,
+.mn-empty {
+  min-height: 240px;
+  box-sizing: border-box;
+  padding: 36px 20px;
+  border: 1px solid #dfe5ed;
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.notifmgr-empty-icon,
+.mn-empty-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifmgr-empty h3,
+.mn-empty strong {
+  margin: 0;
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.notifmgr-empty p,
+.mn-empty span {
+  max-width: 320px;
+  margin: 6px 0 14px;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.notifmgr-empty button,
+.mn-empty button {
+  height: 38px;
+  padding: 0 18px;
+  border: 1px solid #dce3eb;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notifmgr-empty button:hover,
+.mn-empty button:hover {
+  background: #eff6ff;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.notifmgr-footer,
+.mn-footer {
+  margin-top: 14px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.notifmgr-footer span,
+.mn-footer span {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.notifmgr-footer strong,
+.mn-footer strong {
+  color: #334155;
+  font-weight: 700;
+}
+
+.notifmgr-footer button {
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notifmgr-footer button:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   ACCESSIBILITY & FOCUS
+   ========================================================= */
+
+.notifmgr-mark-all:focus-visible,
+.notifmgr-filter-button:focus-visible,
+.notifmgr-category-chip:focus-visible,
+.notifmgr-filter-close:focus-visible,
+.notifmgr-clear-filter:focus-visible,
+.notifmgr-mark-read:focus-visible,
+.notifmgr-empty button:focus-visible,
+.notifmgr-footer button:focus-visible,
+.notifmgr-checkbox-option input:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.25);
+  outline-offset: 2px;
+}

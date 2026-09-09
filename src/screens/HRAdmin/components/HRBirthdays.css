@@ -1,0 +1,147 @@
+/* =========================================================
+   HR BIRTHDAYS COMPONENT STYLES
+   ========================================================= */
+
+.hr-section-card {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hr-section-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.hr-section-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #081426;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hr-cake-emoji {
+  font-size: 1.2rem;
+}
+
+.hr-section-subtitle {
+  font-size: 0.78rem;
+  color: #60708a;
+  font-weight: 500;
+}
+
+.hr-bday-count-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.hr-birthdays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hr-bday-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #f1f5f9;
+  transition: all 0.15s ease;
+}
+
+.hr-bday-item.is-today-item {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.hr-bday-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 750;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hr-bday-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.hr-bday-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #081426;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hr-bday-dept {
+  font-size: 0.76rem;
+  color: #60708a;
+  font-weight: 500;
+}
+
+.hr-bday-status {
+  flex-shrink: 0;
+}
+
+.hr-bday-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.pill-today {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+  animation: pulseHighlight 2s infinite;
+}
+
+.pill-upcoming {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+@keyframes pulseHighlight {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  }
+}

@@ -1,0 +1,1080 @@
+/* ==========================================================================
+   BELNOVA HRMS - Document Management Mobile Stylesheet
+   Namespace: bel-documents-* / bel-doc-*
+   ========================================================================== */
+
+.bel-documents-mobile-layout {
+  min-height: 100vh;
+  background-color: var(--bg-primary, #f8fafc);
+  color: var(--text-primary, #0f172a);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding-bottom: 90px;
+}
+
+.bel-documents-main {
+  padding: 14px 16px 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   1. Hero Card
+   -------------------------------------------------------------------------- */
+.bel-documents-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1e1b4b 100%);
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 18px 16px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-top-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.hero-sync-tag {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.hero-title-content h2 {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+  margin: 0 0 6px;
+}
+
+.hero-title-content p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.45;
+  margin: 0 0 16px;
+}
+
+.bel-docs-stat-pills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+.doc-stat-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.doc-stat-pill .stat-num {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.doc-stat-pill .stat-lbl {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.doc-stat-pill.verified .stat-num {
+  color: #34d399;
+}
+
+.doc-stat-pill.pending .stat-num {
+  color: #fbbf24;
+}
+
+.bel-btn-hero-upload {
+  width: 100%;
+  min-height: 42px;
+  background: linear-gradient(90deg, #2563eb, #4f46e5);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.bel-btn-hero-upload:active {
+  transform: scale(0.98);
+}
+
+/* --------------------------------------------------------------------------
+   2. Horizontal Category Scroll Section
+   -------------------------------------------------------------------------- */
+.bel-category-scroll-section {
+  margin-bottom: 16px;
+}
+
+.section-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.category-active-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.bel-category-pill-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bel-category-pill-track::-webkit-scrollbar {
+  display: none;
+}
+
+.category-pill-btn {
+  flex-shrink: 0;
+  min-height: 38px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.category-pill-btn .cat-icon {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.category-pill-btn .cat-count-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.category-pill-btn.is-active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+.category-pill-btn.is-active .cat-icon {
+  color: #ffffff;
+}
+
+.category-pill-btn.is-active .cat-count-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   3. Search & Toolbar
+   -------------------------------------------------------------------------- */
+.bel-docs-search-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bel-docs-search-box {
+  width: 100%;
+  min-height: 42px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bel-docs-search-box svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.bel-docs-search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.btn-clear-search {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.bel-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bel-select-employee {
+  flex: 1;
+  min-height: 40px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  outline: none;
+}
+
+.bel-btn-more-filters {
+  min-height: 40px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.bel-btn-more-filters.is-active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.active-filter-badge {
+  width: 18px;
+  height: 18px;
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   4. Employee Context Banner
+   -------------------------------------------------------------------------- */
+.bel-employee-context-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.context-emp-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.emp-avatar-icon {
+  width: 32px;
+  height: 32px;
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.context-emp-info strong {
+  display: block;
+  font-size: 13px;
+  color: #1e3a8a;
+}
+
+.context-emp-info span {
+  font-size: 11px;
+  color: #3b82f6;
+}
+
+.context-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-emp-export-csv {
+  min-height: 32px;
+  padding: 0 10px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.btn-emp-clear {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   5. Document Cards Grid
+   -------------------------------------------------------------------------- */
+.bel-docs-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.bel-docs-grid-header h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.docs-counter {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.bel-docs-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bel-doc-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.bel-doc-card:active {
+  border-color: #93c5fd;
+}
+
+.doc-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.doc-type-badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.doc-type-badge.type-pdf {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.doc-type-badge.type-doc,
+.doc-type-badge.type-docx {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.doc-type-badge.type-jpg,
+.doc-type-badge.type-jpeg,
+.doc-type-badge.type-png {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.doc-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.doc-status-pill.is-verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.doc-status-pill.is-pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.doc-card-body {
+  cursor: pointer;
+}
+
+.doc-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+.doc-emp-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 4px;
+}
+
+.doc-specs {
+  font-size: 11px;
+  color: #64748b;
+  margin: 0;
+}
+
+.doc-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-card-action {
+  flex: 1;
+  min-height: 36px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-card-action.view {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.btn-card-action.download {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.btn-card-action.verify {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.btn-card-action:active {
+  transform: scale(0.96);
+}
+
+/* --------------------------------------------------------------------------
+   6. Empty State
+   -------------------------------------------------------------------------- */
+.bel-docs-empty-state {
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 32px 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.empty-icon-wrap {
+  width: 54px;
+  height: 54px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.bel-docs-empty-state h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 6px;
+}
+
+.bel-docs-empty-state p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 16px;
+}
+
+.btn-clear-empty-filters {
+  min-height: 38px;
+  padding: 0 18px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   7. Mobile Bottom Sheets
+   -------------------------------------------------------------------------- */
+.bel-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bel-bottom-sheet-panel {
+  width: 100%;
+  max-width: 540px;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding: 12px 16px 20px;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  animation: belSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes belSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheet-handle-bar {
+  width: 40px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 4px;
+  margin: 0 auto 12px;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.sheet-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sheet-header-title h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.sheet-header-title span {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.btn-sheet-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sheet-content-scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 2px;
+  margin-bottom: 14px;
+}
+
+.sheet-form-group {
+  margin-bottom: 14px;
+}
+
+.sheet-form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.sheet-select-wrapper select,
+.sheet-text-input {
+  width: 100%;
+  min-height: 44px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+}
+
+.sheet-select-wrapper select:focus,
+.sheet-text-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.sheet-footer-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-sheet-clear {
+  flex: 1;
+  min-height: 44px;
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-sheet-apply {
+  flex: 1.5;
+  min-height: 44px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   8. Document Preview Bottom Sheet
+   -------------------------------------------------------------------------- */
+.doc-preview-panel {
+  max-width: 600px;
+}
+
+.preview-type-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.preview-type-badge.type-pdf {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.preview-type-badge.type-doc,
+.preview-type-badge.type-docx {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.preview-type-badge.type-jpg,
+.preview-type-badge.type-png {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.doc-preview-visual-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+}
+
+.generic-doc-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.generic-doc-preview svg {
+  color: #2563eb;
+}
+
+.generic-doc-preview strong {
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.generic-doc-preview span {
+  font-size: 11px;
+  color: #64748b;
+  max-width: 320px;
+}
+
+.image-preview-wrap img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.doc-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.meta-cell {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.meta-lbl {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.meta-val {
+  font-size: 12px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.meta-status-tag {
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 6px;
+  width: fit-content;
+}
+
+.meta-status-tag.verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.meta-status-tag.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.preview-footer-action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-preview-action {
+  min-height: 42px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-preview-action.download {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.btn-preview-action.verify {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.btn-preview-action.remove {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+/* --------------------------------------------------------------------------
+   9. Upload Zone Mobile
+   -------------------------------------------------------------------------- */
+.bel-mobile-upload-zone {
+  position: relative;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 20px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.hidden-file-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.bel-mobile-upload-zone svg {
+  color: #2563eb;
+}
+
+.bel-mobile-upload-zone strong {
+  font-size: 13px;
+  color: #1e293b;
+}
+
+.bel-mobile-upload-zone span {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.btn-browse-files {
+  position: relative;
+  z-index: 2;
+  min-height: 32px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.upload-compliance-note {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #92400e;
+  font-size: 11px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+.upload-compliance-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   10. Toast Notification
+   -------------------------------------------------------------------------- */
+.bel-documents-toast-banner {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1100;
+  animation: belDocFadeInUp 0.2s ease-out;
+  white-space: nowrap;
+}
+
+.bel-documents-toast-banner svg {
+  color: #34d399;
+}
+
+@keyframes belDocFadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. Tablet & Desktop Responsive Scaling
+   -------------------------------------------------------------------------- */
+@media (min-width: 640px) {
+  .bel-docs-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bel-docs-search-toolbar {
+    flex-direction: row;
+  }
+
+  .hero-title-content h2 {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bel-docs-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bel-documents-main {
+    padding: 24px 20px 40px;
+  }
+}
