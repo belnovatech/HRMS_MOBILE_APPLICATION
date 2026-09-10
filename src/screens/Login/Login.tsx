@@ -14,7 +14,7 @@ import {
   X,
   Check
 } from 'lucide-react';
-import belnovaLogo from '../../assets/belnova-logo.png';
+import { COMPANY_BRANDING } from '../../constants/branding';
 import './Login.css';
 
 export const Login: React.FC = () => {
@@ -79,8 +79,8 @@ export const Login: React.FC = () => {
         <div className="login-brand-header">
           <div className="login-logo-container">
             <img
-              src={belnovaLogo}
-              alt="BELNOVA HRMS"
+              src={COMPANY_BRANDING.logoUrl}
+              alt={COMPANY_BRANDING.appName}
               className="belnova-real-logo"
             />
           </div>

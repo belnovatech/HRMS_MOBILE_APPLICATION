@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, AlertCircle, X, ExternalLink } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, ExternalLink, Loader2 } from 'lucide-react';
+import { openNativeFile } from '../../services/downloadService';
 import './DownloadToast.css';
 
 interface ToastData {
@@ -8,11 +9,14 @@ interface ToastData {
   title: string;
   message: string;
   fileName: string;
+  filePath?: string;
+  mimeType?: string;
   time?: string;
 }
 
 export const DownloadToast: React.FC = () => {
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [isOpening, setIsOpening] = useState(false);
 
   useEffect(() => {
     const handleSuccess = (e: Event) => {
@@ -20,9 +24,11 @@ export const DownloadToast: React.FC = () => {
       setToast({
         id: String(Date.now()),
         type: 'success',
-        title: detail.title || 'Download Complete',
-        message: detail.message || `${detail.fileName} downloaded successfully.`,
+        title: detail.title || '✓ Download Complete',
+        message: detail.message || `${detail.fileName} saved successfully.`,
         fileName: detail.fileName,
+        filePath: detail.filePath,
+        mimeType: detail.mimeType,
         time: detail.time || 'Just now',
       });
     };
@@ -32,7 +38,7 @@ export const DownloadToast: React.FC = () => {
       setToast({
         id: String(Date.now()),
         type: 'error',
-        title: 'Download Failed',
+        title: '✕ Download Failed',
         message: detail.error || `Could not save ${detail.fileName}. Please try again.`,
         fileName: detail.fileName,
         time: 'Just now',
@@ -52,12 +58,21 @@ export const DownloadToast: React.FC = () => {
     if (toast) {
       const timer = setTimeout(() => {
         setToast(null);
-      }, 5000);
+      }, 6500);
       return () => clearTimeout(timer);
     }
   }, [toast]);
 
   if (!toast) return null;
+
+  const handleOpen = async () => {
+    setIsOpening(true);
+    try {
+      await openNativeFile(toast.filePath || toast.fileName, toast.mimeType);
+    } finally {
+      setIsOpening(false);
+    }
+  };
 
   return (
     <div className={`download-toast-banner toast-${toast.type}`}>
@@ -76,11 +91,12 @@ export const DownloadToast: React.FC = () => {
       {toast.type === 'success' && (
         <button
           className="toast-open-btn"
-          onClick={() => {
-            alert(`File saved: ${toast.fileName}\nLocation: Android Downloads / Documents Vault`);
-          }}
+          onClick={handleOpen}
+          disabled={isOpening}
+          title="Open in device viewer"
         >
-          <ExternalLink size={12} /> OPEN
+          {isOpening ? <Loader2 size={12} className="spin-icon" /> : <ExternalLink size={12} />}
+          <span>OPEN</span>
         </button>
       )}
 
@@ -90,3 +106,5 @@ export const DownloadToast: React.FC = () => {
     </div>
   );
 };
+
+export default DownloadToast;

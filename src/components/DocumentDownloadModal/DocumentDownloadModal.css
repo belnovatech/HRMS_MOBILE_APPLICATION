@@ -1,0 +1,288 @@
+.doc-dl-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: docDlFadeIn 0.2s ease-out;
+}
+
+.doc-dl-modal-content {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 380px;
+  padding: 24px 20px;
+  position: relative;
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: docDlSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.doc-dl-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.doc-dl-modal-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.doc-dl-icon-container {
+  margin-bottom: 12px;
+}
+
+.doc-dl-icon-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-dl-icon-badge.success {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.doc-dl-icon-badge.error {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.doc-dl-icon-badge.file {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.doc-dl-icon-spinner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.doc-dl-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 14px 0;
+}
+
+.doc-dl-file-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.doc-dl-file-icon {
+  background: #e0f2fe;
+  color: #0284c7;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.doc-dl-file-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.doc-dl-file-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doc-dl-file-location {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.doc-dl-error-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.doc-dl-feedback-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  font-size: 11.5px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+  width: 100%;
+  text-align: left;
+}
+
+.doc-dl-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.doc-dl-btn {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.doc-dl-btn.primary {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.doc-dl-btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.doc-dl-btn.primary.retry {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.doc-dl-btn.primary.retry:hover {
+  background: #b91c1c;
+}
+
+.doc-dl-btn.secondary {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.doc-dl-btn.secondary:hover {
+  background: #e2e8f0;
+}
+
+.doc-dl-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.doc-dl-progress-bar-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc-dl-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.doc-dl-progress-fill {
+  width: 60%;
+  height: 100%;
+  background: #2563eb;
+  border-radius: 3px;
+  animation: progressIndeterminate 1.5s infinite ease-in-out;
+}
+
+@keyframes progressIndeterminate {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(50%); }
+  100% { transform: translateX(200%); }
+}
+
+.doc-dl-progress-text {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+@keyframes docDlFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes docDlSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
