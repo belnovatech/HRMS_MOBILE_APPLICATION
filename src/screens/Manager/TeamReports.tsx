@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { ManagerLayout } from "../../layouts/ManagerLayout";
 import { exportToExcel } from "../../utils/exportUtils";
-import { downloadReportPdf } from "../../utils/pdfGenerator";
+import { downloadReport, downloadReportExcel, downloadReportCsv } from "../../services/downloadService";
 import {
   FiFileText,
   FiDownload,
@@ -250,7 +250,7 @@ export const TeamReports: React.FC = () => {
      DOWNLOAD — CSV
      ========================================================= */
 
-  const downloadCSV = (reportId: string, title: string) => {
+  const downloadCSV = async (reportId: string, title: string) => {
     const key = downloadKey(reportId, "CSV");
     if (downloadState[key]?.loading) return;
     setLoading(key, true);
@@ -266,22 +266,10 @@ export const TeamReports: React.FC = () => {
       }
 
       const headers = Object.keys(rows[0]);
-      const csvLines = [
-        headers.join(","),
-        ...rows.map((row) =>
-          headers.map((h) => `"${String(row[h] ?? "").replace(/"/g, '""')}"`).join(",")
-        ),
-      ].join("\n");
+      const dataRows = rows.map((row) => headers.map((h) => row[h] ?? ""));
+      const fileName = `${title.replace(/\s+/g, "_")}_${selectedPeriod}.csv`;
 
-      const blob = new Blob([csvLines], { type: "text/csv;charset=utf-8;" });
-      const url  = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href     = url;
-      link.download = `${title.replace(/\s+/g, "_")}_${selectedPeriod}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      await downloadReportCsv(headers, dataRows, fileName);
 
       setDone(key);
       showToast(`${title} CSV downloaded successfully.`, "success");
@@ -296,7 +284,7 @@ export const TeamReports: React.FC = () => {
      DOWNLOAD — XLSX
      ========================================================= */
 
-  const downloadXLSX = (reportId: string, title: string) => {
+  const downloadXLSX = async (reportId: string, title: string) => {
     const key = downloadKey(reportId, "XLSX");
     if (downloadState[key]?.loading) return;
     setLoading(key, true);
@@ -311,8 +299,11 @@ export const TeamReports: React.FC = () => {
         return;
       }
 
-      const fileName = `${title.replace(/\s+/g, "_")}_${selectedPeriod}`;
-      exportToExcel(rows, fileName);  // creates & downloads real XLSX via SheetJS
+      const headers = Object.keys(rows[0]);
+      const dataRows = rows.map((row) => headers.map((h) => row[h] ?? ""));
+      const fileName = `${title.replace(/\s+/g, "_")}_${selectedPeriod}.xlsx`;
+
+      await downloadReportExcel(title, headers, dataRows, fileName);
 
       setDone(key);
       showToast(`${title} Excel file downloaded.`, "success");
@@ -327,7 +318,7 @@ export const TeamReports: React.FC = () => {
      DOWNLOAD — PDF
      ========================================================= */
 
-  const downloadPDF = (reportId: string, title: string) => {
+  const downloadPDF = async (reportId: string, title: string) => {
     const key = downloadKey(reportId, "PDF");
     if (downloadState[key]?.loading) return;
     setLoading(key, true);
@@ -347,7 +338,7 @@ export const TeamReports: React.FC = () => {
       const pdfRows  = rows.map((row) => headers.map((h) => String(row[h] ?? "")));
       const fileName = `${title.replace(/\s+/g, "_")}_${selectedPeriod}.pdf`;
 
-      downloadReportPdf(title, selectedPeriod, headers, pdfRows, fileName);
+      await downloadReport(title, `Period: ${selectedPeriod}`, headers, pdfRows, fileName);
 
       setDone(key);
       showToast(`${title} PDF downloaded.`, "success");

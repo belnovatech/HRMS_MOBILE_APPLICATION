@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { getCompanyPdfHeaderHtml } from '../../utils/pdfGenerator';
+import { downloadReport as dlReportPdf, downloadReportExcel, downloadReportCsv } from '../../services/downloadService';
 import {
   FiBarChart2,
   FiDownload,
@@ -352,42 +353,30 @@ export const HRReports: React.FC = () => {
 
   const getRows = (reportId: string) => REPORT_DATA[reportId] || [];
 
-  const downloadReport = (report: ReportConfig, outputFormat: 'PDF' | 'Excel' | 'CSV') => {
+  const downloadReport = async (report: ReportConfig, outputFormat: 'PDF' | 'Excel' | 'CSV') => {
     const rows = getRows(report.id);
     const fileName = `${report.fileName}-${period}`;
+    const headers = rows.length > 0 ? rows[0] : ['Field', 'Value'];
+    const dataRows = rows.slice(1);
 
     if (outputFormat === 'CSV') {
-      downloadBlob(makeCsv(rows), `${fileName}.csv`, 'text/csv;charset=utf-8;');
-      showToast(`${report.title} CSV downloaded.`);
+      await downloadReportCsv(headers, dataRows, `${fileName}.csv`);
       return;
     }
 
     if (outputFormat === 'Excel') {
-      downloadBlob(
-        makeExcelHtml(report.title, rows),
-        `${fileName}.xls`,
-        'application/vnd.ms-excel;charset=utf-8;'
-      );
-      showToast(`${report.title} Excel file downloaded.`);
+      await downloadReportExcel(report.title, headers, dataRows, `${fileName}.xlsx`);
       return;
     }
 
     // PDF Flow
-    const printWindow = window.open('', '_blank', 'width=1100,height=750');
-    if (!printWindow) {
-      showToast('Please allow pop-ups to generate the PDF.');
-      return;
-    }
-
-    printWindow.document.open();
-    printWindow.document.write(makePdfHtml(report.title, rows, period));
-    printWindow.document.close();
-    showToast(`${report.title} PDF print dialog opened.`);
+    const pdfRows = dataRows.map((r) => [String(r[0] || ''), String(r[1] || '')]);
+    await dlReportPdf(report.title, `Period: ${period}`, headers, pdfRows, `${fileName}.pdf`);
   };
 
-  const exportAll = () => {
+  const exportAll = async () => {
+    const headers = ['Report', 'Period', 'Metric', 'Value'];
     const rows = [
-      ['Report', 'Period', 'Metric', 'Value'],
       ['Employee Report', period, 'Total Records', '1,248'],
       ['Attendance Report', 'Sep 2026', 'Attendance Rate', '87.2%'],
       ['Leave Report', 'Sep 2026', 'Leave Requests', '353'],
@@ -398,18 +387,14 @@ export const HRReports: React.FC = () => {
       ['Attrition Report', 'YTD 2026', 'Attrition Rate', '3.2%'],
     ];
 
-    downloadBlob(makeCsv(rows), `hrms-reports-export-${period}.csv`, 'text/csv;charset=utf-8;');
-    showToast('All HR reports exported as CSV.');
+    await downloadReportExcel('All HR Reports Summary', headers, rows, `HRMS_All_Reports_${period}.xlsx`);
   };
 
-  const downloadAnalytics = (metric = activeMetric) => {
-    const rows = [
-      ['Month', metric],
-      ...MONTHS.map((month, index) => [month, CHARTS[metric][index]]),
-    ];
+  const downloadAnalytics = async (metric = activeMetric) => {
+    const headers = ['Month', metric];
+    const rows = MONTHS.map((month, index) => [month, String(CHARTS[metric][index])]);
 
-    downloadBlob(makeCsv(rows), `analytics-${metric.toLowerCase()}-${period}.csv`, 'text/csv;charset=utf-8;');
-    showToast(`${metric} analytics downloaded.`);
+    await downloadReportExcel(`${metric} Analytics`, headers, rows, `Analytics_${metric}_${period}.xlsx`);
   };
 
   const applyFilters = () => {

@@ -1,13 +1,25 @@
 import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { downloadFile, downloadReportExcel, downloadReportCsv } from '../services/downloadService';
 
-export const exportToExcel = (data: any[], fileName: string) => {
+export const exportToExcel = async (data: any[], fileName: string) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-  saveAs(blob, `${fileName}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  const safeFileName = `${fileName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+
+  return downloadFile({
+    fileName: safeFileName,
+    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    arrayBuffer: excelBuffer,
+    title: '✓ Download Complete',
+    description: `${safeFileName} saved successfully.`,
+  });
+};
+
+export const exportToCsv = async (headers: string[], rows: (string | number)[][], fileName: string) => {
+  const safeFileName = `${fileName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+  return downloadReportCsv(headers, rows, safeFileName);
 };
 
 export const formatCurrency = (amount: number | string) => {

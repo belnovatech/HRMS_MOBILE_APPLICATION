@@ -13,7 +13,7 @@ import {
   HelpCircle,
   LogOut,
 } from "lucide-react";
-import belnovaIcon from "../assets/belnova-icon.png";
+import { COMPANY_BRANDING } from "../constants/branding";
 import "./ManagerLayout.css";
 
 interface ManagerLayoutProps {
@@ -45,7 +45,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
       {/* Desktop Sidebar — Hidden on mobile via CSS (@media max-width: 1023px) */}
       <aside className="desktop-sidebar">
         <div className="desktop-sidebar-top">
-          <img src={belnovaIcon} alt="BELNOVA" className="desktop-sidebar-logo-img" />
+          <img src={COMPANY_BRANDING.logoUrl} alt={COMPANY_BRANDING.appName} className="desktop-sidebar-logo-img" />
           <div className="desktop-sidebar-brand">
             <span className="desktop-brand-name">BELNOVA</span>
             <span className="desktop-brand-sub">HRMS Platform</span>

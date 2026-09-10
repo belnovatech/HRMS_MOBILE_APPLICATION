@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
-import { downloadPayslipPdf } from '../../utils/pdfGenerator';
+import { downloadPayslip, downloadReportCsv, downloadReportExcel } from '../../services/downloadService';
+import { COMPANY_BRANDING } from '../../constants/branding';
 import {
   FiCheck,
   FiCheckCircle,
@@ -327,7 +328,7 @@ export const HRPayroll: React.FC = () => {
     showToast(`Payslip generated for ${selectedEmployee.name}`, 'success');
   };
 
-  const exportMonthSummary = () => {
+  const exportMonthSummary = async () => {
     const headers = [
       'Employee ID',
       'Employee',
@@ -356,12 +357,11 @@ export const HRPayroll: React.FC = () => {
       processedEmployees[`${payrollKey}-${employee.id}`] ? 'Processed' : 'Pending',
     ]);
 
-    const filename = `payroll-${MONTH_NAMES[selectedMonth].toLowerCase()}-${selectedYear}.csv`;
-    downloadCsv(filename, headers, rows);
-    showToast(`Downloaded ${filename}`, 'success');
+    const filename = `Payroll_Summary_${MONTH_NAMES[selectedMonth]}_${selectedYear}.xlsx`;
+    await downloadReportExcel(`Payroll ${MONTH_NAMES[selectedMonth]} ${selectedYear}`, headers, rows, filename);
   };
 
-  const exportSelectedPayslip = () => {
+  const exportSelectedPayslip = async () => {
     if (!selectedEmployee) {
       showToast('Please select an employee first.', 'error');
       return;
@@ -376,13 +376,15 @@ export const HRPayroll: React.FC = () => {
         grossSalary: formatINR(selectedEmployee.gross),
         deductions: formatINR(selectedEmployee.deductions),
         netSalary: formatINR(selectedEmployee.net),
+        basic: selectedEmployee.basicPay,
+        hra: selectedEmployee.hraPay,
+        fixedAllowance: selectedEmployee.allowancePay,
         payPeriod: MONTH_NAMES[selectedMonth],
         payDate: `05/${String(selectedMonth + 1).padStart(2, '0')}/${selectedYear}`,
         paidDays: selectedEmployee.paidDays || 30,
       };
 
-      downloadPayslipPdf(slip, selectedEmployee);
-      showToast(`Payslip PDF downloaded for ${selectedEmployee.name}`, 'success');
+      await downloadPayslip(slip, selectedEmployee);
     } catch (err) {
       showToast('Unable to download payslip. Please try again.', 'error');
     }

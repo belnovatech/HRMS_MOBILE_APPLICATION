@@ -13,7 +13,7 @@ import {
   Shield
 } from 'lucide-react';
 import { ManagerDrawer } from '../ManagerDrawer/ManagerDrawer';
-import belnovaIcon from '../../assets/belnova-icon.png';
+import { COMPANY_BRANDING } from '../../constants/branding';
 import './AppHeader.css';
 
 interface AppHeaderProps {
@@ -79,8 +79,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           ) : (
             <div className="header-brand-wrap" onClick={() => navigate(role === 'hr' ? '/hr/dashboard' : role === 'manager' ? '/manager/dashboard' : '/employee/dashboard')}>
               <img
-                src={belnovaIcon}
-                alt="BELNOVA HRMS"
+                src={COMPANY_BRANDING.logoUrl}
+                alt={COMPANY_BRANDING.appName}
                 className="header-brand-icon"
               />
             </div>

@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { useAuth } from '../../context/AuthContext';
-import { downloadReportPdf } from '../../utils/pdfGenerator';
+import { downloadDocument as dlDoc, downloadReportCsv, downloadReport } from '../../services/downloadService';
 import {
   FiFileText,
   FiDownload,
@@ -59,20 +59,21 @@ export interface DocItem {
   file?: any;
 }
 
-function downloadDocument(documentItem: DocItem) {
-  if (documentItem.file && documentItem.file instanceof File) {
-    const url = URL.createObjectURL(documentItem.file);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = documentItem.fileName || documentItem.file.name;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+async function downloadDocument(documentItem: DocItem) {
+  if (documentItem.file) {
+    await dlDoc({
+      fileName: documentItem.fileName,
+      title: documentItem.title,
+      file: documentItem.file,
+    });
     return;
   }
 
-  downloadReportPdf(
+  const safeFileName = documentItem.fileName
+    ? documentItem.fileName.replace(/\.txt$/, '.pdf')
+    : `${documentItem.title.replace(/\s+/g, '_')}.pdf`;
+
+  await downloadReport(
     documentItem.title,
     documentItem.category,
     ['Document Metadata Field', 'Value'],
@@ -86,53 +87,36 @@ function downloadDocument(documentItem: DocItem) {
       ['Upload Date', documentItem.uploaded],
       ['Verification Status', documentItem.status],
     ],
-    documentItem.fileName ? documentItem.fileName.replace(/\.txt$/, '.pdf') : `${documentItem.title.replace(/\s+/g, '_')}.pdf`
+    safeFileName
   );
 }
 
-function downloadEmployeeDocuments(employeeName: string, documents: DocItem[]) {
-  const rows = [
-    [
-      'Document ID',
-      'Employee ID',
-      'Employee',
-      'Category',
-      'Document',
-      'Type',
-      'Size',
-      'Uploaded',
-      'Status',
-    ],
-    ...documents.map((item) => [
-      item.id,
-      item.employeeId,
-      item.employee,
-      item.category,
-      item.title,
-      item.type,
-      item.size,
-      item.uploaded,
-      item.status,
-    ]),
+async function downloadEmployeeDocuments(employeeName: string, documents: DocItem[]) {
+  const headers = [
+    'Document ID',
+    'Employee ID',
+    'Employee',
+    'Category',
+    'Document',
+    'Type',
+    'Size',
+    'Uploaded',
+    'Status',
   ];
 
-  const csv = rows
-    .map((row) =>
-      row
-        .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
-        .join(',')
-    )
-    .join('\n');
+  const rows = documents.map((item) => [
+    item.id,
+    item.employeeId,
+    item.employee,
+    item.category,
+    item.title,
+    item.type,
+    item.size,
+    item.uploaded,
+    item.status,
+  ]);
 
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `${employeeName.replace(/\s+/g, '-')}-documents.csv`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  URL.revokeObjectURL(url);
+  await downloadReportCsv(headers, rows, `${employeeName.replace(/\s+/g, '-')}-documents.csv`);
 }
 
 export const HRDocuments: React.FC = () => {

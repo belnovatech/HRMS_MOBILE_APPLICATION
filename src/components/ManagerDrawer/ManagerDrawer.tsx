@@ -12,7 +12,7 @@ import {
   X,
   LogOut,
 } from 'lucide-react';
-import belnovaIcon from '../../assets/belnova-icon.png';
+import { COMPANY_BRANDING } from '../../constants/branding';
 import './ManagerDrawer.css';
 
 interface ManagerDrawerProps {
@@ -70,7 +70,7 @@ export const ManagerDrawer: React.FC<ManagerDrawerProps> = ({ isOpen, onClose })
         {/* Brand & Close */}
         <div className="drawer-top-bar">
           <div className="drawer-brand">
-            <img src={belnovaIcon} alt="BELNOVA" className="drawer-logo-img" />
+            <img src={COMPANY_BRANDING.logoUrl} alt={COMPANY_BRANDING.appName} className="drawer-logo-img" />
             <div className="drawer-brand-text">
               <span className="brand-name">BELNOVA</span>
               <span className="brand-sub">HRMS Platform</span>

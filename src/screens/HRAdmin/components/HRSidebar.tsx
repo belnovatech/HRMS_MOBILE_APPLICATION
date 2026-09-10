@@ -19,7 +19,7 @@ import {
   LogOut,
   X,
 } from 'lucide-react';
-import belnovaIcon from '../../../assets/belnova-icon.png';
+import { COMPANY_BRANDING } from '../../../constants/branding';
 import './HRSidebar.css';
 
 interface HRSidebarProps {
@@ -80,7 +80,7 @@ export const HRSidebar: React.FC<HRSidebarProps> = ({
         <div className="hr-sidebar-header">
           <div className="hr-brand-container">
             <div className="hr-logo-icon">
-              <img src={belnovaIcon} alt="BELNOVA" className="hr-sidebar-brand-img" />
+              <img src={COMPANY_BRANDING.logoUrl} alt={COMPANY_BRANDING.appName} className="hr-sidebar-brand-img" />
             </div>
             <div className="hr-brand-text">
               <span className="hr-brand-title">BELNOVA</span>
