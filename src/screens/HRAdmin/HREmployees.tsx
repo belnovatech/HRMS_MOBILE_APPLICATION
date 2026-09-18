@@ -1,31 +1,21 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { UserPlus, Search, X, Briefcase, Mail, Calendar, Eye, Edit2 } from 'lucide-react';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
+import { useAuth } from '../../context/AuthContext';
 import { getEmployees, EmployeeRecord } from '../../data/employeeStore';
-import {
-  FiSearch,
-  FiUserPlus,
-  FiEye,
-  FiEdit2,
-  FiX,
-  FiCalendar,
-  FiBriefcase,
-  FiMail,
-} from 'react-icons/fi';
-import './HREmployees.css';
 
 const DEPARTMENTS = [
   'All',
   'Engineering',
-  'Product & Design',
-  'HR & Operations',
-  'Sales & Marketing',
-  'Finance & Legal',
+  'Design',
+  'Human Resources',
 ];
 
 export const HREmployees: React.FC = () => {
   const navigate = useNavigate();
+  const { teamMembers = [] } = useAuth();
   const [searchParams] = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
   const initialDept = searchParams.get('dept') || 'All';
@@ -33,7 +23,28 @@ export const HREmployees: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [selectedDept, setSelectedDept] = useState(initialDept);
 
-  const employees: EmployeeRecord[] = getEmployees();
+  const rawEmployees: EmployeeRecord[] = getEmployees();
+
+  const employees: EmployeeRecord[] = useMemo(() => {
+    if (teamMembers && teamMembers.length > 0) {
+      return teamMembers.map((m) => {
+        const existing = rawEmployees.find((e) => e.id === m.id || e.email === m.email);
+        return {
+          id: m.id,
+          name: m.name,
+          email: m.email,
+          phone: m.phone || '+91 98765 43210',
+          department: (m as any).department || (m.role === 'hr' ? 'Human Resources' : 'Engineering'),
+          role: m.designation || (m.role === 'hr' ? 'HR Director' : m.role === 'manager' ? 'Engineering Manager' : 'Engineer'),
+          status: (m.status as any) || 'Active',
+          joinDate: existing?.joinDate || '2023-01-15',
+          avatarBg: m.color || '#2F6FED',
+          ...existing,
+        };
+      });
+    }
+    return rawEmployees;
+  }, [teamMembers, rawEmployees]);
 
   const filteredEmployees = useMemo(() => {
     return employees.filter((emp) => {
@@ -89,7 +100,7 @@ export const HREmployees: React.FC = () => {
             onClick={() => navigate('/hr/employees/add')}
             aria-label="Add New Employee"
           >
-            <FiUserPlus size={18} />
+            <UserPlus size={18} />
             <span>Add Employee</span>
           </button>
         </section>
@@ -97,7 +108,7 @@ export const HREmployees: React.FC = () => {
         {/* Mobile Search Bar */}
         <section className="hr-emp-search-section">
           <div className="hr-emp-search-bar">
-            <FiSearch className="hr-emp-search-icon" size={17} />
+            <Search className="hr-emp-search-icon" size={17} />
             <input
               type="text"
               className="hr-emp-search-input"
@@ -112,7 +123,7 @@ export const HREmployees: React.FC = () => {
                 onClick={() => setSearchTerm('')}
                 aria-label="Clear Search"
               >
-                <FiX size={16} />
+                <X size={16} />
               </button>
             )}
           </div>
@@ -149,7 +160,7 @@ export const HREmployees: React.FC = () => {
           {filteredEmployees.length === 0 ? (
             <div className="hr-emp-empty-state">
               <div className="hr-emp-empty-icon-wrap">
-                <FiBriefcase size={28} />
+                <Briefcase size={28} />
               </div>
               <h4>No employees found</h4>
               <p>Try adjusting your search criteria or resetting the department filter.</p>
@@ -205,7 +216,7 @@ export const HREmployees: React.FC = () => {
                   {/* Role & Department */}
                   <div className="hr-emp-role-dept-box">
                     <div className="hr-emp-info-pill">
-                      <FiBriefcase size={13} />
+                      <Briefcase size={13} />
                       <span>{emp.role}</span>
                     </div>
                     <span className="hr-emp-dept-text">{emp.department}</span>
@@ -214,11 +225,11 @@ export const HREmployees: React.FC = () => {
                   {/* Email & Joined Date Meta */}
                   <div className="hr-emp-meta-details">
                     <div className="hr-emp-meta-item">
-                      <FiMail size={13} />
+                      <Mail size={13} />
                       <span>{emp.email}</span>
                     </div>
                     <div className="hr-emp-meta-item">
-                      <FiCalendar size={13} />
+                      <Calendar size={13} />
                       <span>Joined {formatDate(emp.joinDate)}</span>
                     </div>
                   </div>
@@ -230,7 +241,7 @@ export const HREmployees: React.FC = () => {
                       className="hr-emp-action-btn btn-view"
                       onClick={() => navigate(`/hr/employees/${emp.id}`)}
                     >
-                      <FiEye size={15} />
+                      <Eye size={15} />
                       <span>View Profile</span>
                     </button>
 
@@ -239,7 +250,7 @@ export const HREmployees: React.FC = () => {
                       className="hr-emp-action-btn btn-edit"
                       onClick={() => navigate(`/hr/employees/${emp.id}/edit`)}
                     >
-                      <FiEdit2 size={15} />
+                      <Edit2 size={15} />
                       <span>Edit</span>
                     </button>
                   </div>

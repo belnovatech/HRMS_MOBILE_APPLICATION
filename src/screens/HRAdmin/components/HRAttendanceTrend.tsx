@@ -10,38 +10,64 @@ interface DayAttendance {
   leave: number;
 }
 
-export const HRAttendanceTrend: React.FC = () => {
+export interface HRAttendanceTrendProps {
+  totalEmployees?: number;
+  presentToday?: number;
+  absentToday?: number;
+  onLeaveToday?: number;
+  monthlyPayroll?: number | string;
+}
+
+export const HRAttendanceTrend: React.FC<HRAttendanceTrendProps> = ({
+  totalEmployees = 0,
+  presentToday = 0,
+  absentToday = 0,
+  onLeaveToday = 0,
+  monthlyPayroll = 0,
+}) => {
   const [activeTab, setActiveTab] = useState<TrendTab>('Attendance');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const todayDayName = daysOfWeek[new Date().getDay()];
 
+  const fullAttendanceData: DayAttendance[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => {
+    if (d === todayDayName) {
+      return { day: d, present: presentToday, absent: absentToday, leave: onLeaveToday };
+    }
+    return { day: d, present: 0, absent: 0, leave: 0 };
+  });
 
-  const fullAttendanceData: DayAttendance[] = [
-    { day: 'Mon', present: 1080, absent: 70, leave: 30 },
-    { day: 'Tue', present: 1090, absent: 65, leave: 25 },
-    { day: 'Wed', present: 1070, absent: 80, leave: 30 },
-    { day: 'Thu', present: 1100, absent: 60, leave: 25 },
-    { day: 'Fri', present: 1080, absent: 70, leave: 35 },
-    { day: 'Sat', present: 850, absent: 330, leave: 15 },
-  ];
-
+  const headcount = totalEmployees || 4;
   const growthData = [
-    { label: 'Apr', value: 1185, formatted: '1,185 Employees' },
-    { label: 'May', value: 1198, formatted: '1,198 Employees' },
-    { label: 'Jun', value: 1212, formatted: '1,212 Employees' },
-    { label: 'Jul', value: 1228, formatted: '1,228 Employees' },
-    { label: 'Aug', value: 1236, formatted: '1,236 Employees' },
-    { label: 'Sep', value: 1248, formatted: '1,248 Employees' },
+    { label: 'Apr', value: Math.max(1, headcount - 1), formatted: `${Math.max(1, headcount - 1)} Employees` },
+    { label: 'May', value: Math.max(1, headcount - 1), formatted: `${Math.max(1, headcount - 1)} Employees` },
+    { label: 'Jun', value: headcount, formatted: `${headcount} Employees` },
+    { label: 'Jul', value: headcount, formatted: `${headcount} Employees` },
+    { label: 'Aug', value: headcount, formatted: `${headcount} Employees` },
+    { label: 'Sep', value: headcount, formatted: `${headcount} Employees` },
   ];
 
+  const payrollNum = typeof monthlyPayroll === 'number'
+    ? monthlyPayroll
+    : parseFloat(String(monthlyPayroll).replace(/[^0-9.]/g, '')) || 0;
+  const payrollLakhs = payrollNum / 100000;
   const payrollData = [
-    { label: 'Apr', value: 44.5, formatted: '₹44.5L Disbursed' },
-    { label: 'May', value: 45.8, formatted: '₹45.8L Disbursed' },
-    { label: 'Jun', value: 46.2, formatted: '₹46.2L Disbursed' },
-    { label: 'Jul', value: 47.1, formatted: '₹47.1L Disbursed' },
-    { label: 'Aug', value: 48.0, formatted: '₹48.0L Disbursed' },
-    { label: 'Sep', value: 48.7, formatted: '₹48.7L Current' },
+    { label: 'Apr', value: 0, formatted: '₹0.0L Disbursed' },
+    { label: 'May', value: 0, formatted: '₹0.0L Disbursed' },
+    { label: 'Jun', value: 0, formatted: '₹0.0L Disbursed' },
+    { label: 'Jul', value: 0, formatted: '₹0.0L Disbursed' },
+    { label: 'Aug', value: 0, formatted: '₹0.0L Disbursed' },
+    { label: 'Sep', value: payrollLakhs, formatted: `₹${payrollLakhs.toFixed(1)}L Current` },
   ];
+
+  const maxAttendance = Math.max(headcount, 4);
+  const maxGrowth = Math.max(headcount * 1.5, 6);
+  const maxPayroll = Math.max(payrollLakhs * 1.5, 5);
+
+  const yTickTop = activeTab === 'Attendance' ? `${maxAttendance}` : activeTab === 'Growth' ? `${Math.round(maxGrowth)}` : `${Math.round(maxPayroll)}L`;
+  const yTickMid = activeTab === 'Attendance' ? `${Math.round(maxAttendance * 0.66)}` : activeTab === 'Growth' ? `${Math.round(maxGrowth * 0.66)}` : `${(maxPayroll * 0.66).toFixed(1)}L`;
+  const yTickLow = activeTab === 'Attendance' ? `${Math.round(maxAttendance * 0.33)}` : activeTab === 'Growth' ? `${Math.round(maxGrowth * 0.33)}` : `${(maxPayroll * 0.33).toFixed(1)}L`;
 
   return (
     <div className="hr-section-card hr-trend-card">
@@ -99,21 +125,15 @@ export const HRAttendanceTrend: React.FC = () => {
         {/* Y Axis Grid Lines */}
         <div className="hr-y-axis">
           <div className="hr-y-tick-row">
-            <span className="hr-y-label">
-              {activeTab === 'Attendance' ? '1200' : activeTab === 'Growth' ? '1400' : '60L'}
-            </span>
+            <span className="hr-y-label">{yTickTop}</span>
             <div className="hr-grid-line" />
           </div>
           <div className="hr-y-tick-row">
-            <span className="hr-y-label">
-              {activeTab === 'Attendance' ? '900' : activeTab === 'Growth' ? '1050' : '45L'}
-            </span>
+            <span className="hr-y-label">{yTickMid}</span>
             <div className="hr-grid-line" />
           </div>
           <div className="hr-y-tick-row">
-            <span className="hr-y-label">
-              {activeTab === 'Attendance' ? '600' : activeTab === 'Growth' ? '700' : '30L'}
-            </span>
+            <span className="hr-y-label">{yTickLow}</span>
             <div className="hr-grid-line" />
           </div>
           <div className="hr-y-tick-row hr-baseline-row">
@@ -126,11 +146,10 @@ export const HRAttendanceTrend: React.FC = () => {
         <div className="hr-bars-row">
           {activeTab === 'Attendance' &&
             fullAttendanceData.map((item, index) => {
-              const max = 1200;
               const isHovered = hoveredIndex === index;
-              const presentHeight = (item.present / max) * 100;
-              const absentHeight = (item.absent / max) * 100;
-              const leaveHeight = (item.leave / max) * 100;
+              const presentHeight = (item.present / maxAttendance) * 100;
+              const absentHeight = (item.absent / maxAttendance) * 100;
+              const leaveHeight = (item.leave / maxAttendance) * 100;
 
               return (
                 <div
@@ -162,9 +181,8 @@ export const HRAttendanceTrend: React.FC = () => {
 
           {activeTab === 'Growth' &&
             growthData.map((item, index) => {
-              const max = 1400;
               const isHovered = hoveredIndex === index;
-              const height = (item.value / max) * 100;
+              const height = (item.value / maxGrowth) * 100;
 
               return (
                 <div
@@ -194,9 +212,8 @@ export const HRAttendanceTrend: React.FC = () => {
 
           {activeTab === 'Payroll' &&
             payrollData.map((item, index) => {
-              const max = 60;
               const isHovered = hoveredIndex === index;
-              const height = (item.value / max) * 100;
+              const height = (item.value / maxPayroll) * 100;
 
               return (
                 <div

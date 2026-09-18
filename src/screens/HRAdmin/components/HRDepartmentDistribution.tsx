@@ -1,28 +1,70 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TeamMember } from '../../../types';
 import './HRDepartmentDistribution.css';
 
-interface DepartmentData {
+export interface DepartmentData {
   name: string;
   count: number;
   percentage: string;
   color: string;
 }
 
-export const HRDepartmentDistribution: React.FC = () => {
+export interface HRDepartmentDistributionProps {
+  teamMembers?: TeamMember[];
+  departmentsData?: Array<{ name: string; count: number; percentage: string; color?: string }>;
+}
+
+export const HRDepartmentDistribution: React.FC<HRDepartmentDistributionProps> = ({
+  teamMembers = [],
+  departmentsData,
+}) => {
   const navigate = useNavigate();
 
-  const departments: DepartmentData[] = [
-    { name: 'Engineering', count: 342, percentage: '27.4%', color: '#2F6FED' },
-    { name: 'Sales', count: 215, percentage: '17.2%', color: '#635BEB' },
-    { name: 'HR', count: 86, percentage: '6.9%', color: '#D946EF' },
-    { name: 'Finance', count: 124, percentage: '9.9%', color: '#10B981' },
-    { name: 'Operations', count: 481, percentage: '38.5%', color: '#06B6D4' },
-  ];
+  const colors = ['#2F6FED', '#D946EF', '#10B981', '#F59E0B', '#635BEB', '#06B6D4'];
+
+  const departments: DepartmentData[] = React.useMemo(() => {
+    if (departmentsData && departmentsData.length > 0) {
+      return departmentsData.map((d, i) => ({
+        ...d,
+        color: d.color || colors[i % colors.length],
+      }));
+    }
+
+    if (!teamMembers || teamMembers.length === 0) {
+      return [];
+    }
+
+    const map = new Map<string, number>();
+    teamMembers.forEach((m) => {
+      const dept =
+        (m as any).department ||
+        (m.role === 'hr'
+          ? 'Human Resources'
+          : m.role === 'manager'
+          ? 'Engineering'
+          : 'Engineering');
+      map.set(dept, (map.get(dept) || 0) + 1);
+    });
+
+    const totalCount = teamMembers.length;
+    let i = 0;
+    const list: DepartmentData[] = [];
+    map.forEach((cnt, deptName) => {
+      list.push({
+        name: deptName,
+        count: cnt,
+        percentage: `${((cnt / totalCount) * 100).toFixed(1)}%`,
+        color: colors[i % colors.length],
+      });
+      i++;
+    });
+    return list;
+  }, [teamMembers, departmentsData]);
 
   const [activeDept, setActiveDept] = useState<DepartmentData | null>(null);
 
-  const total = 1248;
+  const total = departments.reduce((acc, d) => acc + d.count, 0) || teamMembers.length || 0;
   const radius = 75;
   const strokeWidth = 26;
   const circumference = 2 * Math.PI * radius;
@@ -30,7 +72,7 @@ export const HRDepartmentDistribution: React.FC = () => {
   // Calculate stroke dash arrays
   let accumulatedPercent = 0;
   const segments = departments.map((dept) => {
-    const percent = dept.count / total;
+    const percent = total > 0 ? dept.count / total : 0;
     const strokeDasharray = `${percent * circumference} ${circumference}`;
     const strokeDashoffset = -accumulatedPercent * circumference;
     accumulatedPercent += percent;
@@ -52,7 +94,7 @@ export const HRDepartmentDistribution: React.FC = () => {
       <div className="hr-section-card-header">
         <div className="hr-section-title-wrap">
           <h3 className="hr-section-title">Department Distribution</h3>
-          <span className="hr-section-subtitle">1,248 total employees</span>
+          <span className="hr-section-subtitle">{total} total employees</span>
         </div>
       </div>
 

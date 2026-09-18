@@ -19,14 +19,15 @@ export interface HRKPICardsProps {
 }
 
 export const HRKPICards: React.FC<HRKPICardsProps> = ({
-  totalEmployees = 1248,
-  presentToday = 1086,
-  absentToday = 72,
-  onLeave = 91,
-  pendingApprovals = 2,
-  monthlyPayroll = '₹48.7L',
+  totalEmployees = 0,
+  presentToday = 0,
+  absentToday = 0,
+  onLeave = 0,
+  pendingApprovals = 0,
+  monthlyPayroll = '₹0.0L',
 }) => {
   const navigate = useNavigate();
+  const attendanceRate = totalEmployees > 0 ? Math.round((presentToday / totalEmployees) * 100) : 0;
 
   return (
     <div className="hr-kpi-grid">
@@ -41,7 +42,7 @@ export const HRKPICards: React.FC<HRKPICardsProps> = ({
           <div className="hr-kpi-icon-wrap hr-icon-blue">
             <Users size={18} />
           </div>
-          <span className="hr-kpi-badge hr-badge-green">+12 this month</span>
+          <span className="hr-kpi-badge hr-badge-green">Active</span>
         </div>
         <div className="hr-kpi-body">
           <h2 className="hr-kpi-value">{totalEmployees.toLocaleString()}</h2>
@@ -60,7 +61,7 @@ export const HRKPICards: React.FC<HRKPICardsProps> = ({
           <div className="hr-kpi-icon-wrap hr-icon-green">
             <Clock size={18} />
           </div>
-          <span className="hr-kpi-badge hr-badge-green">↗ 87.0%</span>
+          <span className="hr-kpi-badge hr-badge-green">↗ {attendanceRate}%</span>
         </div>
         <div className="hr-kpi-body">
           <h2 className="hr-kpi-value">{presentToday.toLocaleString()}</h2>
@@ -79,7 +80,7 @@ export const HRKPICards: React.FC<HRKPICardsProps> = ({
           <div className="hr-kpi-icon-wrap hr-icon-red">
             <AlertCircle size={18} />
           </div>
-          <span className="hr-kpi-badge hr-badge-red">↘ -5 vs avg</span>
+          <span className="hr-kpi-badge hr-badge-red">Today</span>
         </div>
         <div className="hr-kpi-body">
           <h2 className="hr-kpi-value">{absentToday.toLocaleString()}</h2>
@@ -98,7 +99,7 @@ export const HRKPICards: React.FC<HRKPICardsProps> = ({
           <div className="hr-kpi-icon-wrap hr-icon-amber">
             <Calendar size={18} />
           </div>
-          <span className="hr-kpi-badge hr-badge-gray">Active</span>
+          <span className="hr-kpi-badge hr-badge-gray">On Leave</span>
         </div>
         <div className="hr-kpi-body">
           <h2 className="hr-kpi-value">{onLeave.toLocaleString()}</h2>
@@ -117,7 +118,9 @@ export const HRKPICards: React.FC<HRKPICardsProps> = ({
           <div className="hr-kpi-icon-wrap hr-icon-purple">
             <AlertCircle size={18} />
           </div>
-          <span className="hr-kpi-badge hr-badge-pink">↑ Action needed</span>
+          <span className={`hr-kpi-badge ${pendingApprovals > 0 ? 'hr-badge-pink' : 'hr-badge-green'}`}>
+            {pendingApprovals > 0 ? '↑ Action needed' : 'All clear'}
+          </span>
         </div>
         <div className="hr-kpi-body">
           <h2 className="hr-kpi-value">{pendingApprovals}</h2>
@@ -136,7 +139,7 @@ export const HRKPICards: React.FC<HRKPICardsProps> = ({
           <div className="hr-kpi-icon-wrap hr-icon-white-translucent">
             <DollarSign size={18} />
           </div>
-          <span className="hr-kpi-badge hr-badge-white-translucent">↗ +4.2%</span>
+          <span className="hr-kpi-badge hr-badge-white-translucent">Current</span>
         </div>
         <div className="hr-kpi-body">
           <h2 className="hr-kpi-value hr-val-white">{monthlyPayroll}</h2>

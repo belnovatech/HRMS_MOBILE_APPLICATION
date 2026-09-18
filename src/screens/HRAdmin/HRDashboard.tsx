@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { generalApi } from '../../api';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { HRKPICards } from './components/HRKPICards';
@@ -16,8 +17,39 @@ import './HRDashboard.css';
 
 export const HRDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const {
+    user,
+    teamMembers,
+    leaveRequests,
+    notificationsList,
+    holidays,
+    handleApproveLeave,
+    handleRejectLeave,
+  } = useAuth();
+
   const [searchTerm, setSearchTerm] = useState('');
+  const [summary, setSummary] = useState<{
+    totalEmployees?: number;
+    presentToday?: number;
+    absentToday?: number;
+    onLeaveToday?: number;
+    pendingApprovals?: number;
+    monthlyPayroll?: number;
+    departments?: Array<{ name: string; count: number; percentage: string; color?: string }>;
+  } | null>(null);
+
+  const fetchSummary = useCallback(async () => {
+    try {
+      const data = await generalApi.getDashboardSummary();
+      setSummary(data as any);
+    } catch (err) {
+      console.warn('Could not fetch live dashboard summary:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSummary();
+  }, [fetchSummary]);
 
   // Format today's date dynamically
   const todayDateFormatted = new Intl.DateTimeFormat('en-US', {
@@ -33,6 +65,31 @@ export const HRDashboard: React.FC = () => {
       navigate(`/hr/employees?search=${encodeURIComponent(searchTerm.trim())}`);
     }
   };
+
+  const onApproveLeave = async (id: string) => {
+    if (handleApproveLeave) {
+      await handleApproveLeave(id);
+      fetchSummary();
+    }
+  };
+
+  const onRejectLeave = async (id: string, reason?: string) => {
+    if (handleRejectLeave) {
+      await handleRejectLeave(id, reason);
+      fetchSummary();
+    }
+  };
+
+  // Compute live KPIs
+  const totalEmployees = summary?.totalEmployees ?? teamMembers.length;
+  const presentToday = summary?.presentToday ?? 0;
+  const onLeave = summary?.onLeaveToday ?? leaveRequests.filter((l) => l.status === 'Approved').length;
+  const absentToday = summary?.absentToday ?? Math.max(0, totalEmployees - presentToday - onLeave);
+  const pendingApprovals = summary?.pendingApprovals ?? leaveRequests.filter((l) => l.status === 'Pending').length;
+  const payrollVal = summary?.monthlyPayroll ?? 0;
+  const monthlyPayroll = payrollVal >= 100000
+    ? `₹${(payrollVal / 100000).toFixed(1)}L`
+    : `₹${payrollVal.toLocaleString()}`;
 
   return (
     <div className="hr-mobile-app-layout">
@@ -71,43 +128,59 @@ export const HRDashboard: React.FC = () => {
         {/* 1. KPI SUMMARY */}
         <section className="hr-dashboard-section">
           <HRKPICards
-            totalEmployees={1248}
-            presentToday={1086}
-            absentToday={72}
-            onLeave={91}
-            pendingApprovals={2}
-            monthlyPayroll="₹48.7L"
+            totalEmployees={totalEmployees}
+            presentToday={presentToday}
+            absentToday={absentToday}
+            onLeave={onLeave}
+            pendingApprovals={pendingApprovals}
+            monthlyPayroll={monthlyPayroll}
           />
         </section>
 
         {/* 2. ATTENDANCE TREND */}
         <section className="hr-dashboard-section">
-          <HRAttendanceTrend />
+          <HRAttendanceTrend
+            totalEmployees={totalEmployees}
+            presentToday={presentToday}
+            absentToday={absentToday}
+            onLeaveToday={onLeave}
+            monthlyPayroll={payrollVal}
+          />
         </section>
 
         {/* 3. DEPARTMENT DISTRIBUTION */}
         <section className="hr-dashboard-section">
-          <HRDepartmentDistribution />
+          <HRDepartmentDistribution
+            teamMembers={teamMembers}
+            departmentsData={summary?.departments}
+          />
         </section>
 
         {/* 4. PENDING APPROVALS */}
         <section className="hr-dashboard-section">
-          <HRPendingApprovals />
+          <HRPendingApprovals
+            leaveRequests={leaveRequests}
+            onApprove={onApproveLeave}
+            onReject={onRejectLeave}
+          />
         </section>
 
         {/* 5. BIRTHDAYS */}
         <section className="hr-dashboard-section">
-          <HRBirthdays />
+          <HRBirthdays teamMembers={teamMembers} />
         </section>
 
         {/* 6. RECENT ACTIVITY */}
         <section className="hr-dashboard-section">
-          <HRRecentActivity />
+          <HRRecentActivity
+            leaveRequests={leaveRequests}
+            notificationsList={notificationsList}
+          />
         </section>
 
         {/* 7. UPCOMING HOLIDAYS */}
         <section className="hr-dashboard-section">
-          <HRHolidays />
+          <HRHolidays holidays={holidays} />
         </section>
 
         {/* 8. QUICK ACTIONS */}

@@ -21,10 +21,13 @@ export interface User {
 
 export interface TeamMember {
   id: string;
+  employeeId?: string;
   initials: string;
   color: string;
   name: string;
   designation: string;
+  department?: string;
+  role?: string;
   checkIn: string;
   status: 'Present' | 'Absent' | 'WFH' | 'On Leave';
   performance: string;
@@ -58,6 +61,7 @@ export interface LeaveBalances {
   casual: LeaveBalanceCategory;
   sick: LeaveBalanceCategory;
   earned: LeaveBalanceCategory;
+  [key: string]: LeaveBalanceCategory | undefined;
 }
 
 export interface Holiday {

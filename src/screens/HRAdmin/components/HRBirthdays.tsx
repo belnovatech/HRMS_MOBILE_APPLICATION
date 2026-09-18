@@ -1,5 +1,9 @@
-import React from 'react';
+import { TeamMember } from '../../../types';
 import './HRBirthdays.css';
+
+export interface HRBirthdaysProps {
+  teamMembers?: TeamMember[];
+}
 
 interface BirthdayEmployee {
   id: string;
@@ -11,36 +15,9 @@ interface BirthdayEmployee {
   avatarBg: string;
 }
 
-export const HRBirthdays: React.FC = () => {
-  const birthdays: BirthdayEmployee[] = [
-    {
-      id: '1',
-      name: 'Priya Sharma',
-      initials: 'PS',
-      department: 'HR',
-      dateStatus: 'Today',
-      isToday: true,
-      avatarBg: '#2F6FED',
-    },
-    {
-      id: '2',
-      name: 'Kiran Reddy',
-      initials: 'KR',
-      department: 'Engineering',
-      dateStatus: 'Tomorrow',
-      isToday: false,
-      avatarBg: '#635BEB',
-    },
-    {
-      id: '3',
-      name: 'Anjali Nair',
-      initials: 'AN',
-      department: 'Finance',
-      dateStatus: 'Sep 3',
-      isToday: false,
-      avatarBg: '#10B981',
-    },
-  ];
+export const HRBirthdays: React.FC<HRBirthdaysProps> = ({ teamMembers = [] }) => {
+  // If team members have no explicit DOB, show clean empty state rather than fake birthdays
+  const birthdays: BirthdayEmployee[] = [];
 
   return (
     <div className="hr-section-card hr-birthdays-card">
@@ -51,28 +28,34 @@ export const HRBirthdays: React.FC = () => {
           </h3>
           <span className="hr-section-subtitle">Upcoming team celebrations</span>
         </div>
-        <span className="hr-bday-count-badge">3 this week</span>
+        <span className="hr-bday-count-badge">{birthdays.length} this week</span>
       </div>
 
       <div className="hr-birthdays-list">
-        {birthdays.map((emp) => (
-          <div key={emp.id} className={`hr-bday-item ${emp.isToday ? 'is-today-item' : ''}`}>
-            <div className="hr-bday-avatar" style={{ backgroundColor: emp.avatarBg }}>
-              {emp.initials}
-            </div>
-
-            <div className="hr-bday-info">
-              <span className="hr-bday-name">{emp.name}</span>
-              <span className="hr-bday-dept">{emp.department}</span>
-            </div>
-
-            <div className="hr-bday-status">
-              <span className={`hr-bday-pill ${emp.isToday ? 'pill-today' : 'pill-upcoming'}`}>
-                {emp.isToday ? '🎉 Today' : emp.dateStatus}
-              </span>
-            </div>
+        {birthdays.length === 0 ? (
+          <div style={{ padding: '16px', textAlign: 'center', color: '#64748b', fontSize: '14px' }}>
+            No upcoming team birthdays this week.
           </div>
-        ))}
+        ) : (
+          birthdays.map((emp) => (
+            <div key={emp.id} className={`hr-bday-item ${emp.isToday ? 'is-today-item' : ''}`}>
+              <div className="hr-bday-avatar" style={{ backgroundColor: emp.avatarBg }}>
+                {emp.initials}
+              </div>
+
+              <div className="hr-bday-info">
+                <span className="hr-bday-name">{emp.name}</span>
+                <span className="hr-bday-dept">{emp.department}</span>
+              </div>
+
+              <div className="hr-bday-status">
+                <span className={`hr-bday-pill ${emp.isToday ? 'pill-today' : 'pill-upcoming'}`}>
+                  {emp.isToday ? '🎉 Today' : emp.dateStatus}
+                </span>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

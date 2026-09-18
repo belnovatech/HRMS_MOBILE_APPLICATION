@@ -13,59 +13,73 @@ interface ActivityItem {
   iconBg: string;
 }
 
-export const HRRecentActivity: React.FC = () => {
-  const activities: ActivityItem[] = [
-    {
-      id: '1',
-      name: 'Rahul Kumar',
-      initials: 'RK',
-      action: 'joined Engineering',
-      time: '2m ago',
-      avatarBg: '#2F6FED',
-      icon: <UserPlus size={13} color="#2F6FED" />,
-      iconBg: '#EFF6FF',
-    },
-    {
-      id: '2',
-      name: 'Priya Sharma',
-      initials: 'PS',
-      action: 'applied for Sick Leave',
-      time: '14m ago',
-      avatarBg: '#D946EF',
-      icon: <Calendar size={13} color="#D946EF" />,
-      iconBg: '#FDF4FF',
-    },
-    {
-      id: '3',
-      name: 'Arjun Reddy',
-      initials: 'AR',
-      action: 'payslip downloaded',
-      time: '28m ago',
-      avatarBg: '#10B981',
-      icon: <FileText size={13} color="#10B981" />,
-      iconBg: '#ECFDF5',
-    },
-    {
-      id: '4',
-      name: 'Sneha Rao',
-      initials: 'SR',
-      action: 'attendance regularized',
-      time: '1h ago',
-      avatarBg: '#F59E0B',
-      icon: <Clock size={13} color="#F59E0B" />,
-      iconBg: '#FFFBEB',
-    },
-    {
-      id: '5',
-      name: 'Vikram Singh',
-      initials: 'VS',
-      action: 'profile updated',
-      time: '2h ago',
-      avatarBg: '#635BEB',
-      icon: <UserCheck size={13} color="#635BEB" />,
-      iconBg: '#F5F3FF',
-    },
-  ];
+import { LeaveRequest, NotificationItem } from '../../../types';
+import './HRRecentActivity.css';
+
+export interface HRRecentActivityProps {
+  leaveRequests?: LeaveRequest[];
+  notificationsList?: NotificationItem[];
+}
+
+interface ActivityItem {
+  id: string;
+  name: string;
+  initials: string;
+  action: string;
+  time: string;
+  avatarBg: string;
+  icon: React.ReactNode;
+  iconBg: string;
+}
+
+export const HRRecentActivity: React.FC<HRRecentActivityProps> = ({
+  leaveRequests = [],
+  notificationsList = [],
+}) => {
+  const activities: ActivityItem[] = React.useMemo(() => {
+    const list: ActivityItem[] = [];
+
+    (leaveRequests || []).slice(0, 3).forEach((l, idx) => {
+      list.push({
+        id: `leave-${l.id || idx}`,
+        name: l.employeeName || 'Employee',
+        initials: l.initials || (l.employeeName || 'EM').slice(0, 2).toUpperCase(),
+        action: `applied for ${l.leaveType} (${l.status})`,
+        time: l.appliedOn ? new Date(l.appliedOn).toLocaleDateString() : 'Recent',
+        avatarBg: '#D946EF',
+        icon: <Calendar size={13} color="#D946EF" />,
+        iconBg: '#FDF4FF',
+      });
+    });
+
+    (notificationsList || []).slice(0, 3).forEach((n, idx) => {
+      list.push({
+        id: `notif-${n.id || idx}`,
+        name: n.title,
+        initials: 'NT',
+        action: n.message,
+        time: n.time || 'Today',
+        avatarBg: '#2F6FED',
+        icon: <FileText size={13} color="#2F6FED" />,
+        iconBg: '#EFF6FF',
+      });
+    });
+
+    if (list.length === 0) {
+      list.push({
+        id: '1',
+        name: 'Belnova HRMS',
+        initials: 'BH',
+        action: 'System synchronized with live cloud backend',
+        time: 'Just now',
+        avatarBg: '#10B981',
+        icon: <UserCheck size={13} color="#10B981" />,
+        iconBg: '#ECFDF5',
+      });
+    }
+
+    return list;
+  }, [leaveRequests, notificationsList]);
 
   return (
     <div className="hr-section-card hr-activity-card">

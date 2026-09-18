@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {
   User,
   UserRole,
@@ -25,13 +25,28 @@ import {
   INITIAL_DOCUMENTS,
   INITIAL_NOTIFICATIONS,
 } from '../data/mockData';
+import {
+  authApi,
+  attendanceApi,
+  leaveApi,
+  payrollApi,
+  documentApi,
+  supportApi,
+  notificationApi,
+  generalApi,
+  getApiErrorMessage,
+} from '../api';
 
 interface AuthContextType {
   user: User | null;
   role: UserRole | null;
   isAuthenticated: boolean;
-  login: (identifier: string, password: string) => { success: boolean; role?: UserRole; user?: User; error?: string };
+  loading: boolean;
+  login: (identifier: string, password: string) => Promise<{ success: boolean; role?: UserRole; user?: User; error?: string }>;
   logout: () => void;
+  requestOtp: (identifier: string) => Promise<{ success: boolean; error?: string }>;
+  verifyOtp: (identifier: string, otp: string) => Promise<{ success: boolean; role?: UserRole; user?: User; error?: string }>;
+  refresh: (account?: User) => Promise<void>;
   leaveRequests: LeaveRequest[];
   teamMembers: TeamMember[];
   setTeamMembers: React.Dispatch<React.SetStateAction<TeamMember[]>>;
@@ -43,19 +58,20 @@ interface AuthContextType {
   announcements: Announcement[];
   payslips: Payslip[];
   todayAttendance: TodayAttendance;
-  handleApproveLeave: (leaveId: string) => void;
-  handleRejectLeave: (leaveId: string, reason?: string) => void;
-  handleAddLeaveRequest: (newLeave: { leaveType: string; startDate: string; endDate: string; duration: number; reason: string }) => void;
+  handleApproveLeave: (leaveId: string) => Promise<void> | void;
+  handleRejectLeave: (leaveId: string, reason?: string) => Promise<void> | void;
+  handleAddLeaveRequest: (newLeave: { leaveType: string; startDate: string; endDate: string; duration: number; reason: string }) => Promise<void> | void;
   addHelpTicket: (ticketData: { category: string; subject: string; description: string }) => HelpTicket;
-  updateHelpTicketStatus: (ticketId: string, status: HelpTicket['status'], responseNote?: string) => void;
+  updateHelpTicketStatus: (ticketId: string, status: HelpTicket['status'], responseNote?: string) => Promise<void> | void;
   addEmployeeDocument: (docData: { title: string; category?: string; fileName?: string; size?: string; file?: any; employeeId?: string; employee?: string }) => EmployeeDocument;
-  verifyEmployeeDocument: (docId: string, newStatus?: EmployeeDocument['status']) => void;
+  verifyEmployeeDocument: (docId: string, newStatus?: EmployeeDocument['status']) => Promise<void> | void;
   removeEmployeeDocument: (docId: string) => void;
-  sendNotification: (params: { audience?: NotificationItem['audience']; recipientId?: string | null; category?: string; title: string; message: string; priority?: string; targetPath?: string }) => void;
+  sendNotification: (params: { audience?: NotificationItem['audience']; recipientId?: string | null; category?: string; title: string; message: string; priority?: string; targetPath?: string }) => Promise<void> | void;
   deleteNotification: (id: string) => void;
-  markNotificationAsRead: (id: string) => void;
-  markAllNotificationsAsRead: () => void;
-  toggleCheckInOut: () => void;
+  markNotificationAsRead: (id: string) => Promise<void> | void;
+  markAllNotificationsAsRead: () => Promise<void> | void;
+  toggleCheckInOut: () => Promise<void> | void;
+  requestAttendanceCorrection: (data: { date: string; checkIn: string; checkOut: string; reason: string }) => Promise<{ success: boolean; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -66,53 +82,67 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
+  const [loading, setLoading] = useState<boolean>(true);
+
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>(() => {
     const saved = localStorage.getItem('belnova_leave_requests');
-    return saved ? JSON.parse(saved) : INITIAL_LEAVE_REQUESTS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(() => {
     const saved = localStorage.getItem('belnova_team_members');
-    return saved ? JSON.parse(saved) : INITIAL_TEAM_MEMBERS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [leaveBalances, setLeaveBalances] = useState<LeaveBalances>(() => {
     const saved = localStorage.getItem('belnova_leave_balances');
-    return saved ? JSON.parse(saved) : EMPLOYEE_LEAVE_BALANCES;
+    return saved ? JSON.parse(saved) : {};
   });
 
   const [helpTickets, setHelpTickets] = useState<HelpTicket[]>(() => {
     const saved = localStorage.getItem('belnova_help_tickets');
-    return saved ? JSON.parse(saved) : INITIAL_HELP_TICKETS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [documentsList, setDocumentsList] = useState<EmployeeDocument[]>(() => {
     const saved = localStorage.getItem('belnova_documents');
-    return saved ? JSON.parse(saved) : INITIAL_DOCUMENTS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [notificationsList, setNotificationsList] = useState<NotificationItem[]>(() => {
     const saved = localStorage.getItem('belnova_notifications');
-    return saved ? JSON.parse(saved) : INITIAL_NOTIFICATIONS;
+    return saved ? JSON.parse(saved) : [];
   });
 
-  const [holidays] = useState<Holiday[]>(HOLIDAYS_LIST);
-  const [announcements] = useState<Announcement[]>(ANNOUNCEMENTS_LIST);
-  const [payslips] = useState<Payslip[]>(PAYSLIPS_LIST);
+  const [holidays, setHolidays] = useState<Holiday[]>(() => {
+    const saved = localStorage.getItem('belnova_holidays');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
+    const saved = localStorage.getItem('belnova_announcements');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [payslips, setPayslips] = useState<Payslip[]>(() => {
+    const saved = localStorage.getItem('belnova_payslips');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [todayAttendance, setTodayAttendance] = useState<TodayAttendance>(() => {
     const saved = localStorage.getItem('belnova_today_attendance');
     return saved
       ? JSON.parse(saved)
       : {
-          checkedIn: true,
-          checkInTime: '09:02 AM',
+          checkedIn: false,
+          checkInTime: '—',
           checkOutTime: '—',
-          status: 'Present',
-          workingHours: '6h 15m',
+          status: 'Not checked in',
+          workingHours: '—',
         };
   });
 
+  // Sync state to local storage for offline tolerance
   useEffect(() => {
     if (user) {
       localStorage.setItem('belnova_user', JSON.stringify(user));
@@ -149,7 +179,286 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('belnova_notifications', JSON.stringify(notificationsList));
   }, [notificationsList]);
 
-  const sendNotification = ({
+  useEffect(() => {
+    localStorage.setItem('belnova_holidays', JSON.stringify(holidays));
+  }, [holidays]);
+
+  useEffect(() => {
+    localStorage.setItem('belnova_announcements', JSON.stringify(announcements));
+  }, [announcements]);
+
+  useEffect(() => {
+    localStorage.setItem('belnova_payslips', JSON.stringify(payslips));
+  }, [payslips]);
+
+  // Synchronize collections with remote backend API
+  const refresh = useCallback(
+    async (account?: User) => {
+      const targetUser = account || user;
+      const sessionToken = localStorage.getItem('token');
+      if (!sessionToken || !targetUser) return;
+
+      try {
+        const isHr = targetUser.role === 'hr';
+        const results = await Promise.allSettled([
+          leaveApi.getLeaves(isHr ? undefined : targetUser.id),
+          generalApi.getTeam(),
+          leaveApi.getLeaveBalances(targetUser.id),
+          supportApi.getTickets(isHr ? undefined : targetUser.id),
+          documentApi.getDocuments(isHr ? undefined : targetUser.id),
+          notificationApi.getNotifications(),
+          generalApi.getHolidays(),
+          generalApi.getAnnouncements(),
+          payrollApi.getAllPayslips(),
+          attendanceApi.getAttendance(targetUser.id),
+        ]);
+
+        if (sessionToken !== localStorage.getItem('token')) return;
+
+        const [
+          leavesRes,
+          teamRes,
+          balancesRes,
+          ticketsRes,
+          docsRes,
+          notifsRes,
+          holidaysRes,
+          announcementsRes,
+          payslipsRes,
+          attendanceRes,
+        ] = results;
+
+        if (leavesRes.status === 'fulfilled') {
+          setLeaveRequests(leavesRes.value);
+        }
+        if (teamRes.status === 'fulfilled') {
+          setTeamMembers(teamRes.value);
+        }
+        if (balancesRes.status === 'fulfilled' && balancesRes.value.length > 0) {
+          setLeaveBalances((prev) => {
+            const nextMap: LeaveBalances = { ...prev };
+            balancesRes.value.forEach((b) => {
+              const key = b.leaveType.toLowerCase().split(' ')[0];
+              nextMap[key] = {
+                available: b.available,
+                used: b.used,
+                total: b.total,
+              };
+            });
+            return nextMap;
+          });
+        }
+        if (ticketsRes.status === 'fulfilled') {
+          setHelpTickets(ticketsRes.value);
+        }
+        if (docsRes.status === 'fulfilled') {
+          setDocumentsList(docsRes.value);
+        }
+        if (notifsRes.status === 'fulfilled') {
+          setNotificationsList(notifsRes.value);
+        }
+        if (holidaysRes.status === 'fulfilled') {
+          setHolidays(holidaysRes.value);
+        }
+        if (announcementsRes.status === 'fulfilled') {
+          setAnnouncements(announcementsRes.value);
+        }
+        if (payslipsRes.status === 'fulfilled') {
+          setPayslips(
+            payslipsRes.value.map((p) => ({
+              id: p.id,
+              month: `${p.year}-${String(p.month).padStart(2, '0')}`,
+              grossSalary: `₹${(p.basic + p.allowances).toLocaleString()}`,
+              deductions: `₹${p.deductions.toLocaleString()}`,
+              netSalary: `₹${p.netPay.toLocaleString()}`,
+              payDate: p.payDate || 'Last day of month',
+              status: p.status || 'Processed',
+            }))
+          );
+        }
+        if (attendanceRes.status === 'fulfilled' && attendanceRes.value.length > 0) {
+          const todayStr = new Date().toLocaleDateString('en-CA');
+          const ownToday = attendanceRes.value.find((r) => r.date === todayStr);
+          if (ownToday) {
+            setTodayAttendance({
+              checkedIn: !ownToday.checkOut,
+              checkInTime: ownToday.checkIn || '—',
+              checkOutTime: ownToday.checkOut || '—',
+              status: ownToday.status || 'Present',
+              workingHours: ownToday.workingHours || '—',
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Background sync warning:', err);
+      }
+    },
+    [user]
+  );
+
+  // Restore authenticated session on initial load
+  useEffect(() => {
+    let active = true;
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    if (token.startsWith('demo_session_token_')) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('belnova_user');
+      setLoading(false);
+      return;
+    }
+
+    authApi
+      .getMe()
+      .then((me) => {
+        if (active) {
+          setUser(me);
+          localStorage.setItem('belnova_user', JSON.stringify(me));
+          refresh(me);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('belnova_user');
+        if (active) setUser(null);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const login = async (
+    identifier: string,
+    password: string
+  ): Promise<{ success: boolean; role?: UserRole; user?: User; error?: string }> => {
+    const cleanId = identifier.trim();
+
+    if (!cleanId || !password) {
+      return { success: false, error: 'Please enter both identifier and password.' };
+    }
+
+    try {
+      // Live API login
+      const res = await authApi.login(cleanId, password);
+      localStorage.setItem('token', res.token);
+
+      const serverUser = res.user;
+      const role = (serverUser.role?.toLowerCase() || 'employee') as UserRole;
+      const authUser: User = {
+        id: serverUser.id,
+        employeeId: serverUser.employeeNumber || serverUser.id,
+        email: serverUser.email,
+        username: serverUser.username,
+        role,
+        name: serverUser.name || serverUser.username || 'User',
+        designation: serverUser.designation || (role === 'hr' ? 'HR Manager' : role === 'manager' ? 'Team Lead' : 'Software Engineer'),
+        department: serverUser.department || (role === 'hr' ? 'Human Resources' : 'Engineering'),
+        reportsTo: serverUser.reportsTo,
+        avatar: (serverUser.name || 'U').slice(0, 2).toUpperCase(),
+        avatarBg: role === 'hr' ? '#2563eb' : role === 'manager' ? '#7c3aed' : '#10b981',
+        token: res.token,
+      };
+
+      setUser(authUser);
+      localStorage.setItem('belnova_user', JSON.stringify(authUser));
+      await refresh(authUser);
+
+      return {
+        success: true,
+        role: authUser.role,
+        user: authUser,
+      };
+    } catch (apiError: any) {
+      const errorMessage = getApiErrorMessage(apiError, 'Invalid credentials. Please verify your details.');
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
+  };
+
+  const logout = () => {
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      authApi.logout().catch(() => {});
+    }
+    setUser(null);
+    localStorage.removeItem('belnova_user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('belnova_leave_requests');
+    localStorage.removeItem('belnova_team_members');
+    localStorage.removeItem('belnova_leave_balances');
+    localStorage.removeItem('belnova_today_attendance');
+    localStorage.removeItem('belnova_help_tickets');
+    localStorage.removeItem('belnova_documents');
+    localStorage.removeItem('belnova_notifications');
+    localStorage.removeItem('belnova_holidays');
+    localStorage.removeItem('belnova_announcements');
+    localStorage.removeItem('belnova_payslips');
+    setLeaveRequests([]);
+    setTeamMembers([]);
+    setNotificationsList([]);
+    setHolidays([]);
+    setAnnouncements([]);
+    setPayslips([]);
+  };
+
+  const requestOtp = async (identifier: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      await authApi.requestOtp(identifier);
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: getApiErrorMessage(err) };
+    }
+  };
+
+  const verifyOtp = async (
+    identifier: string,
+    otp: string
+  ): Promise<{ success: boolean; role?: UserRole; user?: User; error?: string }> => {
+    try {
+      const res = await authApi.verifyOtp(identifier, otp);
+      localStorage.setItem('token', res.token);
+
+      const serverUser = res.user;
+      const role = (serverUser.role?.toLowerCase() || 'employee') as UserRole;
+      const authUser: User = {
+        id: serverUser.id,
+        employeeId: serverUser.employeeNumber || serverUser.id,
+        email: serverUser.email,
+        username: serverUser.username,
+        role,
+        name: serverUser.name || serverUser.username || 'User',
+        designation: serverUser.designation || 'Staff',
+        department: serverUser.department || 'General',
+        reportsTo: serverUser.reportsTo,
+        avatar: (serverUser.name || 'U').slice(0, 2).toUpperCase(),
+        avatarBg: role === 'hr' ? '#2563eb' : role === 'manager' ? '#7c3aed' : '#10b981',
+        token: res.token,
+      };
+
+      setUser(authUser);
+      localStorage.setItem('belnova_user', JSON.stringify(authUser));
+      await refresh(authUser);
+
+      return {
+        success: true,
+        role: authUser.role,
+        user: authUser,
+      };
+    } catch (err: any) {
+      return { success: false, error: getApiErrorMessage(err) };
+    }
+  };
+
+  const sendNotification = async ({
     audience = 'All',
     recipientId = null,
     category = 'General',
@@ -180,109 +489,52 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       createdAt: new Date().toISOString(),
     };
     setNotificationsList((prev) => [newNotif, ...prev]);
+
+    if (user && user.role === 'hr' && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await notificationApi.sendNotification({
+          audience: audience as any,
+          recipientId,
+          category,
+          title,
+          message,
+          targetPath,
+        });
+      } catch (err) {
+        console.warn('Notification send warning:', err);
+      }
+    }
   };
 
   const deleteNotification = (id: string) => {
     setNotificationsList((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const markNotificationAsRead = (id: string) => {
+  const markNotificationAsRead = async (id: string) => {
     setNotificationsList((prev) =>
       prev.map((n) => (n.id === id ? { ...n, unread: false } : n))
     );
-  };
-
-  const markAllNotificationsAsRead = () => {
-    setNotificationsList((prev) => prev.map((n) => ({ ...n, unread: false })));
-  };
-
-  const login = (identifier: string, password: string) => {
-    const cleanId = identifier.trim().toLowerCase();
-
-    if (!cleanId || !password) {
-      return { success: false, error: 'Please enter both identifier and password.' };
-    }
-
-    let matchedUser = MOCK_USERS.find(
-      (u) =>
-        u.email.toLowerCase() === cleanId ||
-        (u.username && u.username.toLowerCase() === cleanId) ||
-        (u.employeeId && u.employeeId.toLowerCase() === cleanId)
-    );
-
-    if (!matchedUser) {
-      if (cleanId.includes('@hr.com') || cleanId.startsWith('hr')) {
-        matchedUser = {
-          id: 'HR001',
-          email: identifier,
-          role: 'hr',
-          name: 'HR Administrator',
-          designation: 'HR Manager',
-          department: 'Human Resources',
-          avatar: 'HR',
-          avatarBg: '#2563eb',
-        };
-      } else if (cleanId.includes('mgr') || cleanId.includes('manager')) {
-        matchedUser = {
-          id: 'MGR001',
-          email: identifier,
-          role: 'manager',
-          name: 'Engineering Manager',
-          designation: 'Team Manager',
-          department: 'Engineering',
-          avatar: 'TM',
-          avatarBg: '#7c3aed',
-        };
-      } else if (cleanId.startsWith('emp') || cleanId.startsWith('bel') || cleanId.includes('@')) {
-        matchedUser = {
-          id: cleanId.toUpperCase(),
-          employeeId: cleanId.toUpperCase(),
-          email: identifier,
-          role: 'employee',
-          name: 'Employee User',
-          designation: 'Software Engineer',
-          department: 'Engineering',
-          reportsTo: 'Vikramaditya Rao',
-          avatar: 'EU',
-          avatarBg: '#10b981',
-        };
-      } else {
-        matchedUser = {
-          id: 'EMP001',
-          employeeId: cleanId.toUpperCase(),
-          email: `${cleanId}@belnova.com`,
-          role: 'employee',
-          name: 'Arjun Mehta',
-          designation: 'Senior Engineer',
-          department: 'Engineering',
-          avatar: 'AM',
-          avatarBg: '#10b981',
-        };
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await notificationApi.markAsRead(id);
+      } catch (err) {
+        console.warn('Mark notification as read warning:', err);
       }
     }
-
-    const authUser: User = {
-      ...matchedUser,
-      token: `mock_jwt_token_${Date.now()}`,
-    };
-
-    setUser(authUser);
-    localStorage.setItem('token', authUser.token);
-
-    return {
-      success: true,
-      role: authUser.role,
-      user: authUser,
-    };
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('belnova_user');
-    localStorage.removeItem('token');
+  const markAllNotificationsAsRead = async () => {
+    setNotificationsList((prev) => prev.map((n) => ({ ...n, unread: false })));
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await notificationApi.markAllAsRead();
+      } catch (err) {
+        console.warn('Mark all notifications read warning:', err);
+      }
+    }
   };
 
-  const handleApproveLeave = (leaveId: string) => {
+  const handleApproveLeave = async (leaveId: string) => {
     let targetReq: LeaveRequest | null = null;
     let wasAlreadyApproved = false;
 
@@ -306,29 +558,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         message: `Your ${(targetReq as LeaveRequest).leaveType} request (${(targetReq as LeaveRequest).startDate} to ${(targetReq as LeaveRequest).endDate}) has been Approved.`,
         targetPath: '/employee/leave',
       });
+    }
 
-      const durDays = parseInt((targetReq as LeaveRequest).duration) || 1;
-      const typeKey = (targetReq as LeaveRequest).leaveType.toLowerCase().includes('sick')
-        ? 'sick'
-        : (targetReq as LeaveRequest).leaveType.toLowerCase().includes('earned')
-        ? 'earned'
-        : 'casual';
-
-      setLeaveBalances((prev) => {
-        const current = prev[typeKey] || { available: 5, used: 0, total: 10 };
-        return {
-          ...prev,
-          [typeKey]: {
-            ...current,
-            available: Math.max(0, current.available - durDays),
-            used: current.used + durDays,
-          },
-        };
-      });
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await leaveApi.decideLeave(leaveId, 'Approved');
+        await refresh(user);
+      } catch (err) {
+        console.warn('Approve leave API warning:', err);
+      }
     }
   };
 
-  const handleRejectLeave = (leaveId: string, reason = '') => {
+  const handleRejectLeave = async (leaveId: string, reason = '') => {
     let targetReq: LeaveRequest | null = null;
     let wasAlreadyRejected = false;
 
@@ -353,12 +595,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         targetPath: '/employee/leave',
       });
     }
+
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await leaveApi.decideLeave(leaveId, 'Rejected', reason);
+        await refresh(user);
+      } catch (err) {
+        console.warn('Reject leave API warning:', err);
+      }
+    }
   };
 
-  const handleAddLeaveRequest = (newLeave: { leaveType: string; startDate: string; endDate: string; duration: number; reason: string }) => {
+  const handleAddLeaveRequest = async (newLeave: {
+    leaveType: string;
+    startDate: string;
+    endDate: string;
+    duration: number;
+    reason: string;
+  }) => {
     const created: LeaveRequest = {
       id: `LR-${Date.now().toString().slice(-3)}`,
-      employeeId: user?.employeeId || 'EMP001',
+      employeeId: user?.employeeId || user?.id || 'EMP001',
       employeeName: user?.name || 'Arjun Mehta',
       initials: user?.avatar || 'AM',
       avatarBg: '#10b981',
@@ -380,12 +637,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       message: `${created.employeeName} (${created.employeeId}) submitted a ${created.leaveType} request.`,
       targetPath: '/hr/leave-management',
     });
+
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await leaveApi.applyLeave({
+          employeeId: user.id,
+          employeeName: user.name,
+          leaveType: newLeave.leaveType,
+          startDate: newLeave.startDate,
+          endDate: newLeave.endDate,
+          reason: newLeave.reason,
+        });
+        await refresh(user);
+      } catch (err) {
+        console.warn('Submit leave API warning:', err);
+      }
+    }
   };
 
   const addHelpTicket = (ticketData: { category: string; subject: string; description: string }): HelpTicket => {
     const created: HelpTicket = {
       id: `EMP-${Date.now().toString().slice(-6)}`,
-      employeeId: user?.employeeId || 'EMP001',
+      employeeId: user?.employeeId || user?.id || 'EMP001',
       employeeName: user?.name || 'Arjun Mehta',
       category: ticketData.category,
       subject: ticketData.subject,
@@ -406,40 +679,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       targetPath: '/hr/help',
     });
 
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      supportApi
+        .createTicket({
+          employeeId: user.id,
+          employeeName: user.name,
+          category: ticketData.category,
+          subject: ticketData.subject,
+          description: ticketData.description,
+        })
+        .then(() => refresh(user))
+        .catch((err) => console.warn('Add ticket API warning:', err));
+    }
+
     return created;
   };
 
-  const updateHelpTicketStatus = (ticketId: string, status: HelpTicket['status'], responseNote = '') => {
-    let target: HelpTicket | null = null;
-    let isSameState = false;
-
+  const updateHelpTicketStatus = async (ticketId: string, status: HelpTicket['status'], responseNote = '') => {
     setHelpTickets((prev) =>
-      prev.map((t) => {
-        if (t.id === ticketId) {
-          if (t.status === status && t.responseNote === responseNote) isSameState = true;
-          target = { ...t, status, responseNote };
-          return target;
-        }
-        return t;
-      })
+      prev.map((t) => (t.id === ticketId ? { ...t, status, responseNote } : t))
     );
 
-    if (target && !isSameState) {
-      sendNotification({
-        audience: 'Employee',
-        recipientId: (target as HelpTicket).employeeId,
-        category: 'Support',
-        title: `Support Ticket ${status}`,
-        message: `Your ticket "${(target as HelpTicket).subject}" status is now ${status}.${responseNote ? ` Note: ${responseNote}` : ''}`,
-        targetPath: '/employee/help',
-      });
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await supportApi.updateTicket(ticketId, status, responseNote);
+        await refresh(user);
+      } catch (err) {
+        console.warn('Update ticket status API warning:', err);
+      }
     }
   };
 
-  const addEmployeeDocument = (docData: { title: string; category?: string; fileName?: string; size?: string; file?: any; employeeId?: string; employee?: string }): EmployeeDocument => {
+  const addEmployeeDocument = (docData: {
+    title: string;
+    category?: string;
+    fileName?: string;
+    size?: string;
+    file?: any;
+    employeeId?: string;
+    employee?: string;
+  }): EmployeeDocument => {
     const created: EmployeeDocument = {
       id: `DOC-${Date.now().toString().slice(-4)}`,
-      employeeId: docData.employeeId || user?.employeeId || 'EMP001',
+      employeeId: docData.employeeId || user?.employeeId || user?.id || 'EMP001',
       employee: docData.employee || user?.name || 'Arjun Mehta',
       title: docData.title,
       fileName: docData.fileName || `${docData.title.replace(/\s+/g, '_')}.pdf`,
@@ -460,6 +742,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       targetPath: '/hr/documents',
     });
 
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      (async () => {
+        try {
+          let fileId: string | undefined;
+          if (docData.file instanceof File) {
+            const uploadRes = await documentApi.uploadFile(docData.file);
+            fileId = uploadRes.id;
+          }
+          await documentApi.createDocument({
+            employeeId: user.id,
+            employeeName: user.name,
+            title: docData.title,
+            fileName: docData.fileName || `${docData.title.replace(/\s+/g, '_')}.pdf`,
+            category: docData.category,
+            size: docData.size,
+            fileId,
+          });
+          await refresh(user);
+        } catch (err) {
+          console.warn('Document upload API warning:', err);
+        }
+      })();
+    }
+
     return created;
   };
 
@@ -467,56 +773,71 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setDocumentsList((prev) => prev.filter((d) => d.id !== docId));
   };
 
-  const verifyEmployeeDocument = (docId: string, newStatus: EmployeeDocument['status'] = 'Verified') => {
-    let target: EmployeeDocument | null = null;
-    let isAlreadyStatus = false;
-
+  const verifyEmployeeDocument = async (docId: string, newStatus: EmployeeDocument['status'] = 'Verified') => {
     setDocumentsList((prev) =>
-      prev.map((d) => {
-        if (d.id === docId) {
-          if (d.status === newStatus) isAlreadyStatus = true;
-          target = { ...d, status: newStatus };
-          return target;
-        }
-        return d;
-      })
+      prev.map((d) => (d.id === docId ? { ...d, status: newStatus } : d))
     );
 
-    if (target && !isAlreadyStatus) {
-      sendNotification({
-        audience: 'Employee',
-        recipientId: (target as EmployeeDocument).employeeId,
-        category: 'Documents',
-        title: `Document ${newStatus}`,
-        message: `Your document "${(target as EmployeeDocument).title}" has been ${newStatus}.`,
-        targetPath: '/employee/documents',
-      });
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await documentApi.verifyDocument(docId, newStatus);
+        await refresh(user);
+      } catch (err) {
+        console.warn('Verify document API warning:', err);
+      }
     }
   };
 
-  const toggleCheckInOut = () => {
-    setTodayAttendance((prev) => {
-      const isCheckingOut = prev.checkedIn && prev.checkOutTime === '—';
-      const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      if (isCheckingOut) {
-        return {
-          ...prev,
-          checkedIn: false,
-          checkOutTime: nowTime,
-          status: 'Checked Out',
-          workingHours: '8h 30m',
-        };
-      } else {
-        return {
-          ...prev,
-          checkedIn: true,
-          checkInTime: nowTime,
-          checkOutTime: '—',
-          status: 'Present',
-          workingHours: '0h 01m',
-        };
+  const toggleCheckInOut = async () => {
+    const isCheckingOut = todayAttendance.checkedIn && todayAttendance.checkOutTime === '—';
+    const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    setTodayAttendance((prev) => ({
+      ...prev,
+      checkedIn: !isCheckingOut,
+      checkInTime: isCheckingOut ? prev.checkInTime : nowTime,
+      checkOutTime: isCheckingOut ? nowTime : '—',
+      status: isCheckingOut ? 'Checked Out' : 'Present',
+      workingHours: isCheckingOut ? '8h 30m' : '0h 01m',
+    }));
+
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        if (isCheckingOut) {
+          await attendanceApi.checkOut(user.id, user.name);
+        } else {
+          await attendanceApi.checkIn(user.id, user.name);
+        }
+        await refresh(user);
+      } catch (err) {
+        console.warn('Check in/out API warning:', err);
       }
-    });
+    }
+  };
+
+  const requestAttendanceCorrection = async (data: {
+    date: string;
+    checkIn: string;
+    checkOut: string;
+    reason: string;
+  }): Promise<{ success: boolean; error?: string }> => {
+    if (user && !user.token?.startsWith('demo_session_token_')) {
+      try {
+        await attendanceApi.requestCorrection({
+          employeeId: user.id,
+          employeeName: user.name,
+          date: data.date,
+          checkIn: data.checkIn,
+          checkOut: data.checkOut,
+          reason: data.reason,
+        });
+        await refresh(user);
+        return { success: true };
+      } catch (err: any) {
+        return { success: false, error: getApiErrorMessage(err) };
+      }
+    }
+    return { success: true };
   };
 
   return (
@@ -525,8 +846,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         role: user?.role || null,
         isAuthenticated: !!user,
+        loading,
         login,
         logout,
+        requestOtp,
+        verifyOtp,
+        refresh,
         leaveRequests,
         teamMembers,
         setTeamMembers,
@@ -551,6 +876,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         markNotificationAsRead,
         markAllNotificationsAsRead,
         toggleCheckInOut,
+        requestAttendanceCorrection,
       }}
     >
       {children}
@@ -565,3 +891,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export default AuthContext;

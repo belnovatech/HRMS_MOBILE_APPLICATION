@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, X, ArrowRight, CheckCircle, AlertTriangle } from 'lucide-react';
+import { LeaveRequest } from '../../../types';
 import './HRPendingApprovals.css';
 
-interface PendingApproval {
+export interface HRPendingApprovalsProps {
+  leaveRequests?: LeaveRequest[];
+  onApprove?: (id: string) => Promise<void> | void;
+  onReject?: (id: string, reason?: string) => Promise<void> | void;
+}
+
+interface DisplayApprovalItem {
   id: string;
   name: string;
   initials: string;
@@ -13,34 +20,29 @@ interface PendingApproval {
   status: 'Pending' | 'Approved' | 'Rejected';
 }
 
-export const HRPendingApprovals: React.FC = () => {
+export const HRPendingApprovals: React.FC<HRPendingApprovalsProps> = ({
+  leaveRequests = [],
+  onApprove,
+  onReject,
+}) => {
   const navigate = useNavigate();
 
-  const [approvals, setApprovals] = useState<PendingApproval[]>([
-    {
-      id: 'app-1',
-      name: 'Arjun Mehta',
-      initials: 'AM',
-      request: 'Casual Leave · 2 Days',
+  const realPendingItems: DisplayApprovalItem[] = leaveRequests
+    .filter((req) => req.status === 'Pending')
+    .map((req) => ({
+      id: req.id,
+      name: req.employeeName || 'Employee',
+      initials: req.initials || (req.employeeName || 'EM').slice(0, 2).toUpperCase(),
+      request: `${req.leaveType} · ${req.duration || '1 Day'} (${req.startDate})`,
       tag: 'Leave',
-      avatarBg: '#2F6FED',
+      avatarBg: req.avatarBg || '#2F6FED',
       status: 'Pending',
-    },
-    {
-      id: 'app-2',
-      name: 'Kavya Nair',
-      initials: 'KN',
-      request: 'Sick Leave · 1 Day',
-      tag: 'Leave',
-      avatarBg: '#D946EF',
-      status: 'Pending',
-    },
-  ]);
+    }));
 
   const [dialogState, setDialogState] = useState<{
     isOpen: boolean;
     type: 'approve' | 'reject';
-    item: PendingApproval | null;
+    item: DisplayApprovalItem | null;
   }>({
     isOpen: false,
     type: 'approve',
@@ -49,24 +51,27 @@ export const HRPendingApprovals: React.FC = () => {
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const pendingCount = approvals.filter((a) => a.status === 'Pending').length;
+  const pendingCount = realPendingItems.length;
 
-  const handleOpenDialog = (type: 'approve' | 'reject', item: PendingApproval) => {
+  const handleOpenDialog = (type: 'approve' | 'reject', item: DisplayApprovalItem) => {
     setDialogState({ isOpen: true, type, item });
   };
 
-  const handleConfirmAction = () => {
+  const handleConfirmAction = async () => {
     if (!dialogState.item) return;
 
-    const newStatus = dialogState.type === 'approve' ? 'Approved' : 'Rejected';
-    setApprovals((prev) =>
-      prev.map((a) => (a.id === dialogState.item?.id ? { ...a, status: newStatus } : a))
-    );
+    const targetId = dialogState.item.id;
+    const isApprove = dialogState.type === 'approve';
 
-    const message =
-      dialogState.type === 'approve'
-        ? `Approved leave request for ${dialogState.item.name}`
-        : `Rejected leave request for ${dialogState.item.name}`;
+    if (isApprove && onApprove) {
+      await onApprove(targetId);
+    } else if (!isApprove && onReject) {
+      await onReject(targetId, 'Rejected by HR Administrator');
+    }
+
+    const message = isApprove
+      ? `Approved leave request for ${dialogState.item.name}`
+      : `Rejected leave request for ${dialogState.item.name}`;
 
     setToastMessage(message);
     setDialogState({ isOpen: false, type: 'approve', item: null });
@@ -150,50 +155,56 @@ export const HRPendingApprovals: React.FC = () => {
 
       {/* Approvals List */}
       <div className="hr-approvals-list">
-        {approvals.map((item) => (
-          <div key={item.id} className="hr-approval-item">
-            <div className="hr-app-left">
-              <div className="hr-app-avatar" style={{ backgroundColor: item.avatarBg }}>
-                {item.initials}
-              </div>
-
-              <div className="hr-app-info">
-                <div className="hr-app-name-row">
-                  <strong className="hr-app-name">{item.name}</strong>
-                  <span className="hr-app-tag">{item.tag}</span>
-                </div>
-                <span className="hr-app-req">{item.request}</span>
-              </div>
-            </div>
-
-            <div className="hr-app-actions">
-              {item.status === 'Pending' ? (
-                <>
-                  <button
-                    type="button"
-                    className="hr-btn-approve-mobile"
-                    onClick={() => handleOpenDialog('approve', item)}
-                  >
-                    <Check size={14} />
-                    <span>Approve</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="hr-btn-reject-mobile"
-                    onClick={() => handleOpenDialog('reject', item)}
-                  >
-                    <X size={14} />
-                    <span>Reject</span>
-                  </button>
-                </>
-              ) : (
-                <span className={`hr-app-status-badge badge-${item.status.toLowerCase()}`}>
-                  {item.status}
-                </span>
-              )}
-            </div>
+        {realPendingItems.length === 0 ? (
+          <div style={{ padding: '24px 16px', textAlign: 'center', color: '#64748b', fontSize: '14px' }}>
+            🎉 All pending leave approvals are up to date!
           </div>
-        ))}
+        ) : (
+          realPendingItems.map((item) => (
+            <div key={item.id} className="hr-approval-item">
+              <div className="hr-app-left">
+                <div className="hr-app-avatar" style={{ backgroundColor: item.avatarBg }}>
+                  {item.initials}
+                </div>
+
+                <div className="hr-app-info">
+                  <div className="hr-app-name-row">
+                    <strong className="hr-app-name">{item.name}</strong>
+                    <span className="hr-app-tag">{item.tag}</span>
+                  </div>
+                  <span className="hr-app-req">{item.request}</span>
+                </div>
+              </div>
+
+              <div className="hr-app-actions">
+                {item.status === 'Pending' ? (
+                  <>
+                    <button
+                      type="button"
+                      className="hr-btn-approve-mobile"
+                      onClick={() => handleOpenDialog('approve', item)}
+                    >
+                      <Check size={14} />
+                      <span>Approve</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="hr-btn-reject-mobile"
+                      onClick={() => handleOpenDialog('reject', item)}
+                    >
+                      <X size={14} />
+                      <span>Reject</span>
+                    </button>
+                  </>
+                ) : (
+                  <span className={`hr-app-status-badge badge-${item.status.toLowerCase()}`}>
+                    {item.status}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

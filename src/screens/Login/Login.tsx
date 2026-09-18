@@ -30,7 +30,7 @@ export const Login: React.FC = () => {
   const [activeRole, setActiveRole] = useState<'hr' | 'manager' | 'employee'>('hr');
   const [showForgotModal, setShowForgotModal] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -41,8 +41,8 @@ export const Login: React.FC = () => {
 
     setLoading(true);
 
-    setTimeout(() => {
-      const res = login(identifier, password);
+    try {
+      const res = await login(identifier, password);
       setLoading(false);
 
       if (res.success && res.role) {
@@ -56,7 +56,10 @@ export const Login: React.FC = () => {
       } else {
         setError(res.error || 'Invalid credentials. Please verify your details.');
       }
-    }, 400);
+    } catch (err: any) {
+      setLoading(false);
+      setError(err?.message || 'Login failed. Please check your credentials or network connection.');
+    }
   };
 
   const handleSelectRole = (role: 'hr' | 'manager' | 'employee', idVal: string, passVal = 'password123') => {
