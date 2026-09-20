@@ -5,6 +5,7 @@ import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { useAuth } from '../../context/AuthContext';
 import { getEmployees, EmployeeRecord } from '../../data/employeeStore';
+import './HREmployees.css';
 
 const DEPARTMENTS = [
   'All',

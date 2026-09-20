@@ -266,7 +266,8 @@
   flex-shrink: 0;
 }
 
-.status-active {
+.status-active,
+.status-present {
   background: #ecfdf5;
   color: #059669;
   border: 1px solid #a7f3d0;
@@ -276,6 +277,12 @@
   background: #fffbeb;
   color: #d97706;
   border: 1px solid #fde68a;
+}
+
+.status-wfh {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
 }
 
 .status-inactive {
