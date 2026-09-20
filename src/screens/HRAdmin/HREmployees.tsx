@@ -27,24 +27,44 @@ export const HREmployees: React.FC = () => {
   const rawEmployees: EmployeeRecord[] = getEmployees();
 
   const employees: EmployeeRecord[] = useMemo(() => {
+    const list: EmployeeRecord[] = [];
+    const seenIds = new Set<string>();
+    const seenEmails = new Set<string>();
+
+    // 1. Add employees from persistent store first (newly created or modified)
+    rawEmployees.forEach((emp) => {
+      list.push(emp);
+      seenIds.add(emp.id.toLowerCase());
+      if (emp.email) seenEmails.add(emp.email.toLowerCase());
+    });
+
+    // 2. Add team members from backend API that are not yet in store
     if (teamMembers && teamMembers.length > 0) {
-      return teamMembers.map((m) => {
-        const existing = rawEmployees.find((e) => e.id === m.id || e.email === m.email);
-        return {
-          id: m.id,
-          name: m.name,
-          email: m.email,
-          phone: m.phone || '—',
-          department: (m as any).department || (m.role === 'hr' ? 'Human Resources' : 'Engineering'),
-          role: m.designation || (m.role === 'hr' ? 'HR Director' : m.role === 'manager' ? 'Engineering Manager' : 'Staff'),
-          status: (m.status as any) || 'Active',
-          joinDate: existing?.joinDate || '2024-01-01',
-          avatarBg: m.color || '#2F6FED',
-          ...existing,
-        };
+      teamMembers.forEach((m) => {
+        const idLower = (m.id || m.employeeId || '').toLowerCase();
+        const emailLower = (m.email || '').toLowerCase();
+        if (!seenIds.has(idLower) && (!emailLower || !seenEmails.has(emailLower))) {
+          const names = (m.name || '').split(' ');
+          list.push({
+            id: m.id || m.employeeId || 'EMP',
+            name: m.name || 'Employee',
+            firstName: names[0] || (m as any).firstName || 'Employee',
+            lastName: names.slice(1).join(' ') || (m as any).lastName || '',
+            email: m.email || '',
+            phone: m.phone || '—',
+            department: (m as any).department || (m.role === 'hr' ? 'Human Resources' : 'Engineering'),
+            role: m.designation || m.role || 'Staff',
+            status: (m.status as any) || 'Active',
+            joinDate: '2024-01-01',
+            avatarBg: m.color || '#2F6FED',
+          });
+          seenIds.add(idLower);
+          if (emailLower) seenEmails.add(emailLower);
+        }
       });
     }
-    return rawEmployees;
+
+    return list;
   }, [teamMembers, rawEmployees]);
 
   const filteredEmployees = useMemo(() => {

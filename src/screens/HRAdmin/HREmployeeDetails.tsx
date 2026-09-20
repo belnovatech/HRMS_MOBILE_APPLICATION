@@ -35,9 +35,14 @@ export const HREmployeeDetails: React.FC = () => {
   const [downloadToast, setDownloadToast] = useState<string | null>(null);
 
   const matchedFromStore = id ? getEmployeeById(id) : undefined;
-  const matchedFromTeam = id ? teamMembers.find((m) => m.id === id || m.email === id) : undefined;
+  const matchedFromTeam = id ? teamMembers.find((m) => m.id?.toLowerCase() === id.toLowerCase() || (m.email && m.email.toLowerCase() === id.toLowerCase())) : undefined;
 
-  const employee: EmployeeRecord | null = matchedFromStore || (matchedFromTeam ? {
+  const employee: EmployeeRecord | null = matchedFromStore ? {
+    ...matchedFromStore,
+    department: matchedFromStore.department || (matchedFromTeam as any)?.department || 'Engineering',
+    role: matchedFromStore.role || matchedFromTeam?.designation || 'Staff',
+    status: matchedFromStore.status || (matchedFromTeam?.status as any) || 'Active',
+  } : (matchedFromTeam ? {
     id: matchedFromTeam.id,
     name: matchedFromTeam.name,
     firstName: matchedFromTeam.name.split(' ')[0],

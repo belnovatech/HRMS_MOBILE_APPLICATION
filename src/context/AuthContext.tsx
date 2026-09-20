@@ -526,6 +526,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const handleApproveLeave = async (leaveId: string) => {
+    const existingReq = leaveRequests.find((r) => r.id === leaveId);
     let targetReq: LeaveRequest | null = null;
     let wasAlreadyApproved = false;
 
@@ -540,20 +541,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       })
     );
 
-    if (targetReq && !wasAlreadyApproved) {
+    const reqDetails = existingReq || targetReq;
+
+    if (reqDetails && !wasAlreadyApproved) {
       sendNotification({
         audience: 'Employee',
-        recipientId: (targetReq as LeaveRequest).employeeId,
+        recipientId: reqDetails.employeeId,
         category: 'Leave',
         title: 'Leave Request Approved',
-        message: `Your ${(targetReq as LeaveRequest).leaveType} request (${(targetReq as LeaveRequest).startDate} to ${(targetReq as LeaveRequest).endDate}) has been Approved.`,
+        message: `Your ${reqDetails.leaveType} request (${reqDetails.startDate} to ${reqDetails.endDate}) has been Approved.`,
         targetPath: '/employee/leave',
       });
     }
 
     if (user && !user.token?.startsWith('demo_session_token_')) {
       try {
-        await leaveApi.decideLeave(leaveId, 'Approved');
+        await leaveApi.decideLeave(leaveId, 'Approved', '', {
+          employeeId: reqDetails?.employeeId,
+          leaveType: reqDetails?.leaveType,
+          startDate: reqDetails?.startDate,
+        });
         await refresh(user);
       } catch (err) {
         console.warn('Approve leave API warning:', err);
@@ -562,6 +569,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const handleRejectLeave = async (leaveId: string, reason = '') => {
+    const existingReq = leaveRequests.find((r) => r.id === leaveId);
     let targetReq: LeaveRequest | null = null;
     let wasAlreadyRejected = false;
 
@@ -576,20 +584,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       })
     );
 
-    if (targetReq && !wasAlreadyRejected) {
+    const reqDetails = existingReq || targetReq;
+
+    if (reqDetails && !wasAlreadyRejected) {
       sendNotification({
         audience: 'Employee',
-        recipientId: (targetReq as LeaveRequest).employeeId,
+        recipientId: reqDetails.employeeId,
         category: 'Leave',
         title: 'Leave Request Rejected',
-        message: `Your ${(targetReq as LeaveRequest).leaveType} request (${(targetReq as LeaveRequest).startDate} to ${(targetReq as LeaveRequest).endDate}) was Rejected.${reason ? ` Reason: ${reason}` : ''}`,
+        message: `Your ${reqDetails.leaveType} request (${reqDetails.startDate} to ${reqDetails.endDate}) was Rejected.${reason ? ` Reason: ${reason}` : ''}`,
         targetPath: '/employee/leave',
       });
     }
 
     if (user && !user.token?.startsWith('demo_session_token_')) {
       try {
-        await leaveApi.decideLeave(leaveId, 'Rejected', reason);
+        await leaveApi.decideLeave(leaveId, 'Rejected', reason, {
+          employeeId: reqDetails?.employeeId,
+          leaveType: reqDetails?.leaveType,
+          startDate: reqDetails?.startDate,
+        });
         await refresh(user);
       } catch (err) {
         console.warn('Reject leave API warning:', err);

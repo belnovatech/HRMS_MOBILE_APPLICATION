@@ -57,17 +57,48 @@ export const isValidPAN = (pan: string): boolean => {
   return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan.trim().toUpperCase());
 };
 
-// Central in-memory store
-let employeesMemory: EmployeeRecord[] = [];
+const STORAGE_KEY = 'belnova_employees';
+
+const loadFromStorage = (): EmployeeRecord[] => {
+  try {
+    const raw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveToStorage = (list: EmployeeRecord[]): void => {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+  } catch {
+    // Ignore storage quota errors
+  }
+};
+
+// Central store with localStorage persistence
+let employeesMemory: EmployeeRecord[] = loadFromStorage();
 
 export const getEmployees = (): EmployeeRecord[] => {
+  if (employeesMemory.length === 0) {
+    employeesMemory = loadFromStorage();
+  }
   return employeesMemory;
 };
 
 export const syncEmployeesFromTeam = (members: any[]): void => {
   if (!Array.isArray(members)) return;
+  if (employeesMemory.length === 0) {
+    employeesMemory = loadFromStorage();
+  }
   members.forEach((m) => {
-    const existingIdx = employeesMemory.findIndex((e) => e.id === m.id || (m.email && e.email === m.email));
+    const existingIdx = employeesMemory.findIndex(
+      (e) =>
+        (m.id && e.id.toLowerCase() === m.id.toLowerCase()) ||
+        (m.email && e.email.toLowerCase() === m.email.toLowerCase())
+    );
     const names = (m.name || '').split(' ');
     const record: EmployeeRecord = {
       id: m.id || m.employeeId || `EMP-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -90,17 +121,25 @@ export const syncEmployeesFromTeam = (members: any[]): void => {
       employeesMemory.push(record);
     }
   });
+  saveToStorage(employeesMemory);
 };
 
 export const getEmployeeById = (id: string): EmployeeRecord | undefined => {
+  if (employeesMemory.length === 0) {
+    employeesMemory = loadFromStorage();
+  }
   return employeesMemory.find((e) => e.id.toLowerCase() === id.toLowerCase());
 };
 
 export const saveEmployee = (emp: EmployeeRecord): void => {
-  const index = employeesMemory.findIndex((e) => e.id === emp.id);
+  if (employeesMemory.length === 0) {
+    employeesMemory = loadFromStorage();
+  }
+  const index = employeesMemory.findIndex((e) => e.id.toLowerCase() === emp.id.toLowerCase());
   if (index >= 0) {
     employeesMemory[index] = { ...employeesMemory[index], ...emp };
   } else {
     employeesMemory = [emp, ...employeesMemory];
   }
+  saveToStorage(employeesMemory);
 };

@@ -22,10 +22,13 @@ import {
   FiChevronRight,
   FiAlertCircle,
 } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthContext';
+import client from '../../api/client';
 import './HRAddEmployee.css';
 
 export const HRAddEmployee: React.FC = () => {
   const navigate = useNavigate();
+  const { setTeamMembers, refresh, user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -163,6 +166,45 @@ export const HRAddEmployee: React.FC = () => {
     };
 
     saveEmployee(newRecord);
+
+    const newTeamMember = {
+      id: newRecord.id,
+      employeeId: newRecord.id,
+      name: newRecord.name,
+      designation: newRecord.role,
+      initials: (newRecord.name || 'EM').slice(0, 2).toUpperCase(),
+      color: '#2563eb',
+      checkIn: '09:00 AM',
+      status: 'Present' as const,
+      performance: '95%',
+      email: newRecord.email,
+      phone: newRecord.phone,
+      department: newRecord.department,
+      role: 'employee' as const,
+    };
+
+    setTeamMembers((prev) => [newTeamMember, ...prev.filter((m) => m.id !== newRecord.id)]);
+
+    (async () => {
+      try {
+        const username = newRecord.email.split('@')[0] || `user_${newRecord.id.toLowerCase().replace(/\W/g, '')}`;
+        await client.post('/accounts', {
+          email: newRecord.email,
+          username,
+          password: 'Password123!',
+          role: 'employee',
+          name: newRecord.name,
+          department: newRecord.department,
+          designation: newRecord.role,
+          employeeNumber: newRecord.id,
+        });
+        if (user) {
+          await refresh(user);
+        }
+      } catch (err) {
+        console.warn('Backend account creation note:', err);
+      }
+    })();
 
     setTimeout(() => {
       setIsSubmitting(false);

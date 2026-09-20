@@ -48,12 +48,60 @@ export const leaveApi = {
     return response.data;
   },
 
-  decideLeave: async (id: string, status: 'Approved' | 'Rejected', reason = ''): Promise<any> => {
-    const response = await client.patch(`/Leave/${id}/decision`, {
-      status,
-      reason,
-    });
+  createLeaveBalance: async (data: { employeeId: string; leaveType: string; year: number; total: number }): Promise<any> => {
+    const response = await client.post('/leave/balances', data);
     return response.data;
+  },
+
+  decideLeave: async (
+    id: string,
+    status: 'Approved' | 'Rejected',
+    reason = '',
+    details?: { employeeId?: string; leaveType?: string; startDate?: string }
+  ): Promise<any> => {
+    try {
+      const response = await client.patch(`/Leave/${id}/decision`, {
+        status,
+        reason,
+      });
+      return response.data;
+    } catch (err: any) {
+      const errorMessage =
+        err?.response?.data?.title ||
+        err?.response?.data?.message ||
+        err?.message ||
+        '';
+
+      if (
+        status === 'Approved' &&
+        (err?.response?.status === 409 || errorMessage.includes('entitlement')) &&
+        details?.employeeId &&
+        details?.leaveType
+      ) {
+        try {
+          const year = details.startDate
+            ? new Date(details.startDate).getFullYear()
+            : new Date().getFullYear();
+          await client.post('/leave/balances', {
+            employeeId: details.employeeId,
+            leaveType: details.leaveType,
+            year: isNaN(year) ? new Date().getFullYear() : year,
+            total: 18,
+          });
+
+          const retryRes = await client.patch(`/Leave/${id}/decision`, {
+            status,
+            reason,
+          });
+          return retryRes.data;
+        } catch (retryErr) {
+          console.warn('Auto-entitlement balance creation failed:', retryErr);
+          throw err;
+        }
+      }
+
+      throw err;
+    }
   },
 
   getLeaveBalances: async (employeeId?: string): Promise<LeaveBalanceDto[]> => {

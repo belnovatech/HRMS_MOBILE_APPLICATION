@@ -5,6 +5,7 @@ import { BottomNavigation } from '../../components/BottomNavigation/BottomNaviga
 import {
   getEmployeeById,
   saveEmployee,
+  EmployeeRecord,
   isValidName,
   isValidPhone,
   isValidEmail,
@@ -20,21 +21,37 @@ import {
   FiChevronRight,
   FiAlertCircle,
 } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthContext';
 import './HREditEmployee.css';
 
 export const HREditEmployee: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { teamMembers = [], setTeamMembers } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const existing = id ? getEmployeeById(id) : undefined;
+  const matchedFromStore = id ? getEmployeeById(id) : undefined;
+  const matchedFromTeam = id ? teamMembers.find((m) => m.id.toLowerCase() === id.toLowerCase() || (m.email && m.email.toLowerCase() === id.toLowerCase())) : undefined;
+  const existing: EmployeeRecord | undefined = matchedFromStore || (matchedFromTeam ? {
+    id: matchedFromTeam.id,
+    name: matchedFromTeam.name,
+    firstName: matchedFromTeam.name.split(' ')[0],
+    lastName: matchedFromTeam.name.split(' ').slice(1).join(' '),
+    email: matchedFromTeam.email,
+    phone: matchedFromTeam.phone || '',
+    department: (matchedFromTeam as any).department || 'Engineering',
+    role: matchedFromTeam.designation || 'Staff',
+    status: (matchedFromTeam.status as any) || 'Active',
+    joinDate: '2024-01-01',
+    avatarBg: matchedFromTeam.color || '#2F6FED',
+  } : undefined);
 
   const [formData, setFormData] = useState({
     firstName: existing?.firstName || existing?.name.split(' ')[0] || '',
-    lastName: existing?.lastName || existing?.name.split(' ')[1] || '',
+    lastName: existing?.lastName || existing?.name.split(' ').slice(1).join(' ') || '',
     email: existing?.email || '',
     phone: existing?.phone || '',
     dob: existing?.dob || '1995-01-01',
@@ -53,11 +70,11 @@ export const HREditEmployee: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const emp = getEmployeeById(id);
+      const emp: EmployeeRecord | undefined = getEmployeeById(id) || existing;
       if (emp) {
         setFormData({
           firstName: emp.firstName || emp.name.split(' ')[0] || '',
-          lastName: emp.lastName || emp.name.split(' ')[1] || '',
+          lastName: emp.lastName || emp.name.split(' ').slice(1).join(' ') || '',
           email: emp.email || '',
           phone: emp.phone || '',
           dob: emp.dob || '1995-01-01',
@@ -170,6 +187,22 @@ export const HREditEmployee: React.FC = () => {
     };
 
     saveEmployee(updatedRecord);
+
+    setTeamMembers((prev) =>
+      prev.map((m) =>
+        m.id.toLowerCase() === updatedRecord.id.toLowerCase() ||
+        (m.employeeId && m.employeeId.toLowerCase() === updatedRecord.id.toLowerCase())
+          ? {
+              ...m,
+              name: updatedRecord.name,
+              email: updatedRecord.email,
+              phone: updatedRecord.phone,
+              department: updatedRecord.department,
+              designation: updatedRecord.role,
+            }
+          : m
+      )
+    );
 
     setTimeout(() => {
       setIsSubmitting(false);
