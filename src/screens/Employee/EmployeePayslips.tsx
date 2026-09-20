@@ -137,17 +137,17 @@ export const EmployeePayslips: React.FC = () => {
             <div className="emp-payslip-current-salary-grid">
               <div className="emp-payslip-current-item">
                 <span>Gross Salary</span>
-                <strong>{currentSlip.grossSalary || '₹55,099'}</strong>
+                <strong>{currentSlip.grossSalary || '₹0'}</strong>
               </div>
 
               <div className="emp-payslip-current-item">
                 <span>Deductions</span>
-                <strong>{currentSlip.deductions || '₹6,283'}</strong>
+                <strong>{currentSlip.deductions || '₹0'}</strong>
               </div>
 
               <div className="emp-payslip-current-item">
                 <span>Net Salary</span>
-                <strong>{currentSlip.netSalary || '₹48,816'}</strong>
+                <strong>{currentSlip.netSalary || '₹0'}</strong>
               </div>
             </div>
 

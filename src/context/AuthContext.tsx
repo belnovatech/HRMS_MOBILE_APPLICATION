@@ -13,18 +13,7 @@ import {
   NotificationItem,
   TodayAttendance,
 } from '../types';
-import {
-  MOCK_USERS,
-  INITIAL_TEAM_MEMBERS,
-  INITIAL_LEAVE_REQUESTS,
-  EMPLOYEE_LEAVE_BALANCES,
-  HOLIDAYS_LIST,
-  ANNOUNCEMENTS_LIST,
-  PAYSLIPS_LIST,
-  INITIAL_HELP_TICKETS,
-  INITIAL_DOCUMENTS,
-  INITIAL_NOTIFICATIONS,
-} from '../data/mockData';
+import { syncEmployeesFromTeam } from '../data/employeeStore';
 import {
   authApi,
   attendanceApi,
@@ -157,6 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     localStorage.setItem('belnova_team_members', JSON.stringify(teamMembers));
+    syncEmployeesFromTeam(teamMembers);
   }, [teamMembers]);
 
   useEffect(() => {
@@ -233,6 +223,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         if (teamRes.status === 'fulfilled') {
           setTeamMembers(teamRes.value);
+          syncEmployeesFromTeam(teamRes.value);
         }
         if (balancesRes.status === 'fulfilled' && balancesRes.value.length > 0) {
           setLeaveBalances((prev) => {
@@ -616,8 +607,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const created: LeaveRequest = {
       id: `LR-${Date.now().toString().slice(-3)}`,
       employeeId: user?.employeeId || user?.id || 'EMP001',
-      employeeName: user?.name || 'Arjun Mehta',
-      initials: user?.avatar || 'AM',
+      employeeName: user?.name || 'Employee',
+      initials: user?.avatar || (user?.name ? user.name.slice(0, 2).toUpperCase() : 'EM'),
       avatarBg: '#10b981',
       leaveType: newLeave.leaveType,
       startDate: newLeave.startDate,
@@ -659,7 +650,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const created: HelpTicket = {
       id: `EMP-${Date.now().toString().slice(-6)}`,
       employeeId: user?.employeeId || user?.id || 'EMP001',
-      employeeName: user?.name || 'Arjun Mehta',
+      employeeName: user?.name || 'Employee',
       category: ticketData.category,
       subject: ticketData.subject,
       description: ticketData.description,
@@ -722,7 +713,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const created: EmployeeDocument = {
       id: `DOC-${Date.now().toString().slice(-4)}`,
       employeeId: docData.employeeId || user?.employeeId || user?.id || 'EMP001',
-      employee: docData.employee || user?.name || 'Arjun Mehta',
+      employee: docData.employee || user?.name || 'Employee',
       title: docData.title,
       fileName: docData.fileName || `${docData.title.replace(/\s+/g, '_')}.pdf`,
       category: docData.category || 'General',

@@ -30,25 +30,25 @@ export const HREditEmployee: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const existing = getEmployeeById(id || 'EMP-1001');
+  const existing = id ? getEmployeeById(id) : undefined;
 
   const [formData, setFormData] = useState({
-    firstName: existing?.firstName || existing?.name.split(' ')[0] || 'Arjun',
-    lastName: existing?.lastName || existing?.name.split(' ')[1] || 'Mehta',
-    email: existing?.email || 'arjun.m@belnova.com',
-    phone: existing?.phone || '9876543210',
-    dob: existing?.dob || '1994-08-12',
+    firstName: existing?.firstName || existing?.name.split(' ')[0] || '',
+    lastName: existing?.lastName || existing?.name.split(' ')[1] || '',
+    email: existing?.email || '',
+    phone: existing?.phone || '',
+    dob: existing?.dob || '1995-01-01',
     gender: (existing?.gender || 'Male') as 'Male' | 'Female' | 'Other',
     department: existing?.department || 'Engineering',
-    role: existing?.role || 'Sr. Frontend Dev',
-    employeeId: existing?.id || id || 'EMP-1001',
-    joinDate: existing?.joinDate || '2023-04-15',
+    role: existing?.role || '',
+    employeeId: existing?.id || id || '',
+    joinDate: existing?.joinDate || new Date().toISOString().split('T')[0],
     workLocation: existing?.workLocation || existing?.location || 'Bangalore HQ',
-    baseCtc: existing?.baseCtc || '1850000',
-    bankName: existing?.bankName || existing?.bank || 'HDFC Bank',
-    accountNumber: existing?.accountNumber || existing?.account || '50100098765432',
-    aadhaarNumber: existing?.aadhaarNumber || '789012345678',
-    panNumber: existing?.panNumber || 'ABCDE1234F',
+    baseCtc: existing?.baseCtc || '',
+    bankName: existing?.bankName || existing?.bank || '',
+    accountNumber: existing?.accountNumber || existing?.account || '',
+    aadhaarNumber: existing?.aadhaarNumber || '',
+    panNumber: existing?.panNumber || '',
   });
 
   useEffect(() => {
@@ -60,15 +60,15 @@ export const HREditEmployee: React.FC = () => {
           lastName: emp.lastName || emp.name.split(' ')[1] || '',
           email: emp.email || '',
           phone: emp.phone || '',
-          dob: emp.dob || '1994-08-12',
+          dob: emp.dob || '1995-01-01',
           gender: (emp.gender || 'Male') as 'Male' | 'Female' | 'Other',
           department: emp.department || 'Engineering',
           role: emp.role || '',
-          employeeId: emp.id,
+          employeeId: emp.id || id || '',
           joinDate: emp.joinDate || '',
           workLocation: emp.workLocation || emp.location || 'Bangalore HQ',
-          baseCtc: emp.baseCtc || '1850000',
-          bankName: emp.bankName || emp.bank || 'HDFC Bank',
+          baseCtc: emp.baseCtc || '',
+          bankName: emp.bankName || emp.bank || '',
           accountNumber: emp.accountNumber || emp.account || '',
           aadhaarNumber: emp.aadhaarNumber || '',
           panNumber: emp.panNumber || '',

@@ -83,7 +83,7 @@ const getLeaveData = (leaveBalances: any) => {
       key: 'optional',
       label: 'Optional Leave',
       available: Number(safeBalances.optional?.available) || 0,
-      total: Number(safeBalances.optional?.total) || 3,
+      total: Number(safeBalances.optional?.total) || 0,
       color: 'orange',
     },
   ];
@@ -256,7 +256,7 @@ export const EmployeeLeave: React.FC = () => {
 
       await downloadReport(
         'EMPLOYEE LEAVE HISTORY REPORT',
-        `Employee: ${user?.name || 'Arjun Mehta'} (${user?.employeeId || 'EMP001'})`,
+        `Employee: ${user?.name || 'Employee'} (${user?.employeeId || user?.id || 'N/A'})`,
         headers,
         rows,
         `Leave_History_Report_${new Date().toISOString().slice(0, 10)}.pdf`

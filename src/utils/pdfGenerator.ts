@@ -53,23 +53,23 @@ export function formatINR(val: number): string {
  * Validates and normalizes payslip data before PDF generation.
  */
 export function validateAndNormalizePayslipData(slip: any, user: any): PayslipData {
-  const employeeName = slip?.employeeName || user?.name || 'Rahul Kumar';
-  const employeeId = slip?.employeeId || user?.employeeId || user?.id || 'EMP1001';
-  const designation = slip?.designation || user?.designation || 'Engineering Staff';
-  const department = slip?.department || user?.department || 'Engineering';
-  const month = slip?.month || 'September 2026';
-  const dateOfJoining = slip?.dateOfJoining || user?.joiningDate || '11/05/2026';
-  const payPeriod = slip?.payPeriod || month.split(' ')[0] || 'September';
-  const payDate = slip?.payDate || `05/${new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : '0' + (new Date().getMonth() + 1)}/2026`;
+  const employeeName = slip?.employeeName || user?.name || 'Employee';
+  const employeeId = slip?.employeeId || user?.employeeId || user?.id || 'N/A';
+  const designation = slip?.designation || user?.designation || 'Staff';
+  const department = slip?.department || user?.department || 'General';
+  const month = slip?.month || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const dateOfJoining = slip?.dateOfJoining || user?.joiningDate || 'N/A';
+  const payPeriod = slip?.payPeriod || month.split(' ')[0] || '';
+  const payDate = slip?.payDate || new Date().toLocaleDateString('en-GB');
   const paidDays = slip?.paidDays !== undefined ? slip.paidDays : 30;
   const lopDays = slip?.lopDays !== undefined ? slip.lopDays : 0;
 
   const pfNumber = slip?.pfNumber || user?.pfNumber || 'N/A';
-  const uan = slip?.uan || user?.uan || '101864402517';
-  const bankAccountNo = slip?.bankAccountNo || user?.bankAccount || '922010041338296';
-  const ifsc = slip?.ifsc || user?.ifsc || 'UTIB0001030';
-  const pan = slip?.pan || user?.pan || 'FWGPB3338P';
-  const bankName = slip?.bankName || user?.bankName || 'Axis Bank';
+  const uan = slip?.uan || user?.uan || 'N/A';
+  const bankAccountNo = slip?.bankAccountNo || user?.bankAccount || 'N/A';
+  const ifsc = slip?.ifsc || user?.ifsc || 'N/A';
+  const pan = slip?.pan || user?.pan || 'N/A';
+  const bankName = slip?.bankName || user?.bankName || 'N/A';
 
   // Earnings calculations
   let gross = parseNumericAmount(slip?.grossSalary || slip?.gross);
@@ -86,9 +86,9 @@ export function validateAndNormalizePayslipData(slip: any, user: any): PayslipDa
   } else if (gross > 0 && deductions >= 0 && net <= 0) {
     net = gross - deductions;
   } else if (gross <= 0 && net <= 0) {
-    gross = 55099;
-    deductions = 6283;
-    net = 48816;
+    gross = 0;
+    deductions = 0;
+    net = 0;
   }
 
   // If specific earnings breakdowns are missing, distribute realistically

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
+import { useAuth } from '../../context/AuthContext';
 import {
   FiActivity,
   FiAlertTriangle,
@@ -137,26 +138,23 @@ const INITIAL_COMPANY: CompanyData = {
 };
 
 const INITIAL_BRANCHES: BranchItem[] = [
-  { id: 1, name: 'Mumbai Headquarters', city: 'Mumbai', employees: 482, status: 'Active' },
-  { id: 2, name: 'Bangalore Technology Center', city: 'Bangalore', employees: 365, status: 'Active' },
-  { id: 3, name: 'Hyderabad Development Center', city: 'Hyderabad', employees: 241, status: 'Active' },
-  { id: 4, name: 'Delhi NCR Office', city: 'Delhi', employees: 160, status: 'Active' },
+  { id: 1, name: 'Main Office', city: 'Corporate HQ', employees: 0, status: 'Active' },
 ];
 
 const INITIAL_DEPARTMENTS: DepartmentItem[] = [
-  { id: 1, name: 'Engineering', code: 'ENG', head: 'Arjun Reddy', employees: 356 },
-  { id: 2, name: 'Human Resources', code: 'HR', head: 'Sneha Rao', employees: 48 },
-  { id: 3, name: 'Finance', code: 'FIN', head: 'Kiran Reddy', employees: 42 },
-  { id: 4, name: 'Product', code: 'PROD', head: 'Priya Sharma', employees: 86 },
-  { id: 5, name: 'Sales & Marketing', code: 'SM', head: 'Meena Pillai', employees: 174 },
+  { id: 1, name: 'Engineering', code: 'ENG', head: 'Engineering Lead', employees: 0 },
+  { id: 2, name: 'Human Resources', code: 'HR', head: 'HR Lead', employees: 0 },
+  { id: 3, name: 'Finance', code: 'FIN', head: 'Finance Lead', employees: 0 },
+  { id: 4, name: 'Product', code: 'PROD', head: 'Product Lead', employees: 0 },
+  { id: 5, name: 'Sales & Marketing', code: 'SM', head: 'Marketing Lead', employees: 0 },
 ];
 
 const INITIAL_DESIGNATIONS: DesignationItem[] = [
-  { id: 1, title: 'Software Engineer', department: 'Engineering', level: 'L2', employees: 142 },
-  { id: 2, title: 'Senior Software Engineer', department: 'Engineering', level: 'L3', employees: 96 },
-  { id: 3, title: 'Engineering Manager', department: 'Engineering', level: 'L5', employees: 24 },
-  { id: 4, title: 'HR Executive', department: 'Human Resources', level: 'L2', employees: 16 },
-  { id: 5, title: 'Product Manager', department: 'Product', level: 'L4', employees: 18 },
+  { id: 1, title: 'Software Engineer', department: 'Engineering', level: 'L2', employees: 0 },
+  { id: 2, title: 'Senior Software Engineer', department: 'Engineering', level: 'L3', employees: 0 },
+  { id: 3, title: 'Engineering Manager', department: 'Engineering', level: 'L5', employees: 0 },
+  { id: 4, title: 'HR Executive', department: 'Human Resources', level: 'L2', employees: 0 },
+  { id: 5, title: 'Product Manager', department: 'Product', level: 'L4', employees: 0 },
 ];
 
 const INITIAL_SHIFTS: ShiftItem[] = [
@@ -167,10 +165,10 @@ const INITIAL_SHIFTS: ShiftItem[] = [
 ];
 
 const INITIAL_LEAVE_POLICIES: LeavePolicyItem[] = [
-  { id: 'casual', name: 'Casual Leave', annual: 12, used: 4, remaining: 8, carryForward: 'Yes (max 5 days)', encashment: true },
-  { id: 'sick', name: 'Sick Leave', annual: 12, used: 3, remaining: 9, carryForward: 'Yes (max 5 days)', encashment: false },
-  { id: 'earned', name: 'Earned Leave', annual: 18, used: 6, remaining: 12, carryForward: 'Yes (max 5 days)', encashment: true },
-  { id: 'optional', name: 'Optional Leave', annual: 3, used: 1, remaining: 2, carryForward: 'No', encashment: false },
+  { id: 'casual', name: 'Casual Leave', annual: 12, used: 0, remaining: 12, carryForward: 'Yes (max 5 days)', encashment: true },
+  { id: 'sick', name: 'Sick Leave', annual: 12, used: 0, remaining: 12, carryForward: 'Yes (max 5 days)', encashment: false },
+  { id: 'earned', name: 'Earned Leave', annual: 18, used: 0, remaining: 18, carryForward: 'Yes (max 5 days)', encashment: true },
+  { id: 'optional', name: 'Optional Leave', annual: 3, used: 0, remaining: 3, carryForward: 'No', encashment: false },
 ];
 
 const INITIAL_EMAIL_TEMPLATES: EmailTemplateItem[] = [
@@ -180,14 +178,7 @@ const INITIAL_EMAIL_TEMPLATES: EmailTemplateItem[] = [
   { id: 4, name: 'Attendance Regularization', event: 'Attendance', channel: 'Email', status: 'Active', subject: 'Action Required: Attendance Regularization' },
 ];
 
-const INITIAL_AUDIT: AuditLogItem[] = [
-  { id: 1, action: 'Company profile updated', user: 'Sneha Rao', module: 'Company Profile', time: 'Today, 11:42 AM', result: 'Success' },
-  { id: 2, action: 'Shift policy modified', user: 'Arjun Reddy', module: 'Shift Policies', time: 'Today, 10:18 AM', result: 'Success' },
-  { id: 3, action: 'Payroll configuration viewed', user: 'Sneha Rao', module: 'Payroll', time: 'Yesterday, 4:32 PM', result: 'Success' },
-  { id: 4, action: 'Failed security login', user: 'Unknown (IP 192.168.1.45)', module: 'Security', time: 'Yesterday, 2:08 PM', result: 'Blocked' },
-  { id: 5, action: 'Leave policy updated', user: 'Sneha Rao', module: 'Leave Policies', time: 'Aug 29, 2026', result: 'Success' },
-  { id: 6, action: 'New branch added: Delhi NCR', user: 'Priya Sharma', module: 'Branches', time: 'Aug 25, 2026', result: 'Success' },
-];
+const INITIAL_AUDIT: AuditLogItem[] = [];
 
 interface SettingCategory {
   id: string;
@@ -203,9 +194,9 @@ interface SettingCategory {
 const SETTINGS_AREAS: SettingCategory[] = [
   // Organization
   { id: 'company', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Company Profile', description: 'Legal entity details, registration & regional defaults', icon: FiBriefcase, statusText: 'Verified' },
-  { id: 'branches', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Branches & Locations', description: '4 office locations across India · 1,248 workforce', icon: FiMapPin, statusText: '4 Active' },
-  { id: 'departments', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Departments', description: 'Business units & departmental leadership', icon: FiUsers, statusText: '5 Units' },
-  { id: 'designations', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Designations & Levels', description: 'Job titles, organizational bands & grade hierarchy', icon: FiGrid, statusText: '5 Grades' },
+  { id: 'branches', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Branches & Locations', description: 'Office locations & regional branch centers', icon: FiMapPin, statusText: 'Active' },
+  { id: 'departments', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Departments', description: 'Business units & departmental leadership', icon: FiUsers, statusText: 'Configured' },
+  { id: 'designations', group: 'organization', groupLabel: 'ORGANIZATION', label: 'Designations & Levels', description: 'Job titles, organizational bands & grade hierarchy', icon: FiGrid, statusText: 'Configured' },
 
   // Workforce
   { id: 'shifts', group: 'workforce', groupLabel: 'WORKFORCE & POLICIES', label: 'Shift Policies', description: 'Work timings, grace limits, breaks & overnight shifts', icon: FiClock, statusText: '4 Shifts' },
@@ -241,6 +232,7 @@ function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (val
 
 export const HRSettings: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Active View State: 'hub' for Main Settings Landing or section ID ('company', 'branches', etc.)
@@ -255,17 +247,53 @@ export const HRSettings: React.FC = () => {
 
   const [branches, setBranches] = useState<BranchItem[]>(() => {
     const saved = localStorage.getItem('belnova_settings_branches');
-    return saved ? JSON.parse(saved) : INITIAL_BRANCHES;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((b) => b.employees === 482)) {
+          localStorage.removeItem('belnova_settings_branches');
+          return INITIAL_BRANCHES;
+        }
+        return parsed;
+      } catch {
+        return INITIAL_BRANCHES;
+      }
+    }
+    return INITIAL_BRANCHES;
   });
 
   const [departments, setDepartments] = useState<DepartmentItem[]>(() => {
     const saved = localStorage.getItem('belnova_settings_departments');
-    return saved ? JSON.parse(saved) : INITIAL_DEPARTMENTS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((d) => d.head === 'Arjun Reddy')) {
+          localStorage.removeItem('belnova_settings_departments');
+          return INITIAL_DEPARTMENTS;
+        }
+        return parsed;
+      } catch {
+        return INITIAL_DEPARTMENTS;
+      }
+    }
+    return INITIAL_DEPARTMENTS;
   });
 
   const [designations, setDesignations] = useState<DesignationItem[]>(() => {
     const saved = localStorage.getItem('belnova_settings_designations');
-    return saved ? JSON.parse(saved) : INITIAL_DESIGNATIONS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((d) => d.employees === 142)) {
+          localStorage.removeItem('belnova_settings_designations');
+          return INITIAL_DESIGNATIONS;
+        }
+        return parsed;
+      } catch {
+        return INITIAL_DESIGNATIONS;
+      }
+    }
+    return INITIAL_DESIGNATIONS;
   });
 
   const [shifts, setShifts] = useState<ShiftItem[]>(() => {
@@ -364,7 +392,19 @@ export const HRSettings: React.FC = () => {
 
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>(() => {
     const saved = localStorage.getItem('belnova_settings_audits');
-    return saved ? JSON.parse(saved) : INITIAL_AUDIT;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((l) => l.user === 'Sneha Rao' || l.user.includes('Priya Sharma'))) {
+          localStorage.removeItem('belnova_settings_audits');
+          return [];
+        }
+        return parsed;
+      } catch {
+        return [];
+      }
+    }
+    return [];
   });
 
   // Modals & Bottom Sheets State
@@ -397,7 +437,7 @@ export const HRSettings: React.FC = () => {
     const newLog: AuditLogItem = {
       id: Date.now(),
       action,
-      user: 'Priya Sharma (HR Admin)',
+      user: user?.name ? `${user.name} (${user.role === 'hr' ? 'HR Admin' : user.role})` : 'HR Admin',
       module,
       time: 'Just now',
       result,
@@ -2059,7 +2099,14 @@ export const HRSettings: React.FC = () => {
       </div>
 
       <div className="bel-audit-timeline">
-        {auditLogs.map((log) => (
+        {auditLogs.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '36px 16px', color: '#64748b' }}>
+            <FiActivity size={32} style={{ margin: '0 auto 12px', opacity: 0.5 }} />
+            <h4 style={{ margin: '0 0 6px', color: '#1e293b' }}>No Audit Events</h4>
+            <p style={{ margin: 0, fontSize: '13px' }}>System configuration actions will be logged here.</p>
+          </div>
+        ) : (
+          auditLogs.map((log) => (
           <div key={log.id} className="bel-audit-card">
             <div className="bel-audit-card-top">
               <span className={`bel-audit-badge ${log.result.toLowerCase()}`}>
@@ -2073,7 +2120,8 @@ export const HRSettings: React.FC = () => {
               <span>Module: <strong>{log.module}</strong></span>
             </div>
           </div>
-        ))}
+        ))
+      )}
       </div>
     </div>
   );
@@ -2742,15 +2790,15 @@ export const HRSettings: React.FC = () => {
               <div className="bel-custodian-list">
                 <div className="bel-custodian-row">
                   <div>
-                    <strong>Priya Sharma</strong>
-                    <span>HR Director · Primary Admin</span>
+                    <strong>{user?.name || 'Primary Administrator'}</strong>
+                    <span>HR Administrator · Primary Admin</span>
                   </div>
                   <span className="bel-status-pill success">Verified</span>
                 </div>
                 <div className="bel-custodian-row">
                   <div>
-                    <strong>Arjun Reddy</strong>
-                    <span>VP Engineering · Technical Custodian</span>
+                    <strong>Technical Custodian</strong>
+                    <span>IT Security Lead · Technical Custodian</span>
                   </div>
                   <span className="bel-status-pill success">Verified</span>
                 </div>

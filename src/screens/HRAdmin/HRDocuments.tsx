@@ -35,14 +35,8 @@ const DOCUMENT_CATEGORIES = [
   'Other',
 ];
 
-const EMPLOYEES = [
+const DEFAULT_EMPLOYEES = [
   { id: 'All', name: 'All Employees' },
-  { id: 'EMP1001', name: 'Rahul Kumar' },
-  { id: 'EMP1002', name: 'Priya Sharma' },
-  { id: 'EMP1003', name: 'Arjun Reddy' },
-  { id: 'EMP1004', name: 'Sneha Rao' },
-  { id: 'EMP1005', name: 'Vikram Singh' },
-  { id: 'EMP1006', name: 'Meena Pillai' },
 ];
 
 export interface DocItem {
@@ -121,11 +115,22 @@ async function downloadEmployeeDocuments(employeeName: string, documents: DocIte
 
 export const HRDocuments: React.FC = () => {
   const {
+    teamMembers = [],
     documentsList = [],
     verifyEmployeeDocument,
     addEmployeeDocument,
     removeEmployeeDocument,
   } = useAuth();
+
+  const employeeOptions = useMemo(() => {
+    const list = [{ id: 'All', name: 'All Employees' }];
+    if (teamMembers && teamMembers.length > 0) {
+      teamMembers.forEach((m) => {
+        list.push({ id: m.id || m.employeeId || 'EMP', name: m.name || 'Employee' });
+      });
+    }
+    return list;
+  }, [teamMembers]);
 
   const documents: DocItem[] = useMemo(() => {
     return documentsList.map((d) => ({
@@ -157,7 +162,7 @@ export const HRDocuments: React.FC = () => {
     documentName: string;
     file: File | null;
   }>({
-    employeeId: 'EMP1001',
+    employeeId: '',
     category: 'Identity',
     documentName: '',
     file: null,
@@ -261,8 +266,8 @@ export const HRDocuments: React.FC = () => {
       return;
     }
 
-    const employeeObj = EMPLOYEES.find((item) => item.id === uploadData.employeeId);
-    const chosenEmployeeName = employeeObj?.name || 'Rahul Kumar';
+    const employeeObj = employeeOptions.find((item) => item.id === uploadData.employeeId);
+    const chosenEmployeeName = employeeObj?.name || 'Employee';
 
     addEmployeeDocument({
       title: `${uploadData.documentName.trim()} — ${chosenEmployeeName}`,
@@ -407,7 +412,7 @@ export const HRDocuments: React.FC = () => {
               onChange={(e) => setEmployeeFilter(e.target.value)}
               aria-label="Filter by employee"
             >
-              {EMPLOYEES.map((emp) => (
+              {employeeOptions.map((emp) => (
                 <option key={emp.id} value={emp.id}>
                   {emp.name}
                 </option>
@@ -438,7 +443,7 @@ export const HRDocuments: React.FC = () => {
                 <FiUser size={15} />
               </div>
               <div>
-                <strong>{EMPLOYEES.find((e) => e.id === employeeFilter)?.name}</strong>
+                <strong>{employeeOptions.find((e) => e.id === employeeFilter)?.name}</strong>
                 <span>
                   {employeeFilter} &bull; {filteredDocuments.length} document
                   {filteredDocuments.length === 1 ? '' : 's'} found
@@ -452,7 +457,7 @@ export const HRDocuments: React.FC = () => {
                 className="btn-emp-export-csv"
                 onClick={() => {
                   const empName =
-                    EMPLOYEES.find((item) => item.id === employeeFilter)?.name || 'Employee';
+                    employeeOptions.find((item) => item.id === employeeFilter)?.name || 'Employee';
                   downloadEmployeeDocuments(empName, filteredDocuments);
                   showToast(`${empName} documents downloaded.`);
                 }}
@@ -608,7 +613,7 @@ export const HRDocuments: React.FC = () => {
                     value={employeeFilter}
                     onChange={(e) => setEmployeeFilter(e.target.value)}
                   >
-                    {EMPLOYEES.map((emp) => (
+                    {employeeOptions.map((emp) => (
                       <option key={emp.id} value={emp.id}>
                         {emp.name} {emp.id !== 'All' ? `(${emp.id})` : ''}
                       </option>
@@ -836,7 +841,7 @@ export const HRDocuments: React.FC = () => {
                     }
                     required
                   >
-                    {EMPLOYEES.filter((emp) => emp.id !== 'All').map((emp) => (
+                    {employeeOptions.filter((emp) => emp.id !== 'All').map((emp) => (
                       <option key={emp.id} value={emp.id}>
                         {emp.name} ({emp.id})
                       </option>

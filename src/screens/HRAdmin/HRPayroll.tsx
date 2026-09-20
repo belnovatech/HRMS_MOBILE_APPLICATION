@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { downloadPayslip, downloadReportCsv, downloadReportExcel } from '../../services/downloadService';
@@ -34,63 +35,7 @@ interface EmployeeRaw {
   avatarBg?: string;
 }
 
-const EMPLOYEES: EmployeeRaw[] = [
-  {
-    id: 'EMP1001',
-    name: 'Rahul Kumar',
-    department: 'Engineering',
-    initials: 'RK',
-    basic: 35000,
-    hra: 14000,
-    allowances: 8000,
-    deductions: 6500,
-    avatarBg: '#2F6FED',
-  },
-  {
-    id: 'EMP1002',
-    name: 'Priya Sharma',
-    department: 'HR',
-    initials: 'PS',
-    basic: 28000,
-    hra: 11200,
-    allowances: 6000,
-    deductions: 5160,
-    avatarBg: '#D946EF',
-  },
-  {
-    id: 'EMP1003',
-    name: 'Arjun Reddy',
-    department: 'Engineering',
-    initials: 'AR',
-    basic: 55000,
-    hra: 22000,
-    allowances: 12000,
-    deductions: 12100,
-    avatarBg: '#F59E0B',
-  },
-  {
-    id: 'EMP1004',
-    name: 'Sneha Rao',
-    department: 'HR',
-    initials: 'SR',
-    basic: 40000,
-    hra: 16000,
-    allowances: 9000,
-    deductions: 8000,
-    avatarBg: '#10B981',
-  },
-  {
-    id: 'EMP1005',
-    name: 'Vikram Singh',
-    department: 'Operations',
-    initials: 'VS',
-    basic: 80000,
-    hra: 32000,
-    allowances: 18000,
-    deductions: 19400,
-    avatarBg: '#8B5CF6',
-  },
-];
+const DEFAULT_EMPTY_EMPLOYEES: EmployeeRaw[] = [];
 
 const PROCESS_STEPS = [
   'Select Month',
@@ -205,12 +150,43 @@ function downloadCsv(filename: string, headers: string[], rows: any[][]) {
 }
 
 export const HRPayroll: React.FC = () => {
+  const { teamMembers = [] } = useAuth();
   const currentMonth = getCurrentPayrollMonth();
+
+  const liveEmployees: EmployeeRaw[] = useMemo(() => {
+    if (!teamMembers || teamMembers.length === 0) return DEFAULT_EMPTY_EMPLOYEES;
+    return teamMembers.map((m) => {
+      const initials = (m.name || 'EM')
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+      return {
+        id: m.id || m.employeeId || 'EMP',
+        name: m.name || 'Employee',
+        department: (m as any).department || 'Engineering',
+        initials,
+        basic: 40000,
+        hra: 16000,
+        allowances: 8000,
+        deductions: 6000,
+        avatarBg: m.color || '#2F6FED',
+      };
+    });
+  }, [teamMembers]);
 
   const [selectedYear, setSelectedYear] = useState(currentMonth.year);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth.month);
   const [activeTab, setActiveTab] = useState<'employees' | 'processing' | 'analytics'>('employees');
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('EMP1001');
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
+
+  useEffect(() => {
+    if (!selectedEmployeeId && liveEmployees.length > 0) {
+      setSelectedEmployeeId(liveEmployees[0].id);
+    }
+  }, [liveEmployees, selectedEmployeeId]);
+
   const [processedEmployees, setProcessedEmployees] = useState<Record<string, boolean>>({});
   const [processStep, setProcessStep] = useState(0);
   const [modal, setModal] = useState<'payslip' | 'monthPicker' | null>(null);
@@ -234,8 +210,8 @@ export const HRPayroll: React.FC = () => {
   const payrollKey = monthToKey(selectedYear, selectedMonth);
 
   const employeePayroll = useMemo(
-    () => EMPLOYEES.map((employee) => calculateEmployee(employee, selectedYear, selectedMonth)),
-    [selectedYear, selectedMonth]
+    () => liveEmployees.map((employee) => calculateEmployee(employee, selectedYear, selectedMonth)),
+    [liveEmployees, selectedYear, selectedMonth]
   );
 
   const filteredEmployees = useMemo(() => {
@@ -267,11 +243,11 @@ export const HRPayroll: React.FC = () => {
         label: MONTH_NAMES[date.getMonth()].slice(0, 3),
         year: date.getFullYear(),
         month: date.getMonth(),
-        value: calculateEmployee(EMPLOYEES[0], date.getFullYear(), date.getMonth()).gross,
+        value: liveEmployees[0] ? calculateEmployee(liveEmployees[0], date.getFullYear(), date.getMonth()).gross : 0,
       });
     }
     return values;
-  }, [selectedYear, selectedMonth]);
+  }, [liveEmployees, selectedYear, selectedMonth]);
 
   const closeModal = () => setModal(null);
 
@@ -504,7 +480,7 @@ export const HRPayroll: React.FC = () => {
 
           <div className="bel-payroll-stat-card bel-payroll-stat-card--paid">
             <span className="bel-payroll-stat-label">Employees Paid</span>
-            <strong className="bel-payroll-stat-value">{monthProcessedCount} / {EMPLOYEES.length}</strong>
+            <strong className="bel-payroll-stat-value">{monthProcessedCount} / {liveEmployees.length}</strong>
             <div className="bel-payroll-stat-bar bel-payroll-stat-bar--paid" />
           </div>
         </section>
@@ -519,7 +495,7 @@ export const HRPayroll: React.FC = () => {
             onClick={() => setActiveTab('employees')}
           >
             <span>Employees</span>
-            <span className="bel-payroll-tab-count">{EMPLOYEES.length}</span>
+            <span className="bel-payroll-tab-count">{liveEmployees.length}</span>
           </button>
 
           <button

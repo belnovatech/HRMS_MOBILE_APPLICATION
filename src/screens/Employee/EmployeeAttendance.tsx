@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
@@ -86,14 +86,16 @@ const getDateRangeForMonth = (monthValue: string) => {
   return dates;
 };
 
-const buildDynamicAttendance = (monthValue: string, todayAttendance: any) => {
+import { attendanceApi, AttendanceRecordDto } from '../../api';
+
+const buildDynamicAttendance = (monthValue: string, todayAttendance: any, apiRecords: AttendanceRecordDto[]) => {
   const dates = getDateRangeForMonth(monthValue);
 
-  return dates.map((date, index) => {
+  return dates.map((date) => {
     const dateKey = getDateKey(date);
     const todayKey = getDateKey(new Date());
 
-    if (dateKey === todayKey) {
+    if (dateKey === todayKey && todayAttendance?.checkedIn) {
       return {
         date: dateKey,
         day: getWeekdayName(date),
@@ -104,20 +106,25 @@ const buildDynamicAttendance = (monthValue: string, todayAttendance: any) => {
       };
     }
 
-    const fallbackRows = [
-      { checkIn: '09:30 AM', checkOut: '06:30 PM', hours: '9h 00m', status: 'Present' },
-      { checkIn: '10:15 AM', checkOut: '06:45 PM', hours: '8h 30m', status: 'Late' },
-      { checkIn: '—', checkOut: '—', hours: '—', status: 'Leave' },
-      { checkIn: '09:38 AM', checkOut: '06:40 PM', hours: '9h 02m', status: 'Present' },
-      { checkIn: '09:50 AM', checkOut: '06:35 PM', hours: '8h 45m', status: 'Present' },
-    ];
-
-    const fallback = fallbackRows[(index - 1 + fallbackRows.length) % fallbackRows.length];
+    const matchedRecord = apiRecords.find((r) => r.date === dateKey);
+    if (matchedRecord) {
+      return {
+        date: dateKey,
+        day: getWeekdayName(date),
+        checkIn: formatTime(matchedRecord.checkIn || undefined),
+        checkOut: formatTime(matchedRecord.checkOut || undefined),
+        hours: formatTime(matchedRecord.workingHours || undefined),
+        status: matchedRecord.status || 'Present',
+      };
+    }
 
     return {
       date: dateKey,
       day: getWeekdayName(date),
-      ...fallback,
+      checkIn: '—',
+      checkOut: '—',
+      hours: '—',
+      status: dateKey === todayKey ? 'Not logged' : 'Absent',
     };
   });
 };
@@ -135,10 +142,22 @@ export const EmployeeAttendance: React.FC = () => {
   const [correctionDate, setCorrectionDate] = useState(getDateKey(new Date()));
   const [correctionReason, setCorrectionReason] = useState('');
   const [correctionSubmitted, setCorrectionSubmitted] = useState(false);
+  const [apiAttendance, setApiAttendance] = useState<AttendanceRecordDto[]>([]);
+
+  useEffect(() => {
+    const empId = user?.id || user?.employeeId;
+    if (empId) {
+      attendanceApi.getAttendance(empId).then((records) => {
+        if (Array.isArray(records)) {
+          setApiAttendance(records);
+        }
+      }).catch(() => {});
+    }
+  }, [user?.id, user?.employeeId]);
 
   const attendanceHistory = useMemo(
-    () => buildDynamicAttendance(selectedMonth, todayAttendance),
-    [selectedMonth, todayAttendance]
+    () => buildDynamicAttendance(selectedMonth, todayAttendance, apiAttendance),
+    [selectedMonth, todayAttendance, apiAttendance]
   );
 
   const summary = useMemo(() => {

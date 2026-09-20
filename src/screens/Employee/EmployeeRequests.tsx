@@ -237,7 +237,7 @@ export const EmployeeRequests: React.FC = () => {
 
       await downloadReport(
         'EMPLOYEE REQUEST HISTORY REPORT',
-        `Employee: ${user?.name || 'Arjun Mehta'} (${user?.employeeId || 'EMP001'})`,
+        `Employee: ${user?.name || 'Employee'} (${user?.employeeId || user?.id || 'N/A'})`,
         headers,
         rows,
         `Requests_History_Report_${new Date().toISOString().slice(0, 10)}.pdf`

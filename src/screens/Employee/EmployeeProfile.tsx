@@ -36,30 +36,30 @@ export const EmployeeProfile: React.FC = () => {
       phone: user?.phone || 'Not available',
       address: user?.address || 'Not available',
 
-      branch: (user as any)?.branch || (user as any)?.location || 'Bengaluru HQ',
-      workMode: (user as any)?.workMode || 'Hybrid / On-site',
+      branch: (user as any)?.branch || (user as any)?.location || 'Main Office',
+      workMode: (user as any)?.workMode || 'Full-time',
 
       joiningDate:
         user?.joiningDate ||
         (user as any)?.dateOfJoining ||
-        'Jan 15, 2023',
+        'Not available',
 
       status: (user as any)?.status || 'Active',
 
       bankAccount:
         (user as any)?.bankAccount ||
         (user as any)?.bankAccountNumber ||
-        'XXXX-XXXX-4829',
+        'Not available',
 
-      bankName: (user as any)?.bankName || 'HDFC Bank Ltd',
-      ifsc: (user as any)?.ifsc || 'HDFC0001234',
+      bankName: (user as any)?.bankName || 'Not available',
+      ifsc: (user as any)?.ifsc || 'Not available',
 
-      pan: (user as any)?.pan || 'ABCDE1234F',
-      pfUan: (user as any)?.pfUan || '100987654321',
+      pan: (user as any)?.pan || 'Not available',
+      pfUan: (user as any)?.pfUan || 'Not available',
 
-      emergencyContact: (user as any)?.emergencyContact || '+91 98765 00000',
-      emergencyName: (user as any)?.emergencyName || 'Kavita Mehta',
-      emergencyRelation: (user as any)?.emergencyRelation || 'Spouse / Relative',
+      emergencyContact: (user as any)?.emergencyContact || 'Not available',
+      emergencyName: (user as any)?.emergencyName || 'Not available',
+      emergencyRelation: (user as any)?.emergencyRelation || 'Not available',
     }),
     [user]
   );

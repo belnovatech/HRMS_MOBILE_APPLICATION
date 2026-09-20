@@ -54,7 +54,7 @@ export const EmployeeDocuments: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const empId = user?.employeeId || user?.id || 'EMP001';
-  const userName = user?.name || 'Rahul Kumar';
+  const userName = user?.name || 'Employee';
 
   const documents = useMemo(() => {
     return documentsList

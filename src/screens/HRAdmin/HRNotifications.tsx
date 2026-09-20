@@ -83,6 +83,7 @@ function getCategoryMeta(category: string) {
 export const HRNotifications: React.FC = () => {
   const navigate = useNavigate();
   const {
+    teamMembers = [],
     notificationsList = [],
     sendNotification,
     deleteNotification,
@@ -732,8 +733,9 @@ export const HRNotifications: React.FC = () => {
                   <option value="All Employees">All Employees</option>
                   <option value="HR Administrators">HR Administrators</option>
                   <option value="All Portals">All Portals</option>
-                  <option value="Rahul Kumar">Rahul Kumar</option>
-                  <option value="Sneha Rao">Sneha Rao</option>
+                  {teamMembers.map((m) => (
+                    <option key={m.id} value={m.name}>{m.name}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -841,8 +843,9 @@ export const HRNotifications: React.FC = () => {
                   <option value="All Employees">All Employees (Company-wide)</option>
                   <option value="HR Administrators">HR Administrators Only</option>
                   <option value="All Portals">All Portals &amp; Channels</option>
-                  <option value="Rahul Kumar">Rahul Kumar (Direct)</option>
-                  <option value="Sneha Rao">Sneha Rao (Direct)</option>
+                  {teamMembers.map((m) => (
+                    <option key={m.id} value={m.name}>{m.name} (Direct)</option>
+                  ))}
                 </select>
               </div>
 

@@ -93,58 +93,7 @@ const INITIAL_POLICIES: LeavePolicy[] = [
   },
 ];
 
-const INITIAL_BALANCES: LeaveBalance[] = [
-  {
-    id: 'EMP1001',
-    employee: 'Rahul Kumar',
-    initials: 'RK',
-    casual: 8,
-    sick: 9,
-    earned: 12,
-    optional: 2,
-    avatarBg: '#2F6FED',
-  },
-  {
-    id: 'EMP1002',
-    employee: 'Priya Sharma',
-    initials: 'PS',
-    casual: 6,
-    sick: 4,
-    earned: 12,
-    optional: 2,
-    avatarBg: '#D946EF',
-  },
-  {
-    id: 'EMP1003',
-    employee: 'Arjun Reddy',
-    initials: 'AR',
-    casual: 10,
-    sick: 11,
-    earned: 15,
-    optional: 3,
-    avatarBg: '#F59E0B',
-  },
-  {
-    id: 'EMP1004',
-    employee: 'Sneha Rao',
-    initials: 'SR',
-    casual: 7,
-    sick: 8,
-    earned: 10,
-    optional: 1,
-    avatarBg: '#10B981',
-  },
-  {
-    id: 'EMP1005',
-    employee: 'Vikram Singh',
-    initials: 'VS',
-    casual: 12,
-    sick: 12,
-    earned: 18,
-    optional: 3,
-    avatarBg: '#8B5CF6',
-  },
-];
+const INITIAL_BALANCES: LeaveBalance[] = [];
 
 const FILTER_STATUS_OPTIONS = ['All', 'Pending', 'Approved', 'Rejected'];
 
@@ -157,10 +106,31 @@ const FILTER_TYPE_OPTIONS = [
 ];
 
 export const HRLeaveManagement: React.FC = () => {
-  const { leaveRequests = [], handleApproveLeave, handleRejectLeave } = useAuth();
+  const { teamMembers = [], leaveRequests = [], handleApproveLeave, handleRejectLeave } = useAuth();
   const [activeTab, setActiveTab] = useState<'requests' | 'policies' | 'balance'>('requests');
   const [policies, setPolicies] = useState<LeavePolicy[]>(INITIAL_POLICIES);
-  const [balances] = useState<LeaveBalance[]>(INITIAL_BALANCES);
+
+  const balances: LeaveBalance[] = useMemo(() => {
+    if (!teamMembers || teamMembers.length === 0) return [];
+    return teamMembers.map((m) => {
+      const initials = (m.name || 'EM')
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+      return {
+        id: m.id || m.employeeId || 'EMP',
+        employee: m.name || 'Employee',
+        initials,
+        casual: 12,
+        sick: 12,
+        earned: 18,
+        optional: 3,
+        avatarBg: m.color || '#2F6FED',
+      };
+    });
+  }, [teamMembers]);
 
   // Filters & Search
   const [search, setSearch] = useState('');

@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
+import { useAuth } from '../../context/AuthContext';
 import {
   FiCheck,
   FiChevronDown,
@@ -66,7 +67,7 @@ const INITIAL_ROLES: RoleItem[] = [
     id: 'ROLE-001',
     role: 'Super Admin',
     description: 'Full platform administration and security control',
-    users: 2,
+    users: 0,
     status: 'Active',
     scope: 'Organization-wide',
     permissions: {
@@ -86,7 +87,7 @@ const INITIAL_ROLES: RoleItem[] = [
     id: 'ROLE-002',
     role: 'HR Administrator',
     description: 'Manage employees, HR operations and approvals',
-    users: 6,
+    users: 0,
     status: 'Active',
     scope: 'All HR modules',
     permissions: {
@@ -106,7 +107,7 @@ const INITIAL_ROLES: RoleItem[] = [
     id: 'ROLE-003',
     role: 'HR Executive',
     description: 'Day-to-day HR operations and employee services',
-    users: 9,
+    users: 0,
     status: 'Active',
     scope: 'HR operations',
     permissions: {
@@ -126,7 +127,7 @@ const INITIAL_ROLES: RoleItem[] = [
     id: 'ROLE-004',
     role: 'Department Manager',
     description: 'Team-level management, approvals and reporting',
-    users: 24,
+    users: 0,
     status: 'Active',
     scope: 'Assigned department',
     permissions: {
@@ -146,7 +147,7 @@ const INITIAL_ROLES: RoleItem[] = [
     id: 'ROLE-005',
     role: 'Finance Manager',
     description: 'Payroll, financial reports and compensation access',
-    users: 5,
+    users: 0,
     status: 'Active',
     scope: 'Finance & payroll',
     permissions: {
@@ -166,7 +167,7 @@ const INITIAL_ROLES: RoleItem[] = [
     id: 'ROLE-006',
     role: 'Employee',
     description: 'Self-service access for individual employee data',
-    users: 1248,
+    users: 0,
     status: 'Active',
     scope: 'Own records',
     permissions: {
@@ -201,7 +202,44 @@ function countPermissions(permissions: RolePermissionsMap): number {
 }
 
 export const HRRolesPermissions: React.FC = () => {
-  const [roles, setRoles] = useState<RoleItem[]>(INITIAL_ROLES);
+  const { teamMembers } = useAuth();
+  const [roles, setRoles] = useState<RoleItem[]>(() => {
+    const saved = localStorage.getItem('belnova_roles_permissions');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((r) => r.users === 1248 || r.users === 24)) {
+          localStorage.removeItem('belnova_roles_permissions');
+          return INITIAL_ROLES;
+        }
+        return parsed;
+      } catch {
+        return INITIAL_ROLES;
+      }
+    }
+    return INITIAL_ROLES;
+  });
+
+  useEffect(() => {
+    setRoles((current) =>
+      current.map((role) => {
+        let count = 0;
+        if (role.role === 'Super Admin') {
+          count = 1;
+        } else if (role.role === 'HR Administrator' || role.role === 'HR Executive') {
+          count = teamMembers.filter((m) => m.role === 'hr_admin' || m.department === 'Human Resources').length;
+        } else if (role.role === 'Department Manager') {
+          count = teamMembers.filter((m) => m.role === 'manager' || m.designation?.toLowerCase().includes('manager')).length;
+        } else if (role.role === 'Finance Manager') {
+          count = teamMembers.filter((m) => m.department === 'Finance').length;
+        } else if (role.role === 'Employee') {
+          count = teamMembers.length;
+        }
+        return { ...role, users: count };
+      })
+    );
+  }, [teamMembers]);
+
   const [selectedRoleId, setSelectedRoleId] = useState<string>(INITIAL_ROLES[0].id);
   const [draftPermissions, setDraftPermissions] = useState<RolePermissionsMap>(
     clonePermissions(INITIAL_ROLES[0].permissions)

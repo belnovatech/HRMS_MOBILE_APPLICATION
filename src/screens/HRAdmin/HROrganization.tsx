@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import {
@@ -44,158 +45,63 @@ interface Department {
   employees: Employee[];
 }
 
-const INITIAL_DEPARTMENTS: Department[] = [
-  {
-    id: 'engineering',
-    name: 'Engineering & Tech',
-    shortName: 'Engineering',
-    head: 'Vikram Malhotra',
-    role: 'Engineering Manager',
-    initials: 'VM',
-    total: 45,
-    budget: '₹1.2 Cr',
-    openPositions: 6,
-    growth: '+12%',
-    status: 'Growing',
-    icon: <FiLayers />,
-    color: 'blue',
-    employees: [
-      {
-        name: 'Rahul Kumar',
-        role: 'Senior Software Engineer',
-        initials: 'RK',
-      },
-      {
-        name: 'Kiran Reddy',
-        role: 'Software Engineer',
-        initials: 'KR',
-      },
-      {
-        name: 'Deepika Iyer',
-        role: 'Software Engineer',
-        initials: 'DI',
-      },
-    ],
-  },
-  {
-    id: 'product',
-    name: 'Product & UI/UX',
-    shortName: 'Product',
-    head: 'Kavya Nair',
-    role: 'Product Manager',
-    initials: 'KN',
-    total: 22,
-    budget: '₹65 Lakhs',
-    openPositions: 3,
-    growth: '+8%',
-    status: 'Growing',
-    icon: <FiBriefcase />,
-    color: 'purple',
-    employees: [
-      {
-        name: 'Anjali Menon',
-        role: 'Product Designer',
-        initials: 'AM',
-      },
-      {
-        name: 'Rohit Verma',
-        role: 'Product Analyst',
-        initials: 'RV',
-      },
-    ],
-  },
-  {
-    id: 'sales',
-    name: 'Sales & Growth',
-    shortName: 'Sales',
-    head: 'Rajesh Sharma',
-    role: 'Sales Manager',
-    initials: 'RS',
-    total: 28,
-    budget: '₹80 Lakhs',
-    openPositions: 4,
-    growth: '+15%',
-    status: 'High Growth',
-    icon: <FiUsers />,
-    color: 'orange',
-    employees: [
-      {
-        name: 'Rohan Das',
-        role: 'Sales Executive',
-        initials: 'RD',
-      },
-      {
-        name: 'Neha Kapoor',
-        role: 'Business Executive',
-        initials: 'NK',
-      },
-    ],
-  },
-  {
-    id: 'hr',
-    name: 'HR & Operations',
-    shortName: 'HR',
-    head: 'Sneha Kapur',
-    role: 'HR Manager',
-    initials: 'SK',
-    total: 18,
-    budget: '₹45 Lakhs',
-    openPositions: 2,
-    growth: '+5%',
-    status: 'Stable',
-    icon: <FiCheckCircle />,
-    color: 'green',
-    employees: [
-      {
-        name: 'Priya Sharma',
-        role: 'HR Executive',
-        initials: 'PS',
-      },
-      {
-        name: 'Aarav Mehta',
-        role: 'HR Associate',
-        initials: 'AM',
-      },
-    ],
-  },
-  {
-    id: 'finance',
-    name: 'Finance & Accounts',
-    shortName: 'Finance',
-    head: 'Ananya Deshmukh',
-    role: 'Finance Manager',
-    initials: 'AD',
-    total: 11,
-    budget: '₹35 Lakhs',
-    openPositions: 1,
-    growth: '+3%',
-    status: 'Stable',
-    icon: <FiDollarSign />,
-    color: 'cyan',
-    employees: [
-      {
-        name: 'Anjali Nair',
-        role: 'Finance Executive',
-        initials: 'AN',
-      },
-    ],
-  },
-];
+const INITIAL_DEPARTMENTS: Department[] = [];
 
 export const HROrganization: React.FC = () => {
   const navigate = useNavigate();
+  const { teamMembers = [] } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('All');
-  const [expandedDepartments, setExpandedDepartments] = useState<Record<string, boolean>>({
-    Engineering: true,
-    Product: false,
-    Sales: false,
-    HR: true,
-    Finance: false,
-  });
+  const [expandedDepartments, setExpandedDepartments] = useState<Record<string, boolean>>({});
   const [activeMenuDept, setActiveMenuDept] = useState<Department | null>(null);
 
-  const departments = INITIAL_DEPARTMENTS;
+  const ceoMember = useMemo(() => {
+    return teamMembers.find(
+      (m) =>
+        m.designation?.toLowerCase().includes('ceo') ||
+        m.designation?.toLowerCase().includes('chief executive') ||
+        m.designation?.toLowerCase().includes('director') ||
+        m.role === 'admin'
+    );
+  }, [teamMembers]);
+
+  const departments: Department[] = useMemo(() => {
+    if (!teamMembers || teamMembers.length === 0) return [];
+
+    const groups: Record<string, any[]> = {};
+    teamMembers.forEach((m) => {
+      const dept = (m as any).department || (m.role === 'hr' ? 'HR & Operations' : 'Engineering');
+      if (!groups[dept]) groups[dept] = [];
+      groups[dept].push(m);
+    });
+
+    const colors: ('blue' | 'purple' | 'orange' | 'green' | 'cyan')[] = ['blue', 'purple', 'green', 'orange', 'cyan'];
+
+    return Object.entries(groups).map(([deptName, members], idx) => {
+      const head = members[0];
+      const initials = (head?.name || deptName).split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
+      return {
+        id: deptName.toLowerCase().replace(/\s+/g, '-'),
+        name: deptName,
+        shortName: deptName,
+        head: head?.name || 'Lead',
+        role: head?.designation || head?.role || 'Manager',
+        initials,
+        total: members.length,
+        budget: `₹${(members.length * 8).toFixed(1)}L`,
+        openPositions: 0,
+        growth: 'Stable',
+        status: 'Active',
+        icon: <FiLayers />,
+        color: colors[idx % colors.length],
+        employees: members.map((m) => ({
+          name: m.name,
+          role: m.designation || m.role || 'Staff',
+          initials: (m.name || 'EM').split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase(),
+        })),
+      };
+    });
+  }, [teamMembers]);
 
   const totalEmployees = departments.reduce((sum, department) => sum + department.total, 0);
   const totalOpenPositions = departments.reduce((sum, department) => sum + department.openPositions, 0);
@@ -442,10 +348,12 @@ export const HROrganization: React.FC = () => {
             {/* CEO Card */}
             <div className="hr-org-tree-ceo-box">
               <div className="hr-org-person-card ceo-card">
-                <div className="hr-org-person-avatar ceo-avatar">VM</div>
+                <div className="hr-org-person-avatar ceo-avatar">
+                  {ceoMember ? ceoMember.name.slice(0, 2).toUpperCase() : 'EX'}
+                </div>
                 <div className="hr-org-person-info">
-                  <strong>Vikram Singh</strong>
-                  <span>Chief Executive Officer</span>
+                  <strong>{ceoMember ? ceoMember.name : 'Executive Leadership'}</strong>
+                  <span>{ceoMember?.designation || 'Chief Executive Officer'}</span>
                 </div>
               </div>
               <div className="hr-org-tree-stem-line" />

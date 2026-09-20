@@ -45,139 +45,9 @@ interface JobPosition {
   status: 'Active' | 'Closed';
 }
 
-const INITIAL_CANDIDATES: Candidate[] = [
-  {
-    id: 'CAN-1001',
-    name: 'Amit Gupta',
-    role: 'Sr. Software Engineer',
-    stage: 'Applied',
-    applied: 'Aug 30',
-    experience: '5 yrs',
-    email: 'amit.gupta@example.com',
-    phone: '+91 90000 10001',
-    avatarBg: '#2F6FED',
-  },
-  {
-    id: 'CAN-1002',
-    name: 'Rina Das',
-    role: 'UX Designer',
-    stage: 'Applied',
-    applied: 'Aug 29',
-    experience: '3 yrs',
-    email: 'rina.das@example.com',
-    phone: '+91 90000 10002',
-    avatarBg: '#D946EF',
-  },
-  {
-    id: 'CAN-1003',
-    name: 'Suresh Kumar',
-    role: 'DevOps Engineer',
-    stage: 'Applied',
-    applied: 'Aug 28',
-    experience: '4 yrs',
-    email: 'suresh.kumar@example.com',
-    phone: '+91 90000 10003',
-    avatarBg: '#10B981',
-  },
-  {
-    id: 'CAN-1004',
-    name: 'Pooja Verma',
-    role: 'Product Manager',
-    stage: 'Screening',
-    applied: 'Aug 25',
-    experience: '6 yrs',
-    email: 'pooja.verma@example.com',
-    phone: '+91 90000 10004',
-    avatarBg: '#F59E0B',
-  },
-  {
-    id: 'CAN-1005',
-    name: 'Nikhil Shah',
-    role: 'Sr. Software Engineer',
-    stage: 'Screening',
-    applied: 'Aug 24',
-    experience: '7 yrs',
-    email: 'nikhil.shah@example.com',
-    phone: '+91 90000 10005',
-    avatarBg: '#8B5CF6',
-  },
-  {
-    id: 'CAN-1006',
-    name: 'Lavanya Menon',
-    role: 'HR Manager',
-    stage: 'Interview',
-    applied: 'Aug 20',
-    experience: '8 yrs',
-    email: 'lavanya.menon@example.com',
-    phone: '+91 90000 10006',
-    avatarBg: '#EC4899',
-  },
-  {
-    id: 'CAN-1007',
-    name: 'Rajesh Nair',
-    role: 'Finance Analyst',
-    stage: 'Interview',
-    applied: 'Aug 18',
-    experience: '4 yrs',
-    email: 'rajesh.nair@example.com',
-    phone: '+91 90000 10007',
-    avatarBg: '#06B6D4',
-  },
-  {
-    id: 'CAN-1008',
-    name: 'Sanya Kapoor',
-    role: 'Marketing Lead',
-    stage: 'Offer',
-    applied: 'Aug 15',
-    experience: '5 yrs',
-    email: 'sanya.kapoor@example.com',
-    phone: '+91 90000 10008',
-    avatarBg: '#14B8A6',
-  },
-];
+const INITIAL_CANDIDATES: Candidate[] = [];
 
-const INITIAL_JOBS: JobPosition[] = [
-  {
-    id: 'JOB-101',
-    title: 'Senior Software Engineer',
-    dept: 'Engineering',
-    openings: 3,
-    applicants: 24,
-    status: 'Active',
-  },
-  {
-    id: 'JOB-102',
-    title: 'Product Manager',
-    dept: 'Product',
-    openings: 1,
-    applicants: 18,
-    status: 'Active',
-  },
-  {
-    id: 'JOB-103',
-    title: 'HR Executive',
-    dept: 'Human Resources',
-    openings: 2,
-    applicants: 12,
-    status: 'Active',
-  },
-  {
-    id: 'JOB-104',
-    title: 'DevOps Engineer',
-    dept: 'Engineering',
-    openings: 1,
-    applicants: 8,
-    status: 'Active',
-  },
-  {
-    id: 'JOB-105',
-    title: 'Marketing Specialist',
-    dept: 'Marketing',
-    openings: 1,
-    applicants: 15,
-    status: 'Closed',
-  },
-];
+const INITIAL_JOBS: JobPosition[] = [];
 
 const STAGES: ('Applied' | 'Screening' | 'Interview' | 'Offer' | 'Hired' | 'Rejected')[] = [
   'Applied',
@@ -226,16 +96,35 @@ function downloadCsv(filename: string, headers: string[], rows: any[][]) {
 
 export const HRRecruitment: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'pipeline' | 'jobs'>('pipeline');
-  const [candidates, setCandidates] = useState<Candidate[]>(INITIAL_CANDIDATES);
-  const [jobs, setJobs] = useState<JobPosition[]>(INITIAL_JOBS);
-  const [stageCounts, setStageCounts] = useState({
-    Applied: 48,
-    Screening: 24,
-    Interview: 12,
-    Offer: 5,
-    Hired: 3,
-    Rejected: 16,
+  const [candidates, setCandidates] = useState<Candidate[]>(() => {
+    const saved = localStorage.getItem('belnova_recruitment_candidates');
+    return saved ? JSON.parse(saved) : [];
   });
+  const [jobs, setJobs] = useState<JobPosition[]>(() => {
+    const saved = localStorage.getItem('belnova_recruitment_jobs');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [stageCounts, setStageCounts] = useState({
+    Applied: 0,
+    Screening: 0,
+    Interview: 0,
+    Offer: 0,
+    Hired: 0,
+    Rejected: 0,
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('belnova_recruitment_candidates', JSON.stringify(candidates));
+    const counts: Record<string, number> = { Applied: 0, Screening: 0, Interview: 0, Offer: 0, Hired: 0, Rejected: 0 };
+    candidates.forEach((c) => {
+      if (counts[c.stage] !== undefined) counts[c.stage]++;
+    });
+    setStageCounts(counts as any);
+  }, [candidates]);
+
+  React.useEffect(() => {
+    localStorage.setItem('belnova_recruitment_jobs', JSON.stringify(jobs));
+  }, [jobs]);
 
   // Filters
   const [selectedStageTab, setSelectedStageTab] = useState<string>('All');

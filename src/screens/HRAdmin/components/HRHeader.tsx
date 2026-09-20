@@ -116,11 +116,11 @@ export const HRHeader: React.FC<HRHeaderProps> = ({
             tabIndex={0}
           >
             <div className="hr-header-avatar">
-              {user?.avatar || 'PS'}
+              {user?.avatar || (user?.name ? user.name.slice(0, 2).toUpperCase() : 'HR')}
             </div>
             <div className="hr-header-user-meta">
-              <span className="hr-user-fullname">{user?.name || 'Priya Sharma'}</span>
-              <span className="hr-user-designation">{user?.designation || 'HR Director'}</span>
+              <span className="hr-user-fullname">{user?.name || 'HR Admin'}</span>
+              <span className="hr-user-designation">{user?.designation || 'Administrator'}</span>
             </div>
             <ChevronDown size={15} className={`hr-chevron ${showProfileMenu ? 'open' : ''}`} />
           </div>
@@ -129,8 +129,8 @@ export const HRHeader: React.FC<HRHeaderProps> = ({
           {showProfileMenu && (
             <div className="hr-profile-dropdown" onClick={(e) => e.stopPropagation()}>
               <div className="hr-dropdown-header">
-                <strong>{user?.name || 'Priya Sharma'}</strong>
-                <span>{user?.email || 'priya.sharma@belnova.com'}</span>
+                <strong>{user?.name || 'HR Admin'}</strong>
+                <span>{user?.email || 'hr@belnova.tech'}</span>
               </div>
               <div className="hr-dropdown-divider" />
               <button

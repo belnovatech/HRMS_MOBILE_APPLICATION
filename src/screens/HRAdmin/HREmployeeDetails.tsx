@@ -22,52 +22,43 @@ import {
 } from 'react-icons/fi';
 import './HREmployeeDetails.css';
 
+import { useAuth } from '../../context/AuthContext';
+
 type DetailTab = 'overview' | 'employment' | 'compensation' | 'documents';
 
 export const HREmployeeDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { teamMembers = [] } = useAuth();
   const [activeTab, setActiveTab] = useState<DetailTab>('overview');
   const [showAccount, setShowAccount] = useState(false);
   const [downloadToast, setDownloadToast] = useState<string | null>(null);
 
-  const employee: EmployeeRecord = getEmployeeById(id || 'EMP-1001') || {
-    id: id || 'EMP-1001',
-    name: 'Arjun Mehta',
-    firstName: 'Arjun',
-    lastName: 'Mehta',
-    email: 'arjun.m@belnova.com',
-    phone: '9876543210',
-    department: 'Engineering',
-    role: 'Sr. Frontend Dev',
-    status: 'Active',
-    joinDate: '2023-04-15',
-    ctc: '₹18,50,000 / year',
-    baseCtc: '1850000',
-    location: 'Bangalore HQ',
-    workLocation: 'Bangalore HQ',
-    dob: '1994-08-12',
-    gender: 'Male',
-    bank: 'HDFC Bank',
-    bankName: 'HDFC Bank',
-    account: '50100098765432',
-    accountNumber: '50100098765432',
-    ifscCode: 'HDFC0000123',
-    pfNumber: 'MH/BAN/0012345/000/0000123',
-    employmentType: 'Full-Time',
-    aadhaarNumber: '789012345678',
-    panNumber: 'ABCDE1234F',
-    avatarBg: '#2F6FED',
-  };
+  const matchedFromStore = id ? getEmployeeById(id) : undefined;
+  const matchedFromTeam = id ? teamMembers.find((m) => m.id === id || m.email === id) : undefined;
 
-  const initials = employee.name
+  const employee: EmployeeRecord | null = matchedFromStore || (matchedFromTeam ? {
+    id: matchedFromTeam.id,
+    name: matchedFromTeam.name,
+    firstName: matchedFromTeam.name.split(' ')[0],
+    lastName: matchedFromTeam.name.split(' ').slice(1).join(' '),
+    email: matchedFromTeam.email,
+    phone: matchedFromTeam.phone || '—',
+    department: (matchedFromTeam as any).department || 'Engineering',
+    role: matchedFromTeam.designation || matchedFromTeam.role || 'Staff',
+    status: (matchedFromTeam.status as any) || 'Active',
+    joinDate: '2024-01-01',
+    avatarBg: matchedFromTeam.color || '#2F6FED',
+  } : null);
+
+  const initials = employee ? employee.name
     .split(' ')
     .map((n) => n[0])
     .join('')
     .slice(0, 2)
-    .toUpperCase();
+    .toUpperCase() : 'EM';
 
-  const statusClass = employee.status.toLowerCase().replace(/\s+/g, '-');
+  const statusClass = employee ? employee.status.toLowerCase().replace(/\s+/g, '-') : 'active';
 
   const handleDownloadDoc = (docName: string) => {
     setDownloadToast(`Downloaded ${docName}`);
@@ -82,6 +73,27 @@ export const HREmployeeDetails: React.FC = () => {
     const last4 = acc.slice(-4);
     return `•••• •••• ${last4}`;
   };
+
+  if (!employee) {
+    return (
+      <div className="app-container hr-emp-details-container">
+        <AppHeader title="Employee Profile" showBack />
+        <main className="page-content" style={{ padding: '40px 16px', textAlign: 'center' }}>
+          <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '16px' }}>Employee record not found in system.</p>
+          <button
+            type="button"
+            className="hr-emp-back-nav-btn"
+            style={{ margin: '0 auto', display: 'inline-flex' }}
+            onClick={() => navigate('/hr/employees')}
+          >
+            <FiArrowLeft size={16} />
+            <span>Back to Employees</span>
+          </button>
+        </main>
+        <BottomNavigation />
+      </div>
+    );
+  }
 
   return (
     <div className="app-container hr-emp-details-container">

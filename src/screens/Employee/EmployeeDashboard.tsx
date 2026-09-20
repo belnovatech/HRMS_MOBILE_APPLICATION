@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { downloadPayslip } from '../../services/downloadService';
+import { attendanceApi, AttendanceRecordDto } from '../../api';
 import {
   Calendar,
   Clock,
@@ -29,20 +30,16 @@ export const EmployeeDashboard: React.FC = () => {
     leaveBalances,
     holidays,
     payslips,
+    announcements,
   } = useAuth();
 
   const [showPayslipModal, setShowPayslipModal] = useState(false);
-
-  const latestPayslip = payslips?.[0] || {
-    month: 'August 2026',
-    grossSalary: '₹60,000',
-    deductions: '₹11,500',
-    netSalary: '₹48,500',
-  };
+  const latestPayslip = payslips && payslips.length > 0 ? payslips[0] : null;
 
   const [isDownloadingPayslip, setIsDownloadingPayslip] = useState(false);
 
   const handleDownloadPayslipFromDashboard = async () => {
+    if (!latestPayslip) return;
     setIsDownloadingPayslip(true);
     try {
       await downloadPayslip(latestPayslip, user);
@@ -51,46 +48,42 @@ export const EmployeeDashboard: React.FC = () => {
     }
   };
 
-  const safeLeaveBalances = leaveBalances || {
-    casual: { available: 6, used: 6, total: 12 },
-    sick: { available: 4, used: 8, total: 12 },
-    earned: { available: 12, used: 6, total: 18 },
+  const safeLeaveBalances = {
+    casual: leaveBalances?.casual || { available: 0, used: 0, total: 0 },
+    sick: leaveBalances?.sick || { available: 0, used: 0, total: 0 },
+    earned: leaveBalances?.earned || { available: 0, used: 0, total: 0 },
   };
 
   const safeAttendance = todayAttendance || {
-    checkedIn: true,
-    checkInTime: '09:42 AM',
+    checkedIn: false,
+    checkInTime: '—',
     checkOutTime: '—',
-    workingHours: '04h 32m',
-    status: 'Present',
+    workingHours: '—',
+    status: 'Not checked in',
   };
 
-  const safeHolidays = holidays || [
-    { id: 1, date: '2026-09-07', name: 'Ganesh Chaturthi', day: 'Monday', type: 'Holiday' },
-    { id: 2, date: '2026-10-02', name: 'Gandhi Jayanti', day: 'Friday', type: 'Holiday' },
-    { id: 3, date: '2026-10-20', name: 'Diwali', day: 'Tuesday', type: 'Holiday' },
-  ];
+  const safeHolidays = holidays || [];
 
-  const recentAttendance = [
-    { date: 'Sep 1', checkIn: '09:42 AM', checkOut: '06:38 PM', hours: '8h 56m', status: 'Present' },
-    { date: 'Aug 31', checkIn: '09:30 AM', checkOut: '06:30 PM', hours: '9h 00m', status: 'Present' },
-    { date: 'Aug 30', checkIn: '10:15 AM', checkOut: '06:45 PM', hours: '8h 30m', status: 'Late' },
-    { date: 'Aug 29', checkIn: '—', checkOut: '—', hours: '—', status: 'Leave' },
-    { date: 'Aug 28', checkIn: '09:38 AM', checkOut: '06:40 PM', hours: '9h 02m', status: 'Present' },
-  ];
+  const [recentAttendance, setRecentAttendance] = useState<AttendanceRecordDto[]>([]);
 
-  const announcementsList = [
-    { title: 'September Holiday Schedule', category: 'HR', time: '1h ago' },
-    { title: 'New Work From Home Policy', category: 'Policy', time: '2d ago' },
-    { title: 'Payroll Processed — August 2026', category: 'Payroll', time: '1d ago' },
-    { title: 'Company Anniversary Celebration', category: 'Events', time: '3d ago' },
-  ];
+  useEffect(() => {
+    const empId = user?.id || user?.employeeId;
+    if (empId) {
+      attendanceApi.getAttendance(empId).then((records) => {
+        if (Array.isArray(records)) {
+          setRecentAttendance(records.slice(0, 5));
+        }
+      }).catch(() => {
+        setRecentAttendance([]);
+      });
+    }
+  }, [user?.id, user?.employeeId]);
 
   const getMonth = (dateString: string) => {
     try {
       return new Date(`${dateString}T00:00:00`).toLocaleDateString('en-US', { month: 'short' });
     } catch {
-      return 'SEP';
+      return 'CAL';
     }
   };
 
@@ -98,7 +91,7 @@ export const EmployeeDashboard: React.FC = () => {
     try {
       return new Date(`${dateString}T00:00:00`).getDate();
     } catch {
-      return 15;
+      return 1;
     }
   };
 
@@ -125,7 +118,7 @@ export const EmployeeDashboard: React.FC = () => {
 
             <div className="hrms-profile-copy">
               <div className="hrms-profile-name-row">
-                <h1>{user?.name || 'Rahul Kumar'}</h1>
+                <h1>{user?.name || 'Employee'}</h1>
                 <button
                   type="button"
                   className="hrms-profile-link"
@@ -135,12 +128,12 @@ export const EmployeeDashboard: React.FC = () => {
                 </button>
               </div>
 
-              <p className="hrms-profile-role">{user?.designation || 'Senior Software Engineer'}</p>
+              <p className="hrms-profile-role">{user?.designation || (user?.role ? user.role.toUpperCase() : 'Staff')}</p>
               <p className="hrms-profile-department">
-                {user?.department || 'Engineering'} • {user?.employeeId || user?.id || 'EMP001'}
+                {user?.department || 'General'} • {user?.employeeId || user?.id || '—'}
               </p>
               <p className="hrms-profile-reports">
-                Reports to: <strong>{user?.reportsTo || 'Arjun Reddy'}</strong>
+                Reports to: <strong>{user?.reportsTo || 'Manager'}</strong>
               </p>
             </div>
           </div>
@@ -234,33 +227,54 @@ export const EmployeeDashboard: React.FC = () => {
         <section className="hrms-widget-grid">
           {/* Payslip Card */}
           <article className="hrms-panel hrms-payslip-card">
-            <div className="hrms-card-heading">
-              <h2>{latestPayslip.month} Payslip</h2>
-              <span className="hrms-status-pill hrms-status-present">Processed</span>
-            </div>
+            {latestPayslip ? (
+              <>
+                <div className="hrms-card-heading">
+                  <h2>{latestPayslip.month} Payslip</h2>
+                  <span className="hrms-status-pill hrms-status-present">{latestPayslip.status || 'Processed'}</span>
+                </div>
 
-            <div className="hrms-salary-list">
-              <div className="hrms-salary-row">
-                <span>Gross Salary</span>
-                <strong className="hrms-money-green">{latestPayslip.grossSalary}</strong>
-              </div>
-              <div className="hrms-salary-row">
-                <span>Deductions</span>
-                <strong className="hrms-money-red">{latestPayslip.deductions}</strong>
-              </div>
-              <div className="hrms-salary-row">
-                <span>Net Salary</span>
-                <strong className="hrms-money-blue">{latestPayslip.netSalary}</strong>
-              </div>
-            </div>
+                <div className="hrms-salary-list">
+                  <div className="hrms-salary-row">
+                    <span>Gross Salary</span>
+                    <strong className="hrms-money-green">{latestPayslip.grossSalary}</strong>
+                  </div>
+                  <div className="hrms-salary-row">
+                    <span>Deductions</span>
+                    <strong className="hrms-money-red">{latestPayslip.deductions}</strong>
+                  </div>
+                  <div className="hrms-salary-row">
+                    <span>Net Salary</span>
+                    <strong className="hrms-money-blue">{latestPayslip.netSalary}</strong>
+                  </div>
+                </div>
 
-            <button
-              type="button"
-              className="hrms-outline-button"
-              onClick={() => setShowPayslipModal(true)}
-            >
-              View Payslip
-            </button>
+                <button
+                  type="button"
+                  className="hrms-outline-button"
+                  onClick={() => setShowPayslipModal(true)}
+                >
+                  View Payslip
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="hrms-card-heading">
+                  <h2>Monthly Payslip</h2>
+                  <span className="hrms-status-pill hrms-status-neutral">Pending</span>
+                </div>
+                <div className="hrms-salary-list" style={{ textAlign: 'center', padding: '16px 0' }}>
+                  <p style={{ color: '#64748b', fontSize: '13px', margin: 0 }}>No payslip generated yet for this period.</p>
+                </div>
+                <button
+                  type="button"
+                  className="hrms-outline-button"
+                  onClick={() => navigate('/employee/payslips')}
+                >
+                  View Payslips
+                </button>
+              </>
+            )}
           </article>
 
           {/* Holidays Card */}
@@ -277,19 +291,25 @@ export const EmployeeDashboard: React.FC = () => {
             </div>
 
             <div className="hrms-holiday-list">
-              {safeHolidays.slice(0, 3).map((item) => (
-                <div className="hrms-holiday-item" key={item.id}>
-                  <div className="hrms-holiday-date">
-                    <strong>{getMonth(item.date)}</strong>
-                    <span>{getDay(item.date)}</span>
-                  </div>
+              {safeHolidays.length > 0 ? (
+                safeHolidays.slice(0, 3).map((item) => (
+                  <div className="hrms-holiday-item" key={item.id}>
+                    <div className="hrms-holiday-date">
+                      <strong>{getMonth(item.date)}</strong>
+                      <span>{getDay(item.date)}</span>
+                    </div>
 
-                  <div className="hrms-holiday-copy">
-                    <strong>{item.name}</strong>
-                    <span>{item.day}</span>
+                    <div className="hrms-holiday-copy">
+                      <strong>{item.name}</strong>
+                      <span>{item.day}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p style={{ color: '#64748b', fontSize: '13px', margin: '12px 0', textAlign: 'center' }}>
+                  No upcoming holidays scheduled.
+                </p>
+              )}
             </div>
           </article>
 
@@ -378,19 +398,27 @@ export const EmployeeDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {recentAttendance.map((row) => (
-                  <tr key={`${row.date}-${row.status}`}>
-                    <td>{row.date}</td>
-                    <td className="hrms-table-green">{row.checkIn}</td>
-                    <td className="hrms-table-red">{row.checkOut}</td>
-                    <td>{row.hours}</td>
-                    <td>
-                      <span className={`hrms-table-status hrms-table-status-${row.status.toLowerCase()}`}>
-                        {row.status}
-                      </span>
+                {recentAttendance.length > 0 ? (
+                  recentAttendance.map((row, idx) => (
+                    <tr key={row.id || `${row.date}-${idx}`}>
+                      <td>{row.date}</td>
+                      <td className="hrms-table-green">{row.checkIn || '—'}</td>
+                      <td className="hrms-table-red">{row.checkOut || '—'}</td>
+                      <td>{row.workingHours || '—'}</td>
+                      <td>
+                        <span className={`hrms-table-status hrms-table-status-${(row.status || 'Present').toLowerCase()}`}>
+                          {row.status || 'Present'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} style={{ textAlign: 'center', padding: '24px', color: '#64748b' }}>
+                      No attendance records logged yet.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -410,28 +438,34 @@ export const EmployeeDashboard: React.FC = () => {
           </div>
 
           <div className="hrms-announcement-list">
-            {announcementsList.map((item) => (
-              <button
-                type="button"
-                className="hrms-announcement-item"
-                key={item.title}
-                onClick={() => navigate('/employee/announcements')}
-              >
-                <span className="hrms-announcement-dot" />
-                <span className="hrms-announcement-content">
-                  <strong>{item.title}</strong>
-                  <span>
-                    <em>{item.category}</em> • {item.time}
+            {announcements && announcements.length > 0 ? (
+              announcements.slice(0, 4).map((item) => (
+                <button
+                  type="button"
+                  className="hrms-announcement-item"
+                  key={item.id || item.title}
+                  onClick={() => navigate('/employee/announcements')}
+                >
+                  <span className="hrms-announcement-dot" />
+                  <span className="hrms-announcement-content">
+                    <strong>{item.title}</strong>
+                    <span>
+                      <em>{item.category || 'Company'}</em> • {item.date || 'Recent'}
+                    </span>
                   </span>
-                </span>
-              </button>
-            ))}
+                </button>
+              ))
+            ) : (
+              <div style={{ padding: '20px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
+                No company announcements at this time.
+              </div>
+            )}
           </div>
         </section>
       </main>
 
       {/* Payslip Modal */}
-      {showPayslipModal && (
+      {showPayslipModal && latestPayslip && (
         <div className="hrms-modal-overlay" onClick={() => setShowPayslipModal(false)}>
           <div className="hrms-modal" onClick={(event) => event.stopPropagation()}>
             <div className="hrms-modal-header">
@@ -455,34 +489,22 @@ export const EmployeeDashboard: React.FC = () => {
               <div className="hrms-modal-employee">
                 <p>
                   <span>Employee Name</span>
-                  <strong>{user?.name || 'Rahul Kumar'}</strong>
+                  <strong>{user?.name || 'Employee'}</strong>
                 </p>
                 <p>
                   <span>Employee ID</span>
-                  <strong>{user?.employeeId || user?.id || 'EMP001'}</strong>
+                  <strong>{user?.employeeId || user?.id || '—'}</strong>
                 </p>
               </div>
 
               <div className="hrms-modal-breakdown">
                 <div className="hrms-modal-row">
-                  <span>Basic Salary</span>
-                  <strong>₹50,000</strong>
+                  <span>Gross Salary</span>
+                  <strong className="hrms-money-green">{latestPayslip.grossSalary}</strong>
                 </div>
                 <div className="hrms-modal-row">
-                  <span>House Rent Allowance (HRA)</span>
-                  <strong>₹25,000</strong>
-                </div>
-                <div className="hrms-modal-row">
-                  <span>Special Allowances</span>
-                  <strong>₹20,000</strong>
-                </div>
-                <div className="hrms-modal-row">
-                  <span>PF Deduction</span>
-                  <strong className="hrms-money-red">- ₹6,000</strong>
-                </div>
-                <div className="hrms-modal-row">
-                  <span>Income Tax (TDS)</span>
-                  <strong className="hrms-money-red">- ₹6,500</strong>
+                  <span>Total Deductions</span>
+                  <strong className="hrms-money-red">- {latestPayslip.deductions}</strong>
                 </div>
                 <div className="hrms-modal-total">
                   <span>Net Transferrable Salary</span>

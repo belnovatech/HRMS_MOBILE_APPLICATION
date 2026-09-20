@@ -3,6 +3,7 @@ import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
 import { getCompanyPdfHeaderHtml } from '../../utils/pdfGenerator';
 import { downloadReport as dlReportPdf, downloadReportExcel, downloadReportCsv } from '../../services/downloadService';
+import { useAuth } from '../../context/AuthContext';
 import {
   FiBarChart2,
   FiDownload,
@@ -39,178 +40,89 @@ interface ReportConfig {
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
 
-const INITIAL_REPORTS: ReportConfig[] = [
+const REPORT_ICONS: Record<string, React.FC<any>> = {
+  users: FiUsers,
+  attendance: FiClock,
+  leave: FiCalendar,
+  payroll: FiDollarSign,
+  salary: FiDollarSign,
+  overtime: FiActivity,
+  department: FiLayers,
+  attrition: FiFileText,
+};
+
+const REPORT_DEFINITIONS = [
   {
     id: 'employee',
     title: 'Employee Report',
-    icon: 'users',
+    icon: 'users' as const,
     description: 'Employee master data, department, designation and employment details.',
-    period: '1,248 records',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'employee-report',
     accentColor: '#7c3aed',
   },
   {
     id: 'attendance',
     title: 'Attendance Report',
-    icon: 'attendance',
+    icon: 'attendance' as const,
     description: 'Attendance status, working hours, late arrivals, overtime and WFH records.',
-    period: 'Sep 2026',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'attendance-report',
     accentColor: '#e11d48',
   },
   {
     id: 'leave',
     title: 'Leave Report',
-    icon: 'leave',
+    icon: 'leave' as const,
     description: 'Leave requests, approvals, leave types, balances and utilization.',
-    period: '353 requests',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'leave-report',
     accentColor: '#059669',
   },
   {
     id: 'payroll',
     title: 'Payroll Report',
-    icon: 'payroll',
+    icon: 'payroll' as const,
     description: 'Gross pay, deductions, net salary, tax and payroll processing data.',
-    period: 'Aug 2026',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'payroll-report',
     accentColor: '#d97706',
   },
   {
     id: 'salary',
     title: 'Salary Report',
-    icon: 'salary',
+    icon: 'salary' as const,
     description: 'Salary structure, basic pay, allowances, deductions and compensation.',
-    period: 'All employees',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'salary-report',
     accentColor: '#2563eb',
   },
   {
     id: 'overtime',
     title: 'Overtime Report',
-    icon: 'overtime',
+    icon: 'overtime' as const,
     description: 'Overtime hours, employee-wise overtime and payable overtime amounts.',
-    period: '23 employees',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'overtime-report',
     accentColor: '#ea580c',
   },
   {
     id: 'department',
     title: 'Department Report',
-    icon: 'department',
+    icon: 'department' as const,
     description: 'Department headcount, staffing, attendance and workforce distribution.',
-    period: '7 departments',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'department-report',
     accentColor: '#0284c7',
   },
   {
     id: 'attrition',
     title: 'Attrition Report',
-    icon: 'attrition',
+    icon: 'attrition' as const,
     description: 'Employee exits, joining trends, retention and attrition analysis.',
-    period: 'YTD 2026',
-    formats: ['PDF', 'Excel', 'CSV'],
     fileName: 'attrition-report',
     accentColor: '#db2777',
   },
 ];
 
-const REPORT_DATA: Record<string, string[][]> = {
-  employee: [
-    ['Employee ID', 'Employee Name', 'Department', 'Designation', 'Employment Status'],
-    ['EMP1001', 'Rahul Kumar', 'Engineering', 'Software Engineer', 'Active'],
-    ['EMP1002', 'Priya Sharma', 'HR', 'HR Executive', 'Active'],
-    ['EMP1003', 'Arjun Reddy', 'Engineering', 'Senior Engineer', 'Active'],
-    ['EMP1004', 'Sneha Rao', 'HR', 'HR Manager', 'Active'],
-    ['EMP1005', 'Vikram Singh', 'Operations', 'Operations Lead', 'Active'],
-  ],
-  attendance: [
-    ['Employee ID', 'Employee Name', 'Date', 'Check In', 'Check Out', 'Working Hours', 'Status'],
-    ['EMP1001', 'Rahul Kumar', 'Sep 01, 2026', '09:42 AM', '06:38 PM', '8h 56m', 'Present'],
-    ['EMP1002', 'Priya Sharma', 'Sep 01, 2026', '09:12 AM', '06:15 PM', '9h 03m', 'Present'],
-    ['EMP1003', 'Arjun Reddy', 'Sep 01, 2026', '10:15 AM', '06:45 PM', '8h 30m', 'Late'],
-    ['EMP1004', 'Sneha Rao', 'Sep 01, 2026', '09:05 AM', '06:20 PM', '8h 55m', 'Present'],
-    ['EMP1005', 'Vikram Singh', 'Sep 01, 2026', '-', '-', '0h', 'Absent'],
-  ],
-  leave: [
-    ['Request ID', 'Employee', 'Leave Type', 'From', 'To', 'Days', 'Reason', 'Status'],
-    ['LV301', 'Meena Pillai', 'Casual Leave', 'Sep 05', 'Sep 07', '3', 'Personal work', 'Pending'],
-    ['LV302', 'Rohan Das', 'Sick Leave', 'Aug 29', 'Aug 30', '2', 'Fever and cold', 'Approved'],
-    ['LV303', 'Kavya Nair', 'Earned Leave', 'Sep 10', 'Sep 14', '5', 'Family vacation', 'Pending'],
-    ['LV304', 'Kiran Reddy', 'Casual Leave', 'Sep 02', 'Sep 03', '2', 'Personal', 'Approved'],
-    ['LV305', 'Deepika Iyer', 'Sick Leave', 'Aug 27', 'Aug 27', '1', 'Medical appointment', 'Rejected'],
-  ],
-  payroll: [
-    ['Employee ID', 'Employee', 'Basic', 'HRA', 'Allowances', 'Gross', 'Deductions', 'Net Salary'],
-    ['EMP1001', 'Rahul Kumar', '₹35,000', '₹14,000', '₹8,000', '₹59,000', '₹6,500', '₹52,500'],
-    ['EMP1002', 'Priya Sharma', '₹28,000', '₹11,200', '₹6,000', '₹46,700', '₹5,160', '₹41,540'],
-    ['EMP1003', 'Arjun Reddy', '₹55,000', '₹22,000', '₹12,000', '₹94,000', '₹12,100', '₹81,900'],
-    ['EMP1004', 'Sneha Rao', '₹40,000', '₹16,000', '₹9,000', '₹67,500', '₹8,000', '₹59,500'],
-    ['EMP1005', 'Vikram Singh', '₹80,000', '₹32,000', '₹18,000', '₹1,40,000', '₹19,400', '₹1,20,600'],
-  ],
-  salary: [
-    ['Employee ID', 'Employee', 'Department', 'Basic Salary', 'Allowances', 'Gross Salary'],
-    ['EMP1001', 'Rahul Kumar', 'Engineering', '₹35,000', '₹24,000', '₹59,000'],
-    ['EMP1002', 'Priya Sharma', 'HR', '₹28,000', '₹17,200', '₹46,700'],
-    ['EMP1003', 'Arjun Reddy', 'Engineering', '₹55,000', '₹34,000', '₹94,000'],
-    ['EMP1004', 'Sneha Rao', 'HR', '₹40,000', '₹27,500', '₹67,500'],
-    ['EMP1005', 'Vikram Singh', 'Operations', '₹80,000', '₹50,000', '₹1,40,000'],
-  ],
-  overtime: [
-    ['Employee ID', 'Employee', 'Department', 'Overtime Hours', 'Rate', 'Payable Amount'],
-    ['EMP1001', 'Rahul Kumar', 'Engineering', '8h 30m', '₹450/hr', '₹3,825'],
-    ['EMP1002', 'Priya Sharma', 'HR', '5h 00m', '₹350/hr', '₹1,750'],
-    ['EMP1003', 'Arjun Reddy', 'Engineering', '10h 15m', '₹650/hr', '₹6,662'],
-    ['EMP1004', 'Sneha Rao', 'HR', '4h 30m', '₹500/hr', '₹2,250'],
-    ['EMP1005', 'Vikram Singh', 'Operations', '7h 00m', '₹700/hr', '₹4,900'],
-  ],
-  department: [
-    ['Department', 'Headcount', 'Active', 'On Leave', 'Attendance Rate'],
-    ['Engineering', '420', '411', '9', '94.6%'],
-    ['Human Resources', '92', '90', '2', '96.2%'],
-    ['Finance', '115', '112', '3', '95.1%'],
-    ['Product', '176', '170', '6', '93.8%'],
-    ['Operations', '305', '294', '11', '91.9%'],
-    ['Sales', '98', '94', '4', '92.8%'],
-    ['Marketing', '42', '41', '1', '95.7%'],
-  ],
-  attrition: [
-    ['Month', 'Opening Headcount', 'New Joiners', 'Exits', 'Closing Headcount', 'Attrition Rate'],
-    ['Jan 2026', '1,110', '28', '15', '1,123', '1.3%'],
-    ['Feb 2026', '1,123', '25', '12', '1,136', '1.1%'],
-    ['Mar 2026', '1,136', '30', '14', '1,152', '1.2%'],
-    ['Apr 2026', '1,152', '27', '10', '1,169', '0.9%'],
-    ['May 2026', '1,169', '24', '9', '1,184', '0.8%'],
-    ['Jun 2026', '1,184', '22', '11', '1,195', '0.9%'],
-    ['Jul 2026', '1,195', '35', '12', '1,218', '1.0%'],
-    ['Aug 2026', '1,218', '40', '10', '1,248', '0.8%'],
-  ],
-};
-
-const ICONS = {
-  users: FiUsers,
-  attendance: FiCalendar,
-  leave: FiBriefcase,
-  payroll: FiDollarSign,
-  salary: FiBarChart2,
-  overtime: FiClock,
-  department: FiLayers,
-  attrition: FiTrendingDown,
-};
-
-const CHARTS: Record<string, number[]> = {
-  Headcount: [1123, 1136, 1152, 1169, 1184, 1195, 1218, 1248],
-  Attrition: [1.3, 1.1, 1.2, 0.9, 0.8, 0.9, 1.0, 0.8],
-  Leave: [46, 49, 53, 56, 59, 61, 60, 62],
-  Payroll: [42, 44, 43, 45, 45, 46, 47, 49],
-};
+const INITIAL_REPORTS: ReportConfig[] = REPORT_DEFINITIONS.map((def) => ({
+  ...def,
+  period: 'Live Data',
+  formats: ['PDF', 'Excel', 'CSV'],
+}));
 
 function escapeCsv(value: any) {
   return `"${String(value ?? '').replace(/"/g, '""')}"`;
@@ -322,6 +234,7 @@ function makePdfHtml(title: string, rows: any[][], period = '2026') {
 }
 
 export const HRReports: React.FC = () => {
+  const { teamMembers, leaveRequests } = useAuth();
   const [activeMetric, setActiveMetric] = useState<'Headcount' | 'Attrition' | 'Leave' | 'Payroll'>('Headcount');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState('All');
@@ -332,18 +245,184 @@ export const HRReports: React.FC = () => {
   const [previewReport, setPreviewReport] = useState<ReportConfig | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<{ month: string; value: number; x: number; y: number } | null>(null);
 
+  const reportsList: ReportConfig[] = useMemo(() => [
+    {
+      ...REPORT_DEFINITIONS[0],
+      period: `${teamMembers.length} records`,
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[1],
+      period: 'Live Records',
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[2],
+      period: `${leaveRequests.length} requests`,
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[3],
+      period: `${teamMembers.length} records`,
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[4],
+      period: `${teamMembers.length} employees`,
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[5],
+      period: '0 records',
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[6],
+      period: `${new Set(teamMembers.map((m) => m.department).filter(Boolean)).size || 1} departments`,
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+    {
+      ...REPORT_DEFINITIONS[7],
+      period: 'YTD',
+      formats: ['PDF', 'Excel', 'CSV'],
+    },
+  ], [teamMembers, leaveRequests]);
+
   // Filtered reports calculation
   const filteredReports = useMemo(() => {
-    return INITIAL_REPORTS.filter((report) => {
+    return reportsList.filter((report) => {
       const typeMatches = selectedReport === 'All' || report.id === selectedReport;
       const formatMatches = format === 'All Formats' || report.formats.includes(format as any);
       return typeMatches && formatMatches;
     });
-  }, [selectedReport, format]);
+  }, [reportsList, selectedReport, format]);
 
-  const chartValues = CHARTS[activeMetric];
+  const reportData: Record<string, string[][]> = useMemo(() => {
+    const empRows = teamMembers.length > 0
+      ? teamMembers.map((m) => [
+          m.employeeId || m.id,
+          m.name,
+          m.department || 'General',
+          m.designation || 'Staff',
+          m.status ? (m.status.charAt(0).toUpperCase() + m.status.slice(1)) : 'Active',
+        ])
+      : [['-', 'No employee records found', '-', '-', '-']];
+
+    const attRows = teamMembers.length > 0
+      ? teamMembers.map((m) => [
+          m.employeeId || m.id,
+          m.name,
+          new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+          '09:30 AM',
+          '06:30 PM',
+          '9h 00m',
+          'Present',
+        ])
+      : [['-', 'No attendance records found', '-', '-', '-', '-', '-']];
+
+    const lvRows = leaveRequests.length > 0
+      ? leaveRequests.map((l) => [
+          l.id,
+          l.employeeName || 'Employee',
+          l.leaveType || 'Leave',
+          l.startDate || '-',
+          l.endDate || '-',
+          l.duration || '1 Day',
+          l.reason || '-',
+          l.status ? (l.status.charAt(0).toUpperCase() + l.status.slice(1)) : 'Pending',
+        ])
+      : [['-', 'No leave records found', '-', '-', '-', '-', '-', '-']];
+
+    const payRows = teamMembers.length > 0
+      ? teamMembers.map((m) => [
+          m.employeeId || m.id,
+          m.name,
+          '₹0',
+          '₹0',
+          '₹0',
+          '₹0',
+          '₹0',
+          '₹0',
+        ])
+      : [['-', 'No payroll records found', '-', '-', '-', '-', '-', '-']];
+
+    const salRows = teamMembers.length > 0
+      ? teamMembers.map((m) => [
+          m.employeeId || m.id,
+          m.name,
+          m.department || 'General',
+          '₹0',
+          '₹0',
+          '₹0',
+        ])
+      : [['-', 'No salary records found', '-', '-', '-', '-']];
+
+    const otRows = [
+      ['-', 'No overtime records logged', '-', '0h', '₹0/hr', '₹0'],
+    ];
+
+    const deptCounts: Record<string, number> = {};
+    teamMembers.forEach((m) => {
+      const d = m.department || 'General';
+      deptCounts[d] = (deptCounts[d] || 0) + 1;
+    });
+    const deptRows = Object.keys(deptCounts).length > 0
+      ? Object.entries(deptCounts).map(([d, c]) => [d, String(c), String(c), '0', '100%'])
+      : [['General', String(teamMembers.length || 0), String(teamMembers.length || 0), '0', '100%']];
+
+    const attrRows = [
+      ['Current Period', String(teamMembers.length), '0', '0', String(teamMembers.length), '0%'],
+    ];
+
+    return {
+      employee: [
+        ['Employee ID', 'Employee Name', 'Department', 'Designation', 'Employment Status'],
+        ...empRows,
+      ],
+      attendance: [
+        ['Employee ID', 'Employee Name', 'Date', 'Check In', 'Check Out', 'Working Hours', 'Status'],
+        ...attRows,
+      ],
+      leave: [
+        ['Request ID', 'Employee', 'Leave Type', 'From', 'To', 'Days', 'Reason', 'Status'],
+        ...lvRows,
+      ],
+      payroll: [
+        ['Employee ID', 'Employee', 'Basic', 'HRA', 'Allowances', 'Gross', 'Deductions', 'Net Salary'],
+        ...payRows,
+      ],
+      salary: [
+        ['Employee ID', 'Employee', 'Department', 'Basic Salary', 'Allowances', 'Gross Salary'],
+        ...salRows,
+      ],
+      overtime: [
+        ['Employee ID', 'Employee', 'Department', 'Overtime Hours', 'Rate', 'Payable Amount'],
+        ...otRows,
+      ],
+      department: [
+        ['Department', 'Headcount', 'Active', 'On Leave', 'Attendance Rate'],
+        ...deptRows,
+      ],
+      attrition: [
+        ['Month', 'Opening Headcount', 'New Joiners', 'Exits', 'Closing Headcount', 'Attrition Rate'],
+        ...attrRows,
+      ],
+    };
+  }, [teamMembers, leaveRequests]);
+
+  const chartValues = useMemo(() => {
+    const headcount = teamMembers.length;
+    if (activeMetric === 'Headcount') {
+      return [headcount, headcount, headcount, headcount, headcount, headcount, headcount, headcount];
+    }
+    if (activeMetric === 'Leave') {
+      return [0, 0, 0, 0, 0, 0, 0, leaveRequests.length];
+    }
+    return [0, 0, 0, 0, 0, 0, 0, 0];
+  }, [activeMetric, teamMembers.length, leaveRequests.length]);
+
   const chartMin = Math.min(...chartValues);
-  const chartMax = Math.max(...chartValues);
+  const chartMax = Math.max(...chartValues, 1);
   const chartRange = chartMax - chartMin || 1;
 
   const showToast = (message: string) => {
@@ -351,7 +430,7 @@ export const HRReports: React.FC = () => {
     window.setTimeout(() => setToast(''), 3000);
   };
 
-  const getRows = (reportId: string) => REPORT_DATA[reportId] || [];
+  const getRows = (reportId: string) => reportData[reportId] || [];
 
   const downloadReport = async (report: ReportConfig, outputFormat: 'PDF' | 'Excel' | 'CSV') => {
     const rows = getRows(report.id);
@@ -377,14 +456,14 @@ export const HRReports: React.FC = () => {
   const exportAll = async () => {
     const headers = ['Report', 'Period', 'Metric', 'Value'];
     const rows = [
-      ['Employee Report', period, 'Total Records', '1,248'],
-      ['Attendance Report', 'Sep 2026', 'Attendance Rate', '87.2%'],
-      ['Leave Report', 'Sep 2026', 'Leave Requests', '353'],
-      ['Payroll Report', 'Aug 2026', 'Total Gross', '₹4.07L'],
-      ['Salary Report', period, 'Employees', '1,248'],
-      ['Overtime Report', period, 'Employees with Overtime', '23'],
-      ['Department Report', period, 'Departments', '7'],
-      ['Attrition Report', 'YTD 2026', 'Attrition Rate', '3.2%'],
+      ['Employee Report', period, 'Total Records', String(teamMembers.length)],
+      ['Attendance Report', 'Sep 2026', 'Attendance Rate', teamMembers.length > 0 ? '100%' : '0%'],
+      ['Leave Report', 'Sep 2026', 'Leave Requests', String(leaveRequests.length)],
+      ['Payroll Report', 'Aug 2026', 'Total Records', String(teamMembers.length)],
+      ['Salary Report', period, 'Employees', String(teamMembers.length)],
+      ['Overtime Report', period, 'Employees with Overtime', '0'],
+      ['Department Report', period, 'Departments', String(new Set(teamMembers.map((m) => m.department).filter(Boolean)).size || 1)],
+      ['Attrition Report', 'YTD 2026', 'Attrition Rate', '0.0%'],
     ];
 
     await downloadReportExcel('All HR Reports Summary', headers, rows, `HRMS_All_Reports_${period}.xlsx`);
@@ -392,7 +471,7 @@ export const HRReports: React.FC = () => {
 
   const downloadAnalytics = async (metric = activeMetric) => {
     const headers = ['Month', metric];
-    const rows = MONTHS.map((month, index) => [month, String(CHARTS[metric][index])]);
+    const rows = MONTHS.map((month, index) => [month, String(chartValues[index] ?? 0)]);
 
     await downloadReportExcel(`${metric} Analytics`, headers, rows, `Analytics_${metric}_${period}.xlsx`);
   };
@@ -416,7 +495,7 @@ export const HRReports: React.FC = () => {
   const isFiltered = selectedReport !== 'All' || department !== 'All Departments' || period !== '2026' || format !== 'All Formats';
 
   const renderReportIcon = (iconName: ReportConfig['icon']) => {
-    const IconComponent = ICONS[iconName] || FiFileText;
+    const IconComponent = REPORT_ICONS[iconName] || FiFileText;
     return <IconComponent />;
   };
 
@@ -757,25 +836,25 @@ export const HRReports: React.FC = () => {
           <div className="bel-analytics-kpi-grid">
             <div className="bel-kpi-card">
               <span className="kpi-label">Attendance Rate</span>
-              <strong className="kpi-val">87.2%</strong>
+              <strong className="kpi-val">{teamMembers.length > 0 ? '100%' : '0%'}</strong>
               <div className="kpi-badge positive">
-                <span>+1.4% vs last mo</span>
+                <span>Active</span>
               </div>
             </div>
 
             <div className="bel-kpi-card">
               <span className="kpi-label">Attrition Rate</span>
-              <strong className="kpi-val">3.2%</strong>
+              <strong className="kpi-val">0.0%</strong>
               <div className="kpi-badge positive">
-                <span>-0.8% YTD 2026</span>
+                <span>FY {period}</span>
               </div>
             </div>
 
             <div className="bel-kpi-card">
-              <span className="kpi-label">Leave Utilization</span>
-              <strong className="kpi-val">62%</strong>
+              <span className="kpi-label">Leave Requests</span>
+              <strong className="kpi-val">{leaveRequests.length}</strong>
               <div className="kpi-badge warning">
-                <span>+5% of balance</span>
+                <span>Recorded</span>
               </div>
             </div>
           </div>
@@ -846,7 +925,7 @@ export const HRReports: React.FC = () => {
                     onChange={(e) => setSelectedReport(e.target.value)}
                   >
                     <option value="All">All Reports (8 Modules)</option>
-                    {INITIAL_REPORTS.map((r) => (
+                    {reportsList.map((r) => (
                       <option key={r.id} value={r.id}>
                         {r.title} ({r.period})
                       </option>
@@ -956,20 +1035,20 @@ export const HRReports: React.FC = () => {
               {/* Data Preview Table */}
               <div className="preview-data-table-container">
                 <div className="table-header-indicator">
-                  <span>Record Sample Preview ({REPORT_DATA[previewReport.id]?.length ? REPORT_DATA[previewReport.id].length - 1 : 0} rows shown)</span>
+                  <span>Record Sample Preview ({getRows(previewReport.id).length ? getRows(previewReport.id).length - 1 : 0} rows shown)</span>
                 </div>
 
                 <div className="preview-table-scroll">
                   <table className="preview-table">
                     <thead>
                       <tr>
-                        {REPORT_DATA[previewReport.id]?.[0]?.map((header, idx) => (
+                        {getRows(previewReport.id)[0]?.map((header, idx) => (
                           <th key={idx}>{header}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {REPORT_DATA[previewReport.id]?.slice(1).map((row, rowIdx) => (
+                      {getRows(previewReport.id).slice(1).map((row, rowIdx) => (
                         <tr key={rowIdx}>
                           {row.map((cell, cellIdx) => (
                             <td key={cellIdx}>{cell}</td>

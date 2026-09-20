@@ -478,15 +478,15 @@ export const downloadDocument = async (
   // Fallback: Generate official verified PDF record
   const doc = generatePayslipJsPdf(
     {
-      month: 'September 2026',
-      grossSalary: '55,099',
-      deductions: '6,283',
-      netSalary: '48,816',
+      month: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      grossSalary: '0',
+      deductions: '0',
+      netSalary: '0',
     },
     {
-      name: docItem.employee || 'Rahul Kumar',
-      employeeId: docItem.employeeId || 'EMP1001',
-      designation: 'Engineering Staff',
+      name: docItem.employee || 'Employee',
+      employeeId: docItem.employeeId || 'N/A',
+      designation: 'Staff',
     }
   );
 

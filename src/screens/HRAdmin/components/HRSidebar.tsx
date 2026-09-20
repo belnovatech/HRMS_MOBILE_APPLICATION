@@ -165,11 +165,11 @@ export const HRSidebar: React.FC<HRSidebarProps> = ({
         <div className="hr-sidebar-footer">
           <div className="hr-sidebar-user">
             <div className="hr-user-avatar">
-              {user?.avatar || 'PS'}
+              {user?.avatar || (user?.name ? user.name.slice(0, 2).toUpperCase() : 'HR')}
             </div>
             <div className="hr-user-info">
-              <span className="hr-user-name">{user?.name || 'Priya Sharma'}</span>
-              <span className="hr-user-role">{user?.designation || 'HR Director'}</span>
+              <span className="hr-user-name">{user?.name || 'HR Admin'}</span>
+              <span className="hr-user-role">{user?.designation || 'Administrator'}</span>
             </div>
           </div>
 

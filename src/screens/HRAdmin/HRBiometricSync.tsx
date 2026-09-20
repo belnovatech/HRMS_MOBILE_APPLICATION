@@ -68,177 +68,9 @@ export interface AttendanceEvent {
   result: 'Accepted' | 'Device Error' | 'Rejected';
 }
 
-const INITIAL_DEVICES: BiometricDevice[] = [
-  {
-    id: 'BIO-001',
-    name: 'Main Entrance Gate',
-    location: 'Mumbai HQ',
-    zone: 'Ground Floor',
-    ip: '192.168.1.101',
-    port: '4370',
-    model: 'ZKTeco SpeedFace-V5L',
-    vendor: 'ZKTeco',
-    status: 'Connected',
-    mode: 'Face + Fingerprint',
-    lastSync: '2 min ago',
-    lastHeartbeat: '12 sec ago',
-    records: 1086,
-    pending: 0,
-    todayScans: 284,
-    firmware: '6.3.1',
-    attendanceMode: 'IN / OUT',
-    sync: 'Automatic',
-  },
-  {
-    id: 'BIO-002',
-    name: 'Second Floor Access Gate',
-    location: 'Mumbai HQ',
-    zone: '2nd Floor Tech Wing',
-    ip: '192.168.1.102',
-    port: '4370',
-    model: 'ZKTeco uFace 302',
-    vendor: 'ZKTeco',
-    status: 'Connected',
-    mode: 'Face + Fingerprint',
-    lastSync: '5 min ago',
-    lastHeartbeat: '18 sec ago',
-    records: 420,
-    pending: 0,
-    todayScans: 196,
-    firmware: '6.2.8',
-    attendanceMode: 'IN / OUT',
-    sync: 'Automatic',
-  },
-  {
-    id: 'BIO-003',
-    name: 'Cafeteria Turnstile Entry',
-    location: 'Mumbai HQ',
-    zone: 'Basement Dining',
-    ip: '192.168.1.103',
-    port: '4370',
-    model: 'Suprema FaceLite',
-    vendor: 'Suprema',
-    status: 'Syncing',
-    mode: 'Face Recognition',
-    lastSync: 'Syncing...',
-    lastHeartbeat: '8 sec ago',
-    records: 312,
-    pending: 23,
-    todayScans: 151,
-    firmware: '2.7.4',
-    attendanceMode: 'IN / OUT',
-    sync: 'Automatic',
-  },
-  {
-    id: 'BIO-004',
-    name: 'Bengaluru Development Center',
-    location: 'Bengaluru',
-    zone: 'Main Security Gate',
-    ip: '10.0.0.51',
-    port: '4370',
-    model: 'ZKTeco SpeedFace-V5L',
-    vendor: 'ZKTeco',
-    status: 'Disconnected',
-    mode: 'Face + Fingerprint',
-    lastSync: '4h ago',
-    lastHeartbeat: '4h ago',
-    records: 740,
-    pending: 37,
-    todayScans: 0,
-    firmware: '6.1.9',
-    attendanceMode: 'IN / OUT',
-    sync: 'Automatic',
-  },
-  {
-    id: 'BIO-005',
-    name: 'Delhi Regional Office',
-    location: 'Delhi',
-    zone: 'Tower B Entry',
-    ip: '172.16.0.21',
-    port: '4370',
-    model: 'Suprema BioStation 3',
-    vendor: 'Suprema',
-    status: 'Error',
-    mode: 'Fingerprint',
-    lastSync: '1d ago',
-    lastHeartbeat: '1d ago',
-    records: 198,
-    pending: 64,
-    todayScans: 0,
-    firmware: '3.4.2',
-    attendanceMode: 'IN / OUT',
-    sync: 'Automatic',
-  },
-];
+const INITIAL_DEVICES: BiometricDevice[] = [];
 
-const INITIAL_EVENTS: AttendanceEvent[] = [
-  {
-    id: 1,
-    device: 'BIO-001',
-    deviceName: 'Main Entrance Gate',
-    employee: 'Rahul Kumar',
-    employeeId: 'EMP1001',
-    event: 'Check In',
-    method: 'Face Recognition',
-    time: '09:12 AM',
-    result: 'Accepted',
-  },
-  {
-    id: 2,
-    device: 'BIO-001',
-    deviceName: 'Main Entrance Gate',
-    employee: 'Priya Sharma',
-    employeeId: 'EMP1002',
-    event: 'Check In',
-    method: 'Fingerprint',
-    time: '09:18 AM',
-    result: 'Accepted',
-  },
-  {
-    id: 3,
-    device: 'BIO-002',
-    deviceName: 'Second Floor Access Gate',
-    employee: 'Arjun Reddy',
-    employeeId: 'EMP1003',
-    event: 'Check In',
-    method: 'Face Recognition',
-    time: '09:24 AM',
-    result: 'Accepted',
-  },
-  {
-    id: 4,
-    device: 'BIO-003',
-    deviceName: 'Cafeteria Turnstile Entry',
-    employee: 'Sneha Rao',
-    employeeId: 'EMP1004',
-    event: 'Break Out',
-    method: 'Face Recognition',
-    time: '01:08 PM',
-    result: 'Accepted',
-  },
-  {
-    id: 5,
-    device: 'BIO-005',
-    deviceName: 'Delhi Regional Office',
-    employee: 'Vikram Singh',
-    employeeId: 'EMP1005',
-    event: 'Check In',
-    method: 'Fingerprint',
-    time: '09:42 AM',
-    result: 'Device Error',
-  },
-  {
-    id: 6,
-    device: 'BIO-001',
-    deviceName: 'Main Entrance Gate',
-    employee: 'Meena Pillai',
-    employeeId: 'EMP1006',
-    event: 'Check Out',
-    method: 'Face Recognition',
-    time: '06:18 PM',
-    result: 'Accepted',
-  },
-];
+const INITIAL_EVENTS: AttendanceEvent[] = [];
 
 function formatNumber(value: number) {
   return Number(value || 0).toLocaleString('en-IN');
@@ -260,12 +92,36 @@ function getStatusClass(status: string) {
 export const HRBiometricSync: React.FC = () => {
   const [devices, setDevices] = useState<BiometricDevice[]>(() => {
     const saved = localStorage.getItem('belnova_biometric_devices');
-    return saved ? JSON.parse(saved) : INITIAL_DEVICES;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((d) => d.name === 'Main Entrance Gate')) {
+          localStorage.removeItem('belnova_biometric_devices');
+          return [];
+        }
+        return parsed;
+      } catch {
+        return [];
+      }
+    }
+    return [];
   });
 
   const [events, setEvents] = useState<AttendanceEvent[]>(() => {
     const saved = localStorage.getItem('belnova_biometric_events');
-    return saved ? JSON.parse(saved) : INITIAL_EVENTS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((e) => e.employee === 'Rahul Kumar')) {
+          localStorage.removeItem('belnova_biometric_events');
+          return [];
+        }
+        return parsed;
+      } catch {
+        return [];
+      }
+    }
+    return [];
   });
 
   const [activeTab, setActiveTab] = useState<'overview' | 'activity' | 'health' | 'settings'>('overview');
@@ -1219,7 +1075,14 @@ export const HRBiometricSync: React.FC = () => {
             <div className="health-devices-section">
               <h4>Terminal Heartbeat &amp; Signal Quality</h4>
               <div className="health-device-rows">
-                {devices.map((dev) => (
+                {devices.length === 0 ? (
+                  <div className="bel-bio-empty-state">
+                    <FiCpu size={26} />
+                    <h4>No terminals registered</h4>
+                    <p>Register a terminal to view real-time heartbeat and signal quality.</p>
+                  </div>
+                ) : (
+                  devices.map((dev) => (
                   <div className="health-device-row-card" key={dev.id}>
                     <div className="h-dev-header">
                       <div className="h-dev-info">
@@ -1263,7 +1126,8 @@ export const HRBiometricSync: React.FC = () => {
                       <span>Pending: <b>{dev.pending}</b></span>
                     </div>
                   </div>
-                ))}
+                ))
+              )}
               </div>
             </div>
           </section>

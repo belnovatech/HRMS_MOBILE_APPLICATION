@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { BottomNavigation } from '../../components/BottomNavigation/BottomNavigation';
+import { attendanceApi } from '../../api';
 import {
   FiCalendar,
   FiCheck,
@@ -47,131 +48,9 @@ interface RegularizationRequest {
   avatarBg?: string;
 }
 
-const INITIAL_LOGS: AttendanceLog[] = [
-  {
-    id: 'EMP1001',
-    name: 'Rahul Kumar',
-    initials: 'RK',
-    date: 'Sep 1, 2026',
-    checkIn: '09:42 AM',
-    checkOut: '06:38 PM',
-    hours: '8h 56m',
-    shift: 'General',
-    status: 'Present',
-    avatarBg: '#2F6FED',
-  },
-  {
-    id: 'EMP1002',
-    name: 'Priya Sharma',
-    initials: 'PS',
-    date: 'Sep 1, 2026',
-    checkIn: '09:12 AM',
-    checkOut: '06:15 PM',
-    hours: '9h 03m',
-    shift: 'General',
-    status: 'Present',
-    avatarBg: '#D946EF',
-  },
-  {
-    id: 'EMP1003',
-    name: 'Arjun Reddy',
-    initials: 'AR',
-    date: 'Sep 1, 2026',
-    checkIn: '10:15 AM',
-    checkOut: '06:45 PM',
-    hours: '8h 30m',
-    shift: 'General',
-    status: 'Late',
-    avatarBg: '#F59E0B',
-  },
-  {
-    id: 'EMP1004',
-    name: 'Sneha Rao',
-    initials: 'SR',
-    date: 'Sep 1, 2026',
-    checkIn: '06:05 AM',
-    checkOut: '02:10 PM',
-    hours: '8h 05m',
-    shift: 'Morning',
-    status: 'Present',
-    avatarBg: '#10B981',
-  },
-  {
-    id: 'EMP1005',
-    name: 'Vikram Singh',
-    initials: 'VS',
-    date: 'Sep 1, 2026',
-    checkIn: '02:18 PM',
-    checkOut: '10:06 PM',
-    hours: '7h 48m',
-    shift: 'Evening',
-    status: 'Late',
-    avatarBg: '#635BEB',
-  },
-  {
-    id: 'EMP1006',
-    name: 'Ananya Patel',
-    initials: 'AP',
-    date: 'Sep 1, 2026',
-    checkIn: '-',
-    checkOut: '-',
-    hours: '0h',
-    shift: 'General',
-    status: 'Absent',
-    avatarBg: '#EF4444',
-  },
-  {
-    id: 'EMP1007',
-    name: 'Rohan Das',
-    initials: 'RD',
-    date: 'Sep 1, 2026',
-    checkIn: '09:05 AM',
-    checkOut: '06:30 PM',
-    hours: '9h 25m',
-    shift: 'General',
-    status: 'WFH',
-    avatarBg: '#06B6D4',
-  },
-];
+const INITIAL_LOGS: AttendanceLog[] = [];
 
-const INITIAL_REQUESTS: RegularizationRequest[] = [
-  {
-    id: 1,
-    employee: 'Rohan Das',
-    empId: 'EMP1007',
-    initials: 'RD',
-    date: 'Aug 28, 2026',
-    requestedIn: '09:45 AM',
-    requestedOut: '07:00 PM',
-    reason: 'Biometric device failure',
-    status: 'Pending',
-    avatarBg: '#06B6D4',
-  },
-  {
-    id: 2,
-    employee: 'Deepika Iyer',
-    empId: 'EMP1012',
-    initials: 'DI',
-    date: 'Aug 26, 2026',
-    requestedIn: '09:30 AM',
-    requestedOut: '06:30 PM',
-    reason: 'Forgot to punch out',
-    status: 'Approved',
-    avatarBg: '#2F6FED',
-  },
-  {
-    id: 3,
-    employee: 'Kiran Reddy',
-    empId: 'EMP1011',
-    initials: 'KR',
-    date: 'Aug 25, 2026',
-    requestedIn: '10:00 AM',
-    requestedOut: '06:45 PM',
-    reason: 'Missed biometric punch',
-    status: 'Rejected',
-    avatarBg: '#F59E0B',
-  },
-];
+const INITIAL_REQUESTS: RegularizationRequest[] = [];
 
 const STATUS_OPTIONS = ['All', 'Present', 'Absent', 'Late', 'WFH', 'Leave'];
 
@@ -221,7 +100,7 @@ const STATUS_META: Record<string, { className: string; short: string }> = {
 
 export const HRAttendance: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'daily' | 'monthly' | 'regularization'>('daily');
-  const [selectedDate, setSelectedDate] = useState('2026-09-01');
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -230,6 +109,44 @@ export const HRAttendance: React.FC = () => {
   const [modal, setModal] = useState<'edit' | 'regularize' | null>(null);
   const [editForm, setEditForm] = useState<any>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    attendanceApi.getAttendance(undefined, selectedDate).then((records) => {
+      if (Array.isArray(records)) {
+        setLogs(records.map((r) => ({
+          id: r.employeeId || r.id,
+          name: r.employeeName || 'Employee',
+          initials: (r.employeeName || 'EM').split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase(),
+          date: r.date,
+          checkIn: r.checkIn || '—',
+          checkOut: r.checkOut || '—',
+          hours: r.workingHours || '—',
+          shift: 'General',
+          status: (r.status as any) || 'Present',
+          avatarBg: '#2F6FED',
+        })));
+      }
+    }).catch(() => setLogs([]));
+  }, [selectedDate]);
+
+  useEffect(() => {
+    attendanceApi.getCorrections().then((data) => {
+      if (Array.isArray(data)) {
+        setRequests(data.map((c, idx) => ({
+          id: idx + 1,
+          employee: c.employeeName || 'Employee',
+          empId: c.employeeId,
+          initials: (c.employeeName || 'EM').split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase(),
+          date: c.date,
+          requestedIn: c.checkIn || '—',
+          requestedOut: c.checkOut || '—',
+          reason: c.reason || 'Correction requested',
+          status: (c.status as any) || 'Pending',
+          avatarBg: '#2F6FED',
+        })));
+      }
+    }).catch(() => setRequests([]));
+  }, []);
 
   const filteredLogs = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -743,63 +660,71 @@ export const HRAttendance: React.FC = () => {
             </div>
 
             <div className="hr-att-reg-list">
-              {requests.map((req) => (
-                <div key={req.id} className="hr-att-reg-item">
-                  <div className="hr-att-reg-top">
-                    <div className="hr-att-reg-user">
-                      <div
-                        className="hr-att-reg-avatar"
-                        style={{ backgroundColor: req.avatarBg || '#2F6FED' }}
-                      >
-                        {req.initials}
-                      </div>
-                      <div className="hr-att-reg-info">
-                        <strong>{req.employee}</strong>
-                        <small>{req.empId} • {req.date}</small>
-                      </div>
-                    </div>
-
-                    <span className={`hr-att-reg-status-pill reg-${req.status.toLowerCase()}`}>
-                      {req.status}
-                    </span>
-                  </div>
-
-                  {/* Requested Timings */}
-                  <div className="hr-att-reg-times-row">
-                    <div className="reg-time-block">
-                      <span>Requested In:</span>
-                      <strong>{req.requestedIn}</strong>
-                    </div>
-                    <div className="reg-time-block">
-                      <span>Requested Out:</span>
-                      <strong>{req.requestedOut}</strong>
-                    </div>
-                  </div>
-
-                  <p className="hr-att-reg-reason">"{req.reason}"</p>
-
-                  {req.status === 'Pending' && (
-                    <div className="hr-att-reg-actions">
-                      <button
-                        type="button"
-                        className="hr-att-btn-approve"
-                        onClick={() => updateRequestStatus(req.id, 'Approved')}
-                      >
-                        <FiCheck size={14} />
-                        <span>Approve</span>
-                      </button>
-                      <button
-                        type="button"
-                        className="hr-att-btn-reject"
-                        onClick={() => updateRequestStatus(req.id, 'Rejected')}
-                      >
-                        <FiX size={14} />
-                        <span>Reject</span>
-                      </button>
-                    </div>
-                  )}
+              {requests.length === 0 ? (
+                <div className="hr-att-empty-card" style={{ padding: '32px 16px', textAlign: 'center' }}>
+                  <FiCheckCircle size={28} color="#10b981" />
+                  <h4 style={{ marginTop: '12px', fontSize: '15px' }}>No Pending Regularizations</h4>
+                  <p style={{ color: '#64748b', fontSize: '13px', margin: '6px 0 0' }}>All employee attendance correction requests have been addressed.</p>
                 </div>
-              ))}
+              ) : (
+                requests.map((req) => (
+                  <div key={req.id} className="hr-att-reg-item">
+                    <div className="hr-att-reg-top">
+                      <div className="hr-att-reg-user">
+                        <div
+                          className="hr-att-reg-avatar"
+                          style={{ backgroundColor: req.avatarBg || '#2F6FED' }}
+                        >
+                          {req.initials}
+                        </div>
+                        <div className="hr-att-reg-info">
+                          <strong>{req.employee}</strong>
+                          <small>{req.empId} • {req.date}</small>
+                        </div>
+                      </div>
+
+                      <span className={`hr-att-reg-status-pill reg-${req.status.toLowerCase()}`}>
+                        {req.status}
+                      </span>
+                    </div>
+
+                    {/* Requested Timings */}
+                    <div className="hr-att-reg-times-row">
+                      <div className="reg-time-block">
+                        <span>Requested In:</span>
+                        <strong>{req.requestedIn}</strong>
+                      </div>
+                      <div className="reg-time-block">
+                        <span>Requested Out:</span>
+                        <strong>{req.requestedOut}</strong>
+                      </div>
+                    </div>
+
+                    <p className="hr-att-reg-reason">"{req.reason}"</p>
+
+                    {req.status === 'Pending' && (
+                      <div className="hr-att-reg-actions">
+                        <button
+                          type="button"
+                          className="hr-att-btn-approve"
+                          onClick={() => updateRequestStatus(req.id, 'Approved')}
+                        >
+                          <FiCheck size={14} />
+                          <span>Approve</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="hr-att-btn-reject"
+                          onClick={() => updateRequestStatus(req.id, 'Rejected')}
+                        >
+                          <FiX size={14} />
+                          <span>Reject</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}
