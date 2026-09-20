@@ -207,10 +207,10 @@ export const LeaveApprovals: React.FC = () => {
     try {
       const { request, action } = confirmation;
       if (action === "approve") {
-        handleApproveLeave(request.id);
+        await handleApproveLeave(request.id);
       }
       if (action === "reject") {
-        handleRejectLeave(request.id);
+        await handleRejectLeave(request.id);
       }
     } finally {
       setIsProcessing(false);

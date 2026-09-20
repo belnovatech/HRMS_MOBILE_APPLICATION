@@ -130,7 +130,7 @@ const buildDynamicAttendance = (monthValue: string, todayAttendance: any, apiRec
 };
 
 export const EmployeeAttendance: React.FC = () => {
-  const { user, todayAttendance, toggleCheckInOut } = useAuth();
+  const { user, todayAttendance, toggleCheckInOut, requestAttendanceCorrection } = useAuth();
 
   const currentMonth = useMemo(() => {
     const now = new Date();
@@ -183,11 +183,23 @@ export const EmployeeAttendance: React.FC = () => {
     setCorrectionSubmitted(false);
   };
 
-  const submitCorrectionRequest = (event: React.FormEvent) => {
+  const submitCorrectionRequest = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!correctionReason.trim()) return;
 
     const employeeName = user?.name || 'Employee';
     const employeeId = user?.employeeId || user?.id || 'EMP001';
+
+    try {
+      await requestAttendanceCorrection({
+        date: correctionDate,
+        checkIn: '09:00:00',
+        checkOut: '18:00:00',
+        reason: correctionReason.trim(),
+      });
+    } catch (error) {
+      console.warn('Unable to submit attendance correction to API:', error);
+    }
 
     const notification = {
       id: `ATT-CORR-${Date.now()}`,

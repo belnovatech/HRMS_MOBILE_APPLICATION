@@ -19,6 +19,8 @@ import {
 } from "react-icons/fi";
 import "./TeamAttendance.css";
 
+import { attendanceApi, AttendanceRecordDto } from "../../api";
+
 interface ExtendedAttendanceRecord extends TeamMember {
   attendanceStatus: "Present" | "Absent" | "WFH" | "Late";
   checkOut: string;
@@ -30,14 +32,25 @@ interface ExtendedAttendanceRecord extends TeamMember {
 export const TeamAttendance: React.FC = () => {
   const { teamMembers = [] } = useAuth();
 
-  const [selectedDate, setSelectedDate] = useState("2026-09-01");
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<"daily" | "monthly" | "regularization">("daily");
+  const [liveAttendance, setLiveAttendance] = useState<AttendanceRecordDto[]>([]);
 
   const [showFilters, setShowFilters] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<ExtendedAttendanceRecord | null>(null);
   const [modalType, setModalType] = useState<"edit" | "regularize" | null>(null);
+
+  React.useEffect(() => {
+    attendanceApi.getAttendance(undefined, selectedDate)
+      .then((records) => {
+        if (Array.isArray(records)) {
+          setLiveAttendance(records);
+        }
+      })
+      .catch(() => setLiveAttendance([]));
+  }, [selectedDate]);
 
   /*
    * Helpers
@@ -78,60 +91,44 @@ export const TeamAttendance: React.FC = () => {
    * Attendance Data calculation
    */
   const attendanceRecords = useMemo<ExtendedAttendanceRecord[]>(() => {
-    return teamMembers.map((member, index) => {
-      const originalStatus = String(member.status || "Present").toLowerCase();
+    return teamMembers.map((member) => {
+      const matched = liveAttendance.find(
+        (r) => r.employeeId === member.id || r.employeeId === member.employeeId || r.employeeName === member.name
+      );
 
       let attendanceStatus: "Present" | "Absent" | "WFH" | "Late" = "Present";
+      let checkIn = "—";
+      let checkOut = "—";
+      let workingHours = "—";
 
-      if (originalStatus.includes("absent") || originalStatus.includes("leave")) {
-        attendanceStatus = "Absent";
-      } else if (originalStatus.includes("wfh")) {
-        attendanceStatus = "WFH";
-      } else if (originalStatus.includes("late")) {
-        attendanceStatus = "Late";
-      }
-
-      const fallbackCheckIns = [
-        "09:42 AM",
-        "09:12 AM",
-        "10:15 AM",
-        "—",
-        "09:28 AM",
-        "09:05 AM",
-        "09:48 AM",
-        "10:02 AM",
-      ];
-
-      const checkIn =
-        member.checkIn ||
-        (attendanceStatus === "Absent"
-          ? "—"
-          : fallbackCheckIns[index % fallbackCheckIns.length]);
-
-      let checkOut = (member as any).checkOut;
-      if (!checkOut) {
-        if (attendanceStatus === "Absent") {
-          checkOut = "—";
-        } else if (attendanceStatus === "WFH") {
-          checkOut = "06:00 PM";
-        } else if (attendanceStatus === "Late") {
-          checkOut = "06:45 PM";
+      if (matched) {
+        checkIn = matched.checkIn || "—";
+        checkOut = matched.checkOut || "—";
+        workingHours = matched.workingHours || "—";
+        const st = (matched.status || "").toLowerCase();
+        if (st.includes("absent") || st.includes("leave")) {
+          attendanceStatus = "Absent";
+        } else if (st.includes("wfh")) {
+          attendanceStatus = "WFH";
+        } else if (st.includes("late")) {
+          attendanceStatus = "Late";
         } else {
-          checkOut = "06:38 PM";
+          attendanceStatus = "Present";
         }
-      }
-
-      let workingHours = (member as any).workingHours;
-      if (!workingHours) {
-        if (attendanceStatus === "Absent") {
-          workingHours = "—";
-        } else if (attendanceStatus === "Late") {
-          workingHours = "8h 30m";
-        } else if (attendanceStatus === "WFH") {
-          workingHours = "8h 52m";
+      } else {
+        const originalStatus = String(member.status || "Present").toLowerCase();
+        if (originalStatus.includes("absent") || originalStatus.includes("leave")) {
+          attendanceStatus = "Absent";
+        } else if (originalStatus.includes("wfh")) {
+          attendanceStatus = "WFH";
+        } else if (originalStatus.includes("late")) {
+          attendanceStatus = "Late";
         } else {
-          workingHours = "8h 56m";
+          attendanceStatus = member.checkIn ? "Present" : "Absent";
         }
+        checkIn = member.checkIn || "—";
+        checkOut = (member as any).checkOut || "—";
+        workingHours = (member as any).workingHours || (member.checkIn ? "8h 00m" : "—");
       }
 
       return {
@@ -146,7 +143,7 @@ export const TeamAttendance: React.FC = () => {
         overtime: (member as any).overtime || "0h",
       };
     });
-  }, [teamMembers]);
+  }, [teamMembers, liveAttendance]);
 
   /*
    * Filtered records

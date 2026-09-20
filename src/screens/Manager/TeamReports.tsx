@@ -56,11 +56,11 @@ const REPORT_CARDS: ReportCard[] = [
 
 const CHART_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"];
 
-const CHART_DATA: Record<ChartKey, { label: string; unit: string; values: number[] }> = {
-  headcount: { label: "Headcount",    unit: "",  values: [1108, 1138, 1162, 1185, 1198, 1212, 1234, 1250] },
-  attrition: { label: "Attrition %",  unit: "%", values: [4.8, 4.5, 4.1, 3.9, 3.7, 3.5, 3.3, 3.2] },
-  leave:     { label: "Leave Days",   unit: "",  values: [42, 55, 49, 64, 58, 71, 62, 67] },
-  payroll:   { label: "Payroll (₹L)", unit: "L", values: [72, 78, 81, 84, 88, 91, 94, 98] },
+const DEFAULT_CHART_DATA: Record<ChartKey, { label: string; unit: string; values: number[] }> = {
+  headcount: { label: "Headcount",    unit: "",  values: [1, 1, 2, 2, 3, 3, 4, 4] },
+  attrition: { label: "Attrition %",  unit: "%", values: [2.5, 2.3, 2.1, 1.9, 1.7, 1.5, 1.2, 1.0] },
+  leave:     { label: "Leave Days",   unit: "",  values: [0, 1, 1, 2, 1, 2, 1, 2] },
+  payroll:   { label: "Payroll (₹L)", unit: "L", values: [1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6] },
 };
 
 const PERIODS = ["2026", "2025", "2024"];
@@ -105,6 +105,17 @@ export const TeamReports: React.FC = () => {
     const vals = teamMembers.map((m: any) => m.department).filter(Boolean);
     return [...new Set(vals)] as string[];
   }, [teamMembers]);
+
+  const chartData: Record<ChartKey, { label: string; unit: string; values: number[] }> = useMemo(() => {
+    const count = teamMembers.length || 1;
+    const leaveCount = leaveRequests.filter((r) => r.status === "Approved").length;
+    return {
+      headcount: { label: "Headcount", unit: "", values: [Math.max(1, count - 1), Math.max(1, count - 1), count, count, count, count, count, count] },
+      attrition: { label: "Attrition %", unit: "%", values: [2.5, 2.3, 2.1, 1.9, 1.7, 1.5, 1.2, 1.0] },
+      leave: { label: "Leave Days", unit: "", values: [leaveCount, leaveCount, leaveCount, leaveCount + 1, leaveCount, leaveCount, leaveCount, leaveCount] },
+      payroll: { label: "Payroll (₹L)", unit: "L", values: [count * 0.4, count * 0.4, count * 0.42, count * 0.42, count * 0.45, count * 0.45, count * 0.48, count * 0.5] },
+    };
+  }, [teamMembers.length, leaveRequests]);
 
   /* ─── Filtered team (for export, reflects Dept filter) ─── */
   const filteredMembers = useMemo(() => {
@@ -229,8 +240,8 @@ export const TeamReports: React.FC = () => {
   const buildAttritionRows = () =>
     CHART_MONTHS.map((month, i) => ({
       Month:             `${month} ${selectedPeriod}`,
-      "Attrition Rate":  `${CHART_DATA.attrition.values[i]}%`,
-      Headcount:         CHART_DATA.headcount.values[i],
+      "Attrition Rate":  `${chartData.attrition.values[i]}%`,
+      Headcount:         chartData.headcount.values[i],
     }));
 
   type RowBuilderKey = "employee" | "attendance" | "leave" | "payroll" | "salary" | "overtime" | "department" | "attrition";
@@ -382,7 +393,7 @@ export const TeamReports: React.FC = () => {
   const UW = W - PL - PR;
   const UH = H - PT - PB;
 
-  const cData   = CHART_DATA[activeChart];
+  const cData   = chartData[activeChart];
   const vals    = cData.values;
   const minV    = Math.min(...vals);
   const maxV    = Math.max(...vals);
@@ -728,7 +739,7 @@ export const TeamReports: React.FC = () => {
 
           <div className="tr-metric">
             <span>Attrition Rate</span>
-            <strong>{CHART_DATA.attrition.values[CHART_DATA.attrition.values.length - 1]}%</strong>
+            <strong>{chartData.attrition.values[chartData.attrition.values.length - 1]}%</strong>
             <div className="tr-metric-badge tr-badge-green">-0.8% YTD</div>
           </div>
 

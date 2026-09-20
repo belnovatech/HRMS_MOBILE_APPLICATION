@@ -93,13 +93,13 @@ export const ManagerDashboard: React.FC = () => {
      LEAVE ACTIONS
   ========================= */
 
-  const approveLeave = (leaveId: string) => {
-    handleApproveLeave(leaveId);
+  const approveLeave = async (leaveId: string) => {
+    await handleApproveLeave(leaveId);
     setSelectedLeave(null);
   };
 
-  const rejectLeave = (leaveId: string) => {
-    handleRejectLeave(leaveId);
+  const rejectLeave = async (leaveId: string) => {
+    await handleRejectLeave(leaveId);
     setSelectedLeave(null);
   };
 

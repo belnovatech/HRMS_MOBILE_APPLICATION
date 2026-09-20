@@ -15,6 +15,8 @@ import {
 } from "react-icons/fi";
 import "./EmployeeRequests.css";
 
+import { attendanceApi } from "../../api";
+
 interface RequestItem {
   id: string;
   type: string;
@@ -23,37 +25,6 @@ interface RequestItem {
   status: string;
   employeeId?: string;
 }
-
-const STATIC_REQUESTS: RequestItem[] = [
-  {
-    id: "REQ-2041",
-    type: "Attendance Correction",
-    details: "Attendance correction request",
-    date: "2026-09-01",
-    status: "Pending",
-  },
-  {
-    id: "REQ-2038",
-    type: "Leave Request",
-    details: "Leave request",
-    date: "2026-08-28",
-    status: "Approved",
-  },
-  {
-    id: "REQ-2030",
-    type: "Profile Update",
-    details: "Profile information update",
-    date: "2026-08-20",
-    status: "Resolved",
-  },
-  {
-    id: "REQ-2024",
-    type: "Document Verification",
-    details: "Document verification request",
-    date: "2026-08-15",
-    status: "In Progress",
-  },
-];
 
 const formatRequestDate = (value: string) => {
   if (!value) return "—";
@@ -77,7 +48,7 @@ const getRequestStatusClass = (status: string) => {
     return "emp-request-status-success";
   }
 
-  if (normalized === "pending") {
+  if (normalized === "pending" || normalized === "open") {
     return "emp-request-status-pending";
   }
 
@@ -89,22 +60,36 @@ const getRequestStatusClass = (status: string) => {
 };
 
 export const EmployeeRequests: React.FC = () => {
-  const { leaveRequests = [], user } = useAuth();
+  const { leaveRequests = [], helpTickets = [], user, requestAttendanceCorrection, addHelpTicket } = useAuth();
 
   const [createdRequests, setCreatedRequests] = useState<RequestItem[]>([]);
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
+  const [attendanceCorrections, setAttendanceCorrections] = useState<RequestItem[]>([]);
 
-  const [requestType, setRequestType] = useState(
-    "Attendance Correction"
-  );
+  const [requestType, setRequestType] = useState("Attendance Correction");
   const [requestDetails, setRequestDetails] = useState("");
 
-  /*
-   * Leave requests already coming from AuthContext are converted
-   * into the same structure used by this page.
-   */
+  React.useEffect(() => {
+    attendanceApi.getCorrections()
+      .then((records) => {
+        if (Array.isArray(records)) {
+          const empId = user?.id || user?.employeeId;
+          const userRecords = empId ? records.filter(r => r.employeeId === empId) : records;
+          setAttendanceCorrections(userRecords.map((r, idx) => ({
+            id: r.id || `ATT-CORR-${idx + 1}`,
+            type: "Attendance Correction",
+            details: r.reason || `Correction for ${r.date}`,
+            date: r.date,
+            status: r.status || "Pending",
+            employeeId: r.employeeId,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, [user?.id, user?.employeeId]);
+
   const leaveBasedRequests = useMemo(
     () =>
       leaveRequests.map((leave, index) => ({
@@ -117,19 +102,30 @@ export const EmployeeRequests: React.FC = () => {
           })`,
         date: leave.appliedOn || leave.startDate || "",
         status: leave.status || "Pending",
+        employeeId: leave.employeeId,
       })),
     [leaveRequests]
   );
 
-  /*
-   * Keep static demo records, AuthContext leave records,
-   * and requests created from this page together.
-   */
+  const ticketBasedRequests = useMemo(
+    () =>
+      helpTickets.map((ticket) => ({
+        id: ticket.id,
+        type: ticket.category || "Support Ticket",
+        details: `${ticket.subject}: ${ticket.description}`,
+        date: ticket.date || "",
+        status: ticket.status || "Open",
+        employeeId: ticket.employeeId,
+      })),
+    [helpTickets]
+  );
+
   const allRequests = useMemo(() => {
     const combined: RequestItem[] = [
       ...createdRequests,
       ...leaveBasedRequests,
-      ...STATIC_REQUESTS,
+      ...attendanceCorrections,
+      ...ticketBasedRequests,
     ];
 
     const uniqueRequests: RequestItem[] = [];
@@ -143,7 +139,7 @@ export const EmployeeRequests: React.FC = () => {
     });
 
     return uniqueRequests;
-  }, [createdRequests, leaveBasedRequests]);
+  }, [createdRequests, leaveBasedRequests, attendanceCorrections, ticketBasedRequests]);
 
   const requestTypes = useMemo(() => {
     return [
@@ -192,34 +188,53 @@ export const EmployeeRequests: React.FC = () => {
     setRequestDetails("");
   };
 
-  const handleSubmitRequest = (event: React.FormEvent) => {
+  const handleSubmitRequest = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const trimmedDetails = requestDetails.trim();
-
     if (!trimmedDetails) {
       return;
     }
 
     const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
 
     const newRequest: RequestItem = {
       id: `REQ-${Date.now().toString().slice(-6)}`,
       type: requestType,
       details: trimmedDetails,
-      date: today.toISOString().split("T")[0],
+      date: todayStr,
       status: "Pending",
-      employeeId: user?.employeeId || "EMP001",
+      employeeId: user?.employeeId || user?.id || "EMP001",
     };
 
-    /*
-     * New request is immediately added to the employee's request list.
-     * Status starts as Pending until HR/Manager processes it.
-     */
     setCreatedRequests((previous) => [
       newRequest,
       ...previous,
     ]);
+
+    if (requestType === "Attendance Correction") {
+      try {
+        await requestAttendanceCorrection({
+          date: todayStr,
+          checkIn: "09:00:00",
+          checkOut: "18:00:00",
+          reason: trimmedDetails,
+        });
+      } catch (e) {
+        console.warn("Attendance correction API warning:", e);
+      }
+    } else {
+      try {
+        addHelpTicket({
+          category: requestType,
+          subject: requestType,
+          description: trimmedDetails,
+        });
+      } catch (e) {
+        console.warn("Create ticket warning:", e);
+      }
+    }
 
     handleCloseRequest();
   };

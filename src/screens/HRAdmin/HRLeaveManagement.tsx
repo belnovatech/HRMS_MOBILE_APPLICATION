@@ -205,7 +205,10 @@ export const HRLeaveManagement: React.FC = () => {
   const pendingCount = normalizedRequests.filter((item) => item.status === 'Pending').length;
   const approvedCount = normalizedRequests.filter((item) => item.status === 'Approved').length;
   const rejectedCount = normalizedRequests.filter((item) => item.status === 'Rejected').length;
-  const onLeaveTodayCount = 90; // Standard company metric
+  const todayStr = new Date().toISOString().split('T')[0];
+  const onLeaveTodayCount = normalizedRequests.filter((item) => {
+    return item.status === 'Approved' && (!item.from || item.from <= todayStr) && (!item.to || item.to >= todayStr);
+  }).length;
 
   // Close modals
   const closeModal = () => {
@@ -225,17 +228,17 @@ export const HRLeaveManagement: React.FC = () => {
     setModalType('rejectConfirm');
   };
 
-  const handleExecuteApprove = () => {
+  const handleExecuteApprove = async () => {
     if (selectedRequest) {
-      handleApproveLeave(selectedRequest.id);
+      await handleApproveLeave(selectedRequest.id);
       showToast(`Leave request for ${selectedRequest.employee} approved.`);
       closeModal();
     }
   };
 
-  const handleExecuteReject = () => {
+  const handleExecuteReject = async () => {
     if (selectedRequest) {
-      handleRejectLeave(selectedRequest.id, 'Rejected by HR');
+      await handleRejectLeave(selectedRequest.id, 'Rejected by HR');
       showToast(`Leave request for ${selectedRequest.employee} rejected.`);
       closeModal();
     }
